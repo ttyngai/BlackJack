@@ -1,0 +1,60 @@
+:root {
+  --buttonGrey: #d4d4d4;
+  --casinoRed: #530000;
+  --casinoYellow: #9b870c;
+  --tableBackground: #06170e;
+  --scoreText: white;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--tableBackground);
+}
+
+img {
+  border-radius: 30px;
+  border: solid 2px var(--casinoYellow);
+}
+#playerImg {
+  max-width: 500px;
+}
+#dealerImg {
+  max-width: 500px;
+}
+
+#playHands {
+  color: var(--buttonGrey);
+}
+
+#gameTitle {
+  border-radius: 30px;
+  border: solid 3px var(--casinoRed);
+  color: var(--buttonGrey);
+  padding: 10px 20px;
+}
+#controls {
+  padding: 30px;
+}
+
+#controls button {
+  background-color: var(--buttonGrey);
+  width: 150px;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 30px;
+  font-size: 20px;
+}
+
+.scoreBox {
+  position: absolute;
+  padding: 5px 30px;
+  font-size: 50px;
+  font-style: bold;
+  color: var(--scoreText);
+}
+
+#playerScoreBox {
+  right: 0;
+}

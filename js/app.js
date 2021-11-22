@@ -6,6 +6,8 @@
 
 /*----- event listeners -----*/
 
+document.querySelector('button').addEventListener('click', playRound);
+
 /*----- functions -----*/
 
 init();
