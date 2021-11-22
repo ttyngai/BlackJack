@@ -88,5 +88,10 @@ img {
 }
 
 #sillyTag {
-  /* text-decoration: underline; */
+  text-decoration: underline;
+}
+
+.hands {
+  font-size: 50px;
+  padding: 0 25px;
 }
