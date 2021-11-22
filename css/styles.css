@@ -1,6 +1,6 @@
 :root {
   --interfaceGrey: #d4d4d4;
-  --casinoRed: #530000;
+  --casinoRed: #6d0202;
   --casinoYellow: #9b870c;
   --tableBackground: #06170e;
   --buttonsBackground: #0d331f;
@@ -85,4 +85,8 @@ img {
   color: white;
   transform: translate(30px, -70px);
   font-size: 25px;
+}
+
+#sillyTag {
+  text-decoration: underline;
 }
