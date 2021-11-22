@@ -44,7 +44,7 @@ img {
 
 #controls button {
   background-color: var(--buttonsBackground);
-  width: 150px;
+  width: 100px;
   padding: 15px;
   margin: 10px;
   border-radius: 30px;
@@ -63,21 +63,35 @@ img {
   background-color: var(--scoreBackground);
   border: solid 3px var(--casinoYellow);
   border-radius: 10px;
-  min-width: 50px;
+  min-width: 40px;
   min-height: 60px;
   text-align: center;
 }
 
-#handsContainer {
-  width: 500px;
+.handsContainer {
+  display: flex;
+  flex-direction: row;
+  font-size: 50px;
 }
+
+.sumBox {
+  border-radius: 20px;
+  border: solid 3px var(--casinoRed);
+  padding: 0 25px;
+  margin: 10px;
+  color: white;
+  width: 50px;
+  text-align: center;
+}
+
 .hands {
   height: 60px;
   border-radius: 20px;
   border: solid 3px var(--casinoRed);
-  padding: 20px;
+
   margin: 10px;
   color: white;
+  width: 300px;
 }
 
 .nameCard {
