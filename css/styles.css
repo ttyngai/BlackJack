@@ -1,10 +1,11 @@
 :root {
   --interfaceGrey: #d4d4d4;
-  --buttonsBackground: #753a13;
-  --buttonText: rgb(236, 191, 67);
   --casinoRed: #530000;
   --casinoYellow: #9b870c;
   --tableBackground: #06170e;
+  --buttonsBackground: #0d331f;
+  --buttonText: rgb(250, 243, 225);
+  --scoreBackground: #9b880c6b;
   --scoreText: white;
 }
 body {
@@ -38,15 +39,17 @@ img {
   border: solid 3px var(--casinoRed);
   color: var(--interfaceGrey);
   padding: 10px 20px;
+  margin: 10px;
 }
 
 #controls button {
   background-color: var(--buttonsBackground);
   width: 150px;
-  padding: 5px 20px;
-  margin: 15px;
+  padding: 15px;
+  margin: 10px;
   border-radius: 30px;
   font-size: 20px;
+  font-style: bold;
   color: var(--buttonText);
 }
 
@@ -57,23 +60,29 @@ img {
   font-size: 50px;
   font-style: bold;
   color: var(--scoreText);
-  border: solid 2px var(--casinoYellow);
+  background-color: var(--scoreBackground);
+  border: solid 3px var(--casinoYellow);
   border-radius: 10px;
-}
-
-#playerScoreBox {
-  transform: translateX(300px);
+  min-width: 50px;
+  min-height: 60px;
+  text-align: center;
 }
 
 #handsContainer {
   width: 500px;
 }
 .hands {
-  /* align-items: left; */
-  /* width: 75%; */
   height: 60px;
   border-radius: 20px;
   border: solid 3px var(--casinoRed);
   padding: 20px;
   margin: 10px;
+  color: white;
+}
+
+.nameCard {
+  position: absolute;
+  color: white;
+  transform: translate(30px, -70px);
+  font-size: 25px;
 }
