@@ -1,5 +1,7 @@
 :root {
-  --buttonGrey: #d4d4d4;
+  --interfaceGrey: #d4d4d4;
+  --buttonsBackground: #753a13;
+  --buttonText: rgb(236, 191, 67);
   --casinoRed: #530000;
   --casinoYellow: #9b870c;
   --tableBackground: #06170e;
@@ -11,11 +13,14 @@ body {
   align-items: center;
   justify-content: center;
   background-color: var(--tableBackground);
+  max-width: 600px;
+  margin: auto;
 }
 
 img {
   border-radius: 30px;
   border: solid 2px var(--casinoYellow);
+  width: 100vw;
 }
 #playerImg {
   max-width: 500px;
@@ -25,36 +30,50 @@ img {
 }
 
 #playHands {
-  color: var(--buttonGrey);
+  color: var(--interfaceGrey);
 }
 
 #gameTitle {
   border-radius: 30px;
   border: solid 3px var(--casinoRed);
-  color: var(--buttonGrey);
+  color: var(--interfaceGrey);
   padding: 10px 20px;
-}
-#controls {
-  padding: 30px;
 }
 
 #controls button {
-  background-color: var(--buttonGrey);
+  background-color: var(--buttonsBackground);
   width: 150px;
-  padding: 20px;
-  margin: 10px;
+  padding: 5px 20px;
+  margin: 15px;
   border-radius: 30px;
   font-size: 20px;
+  color: var(--buttonText);
 }
 
 .scoreBox {
   position: absolute;
   padding: 5px 30px;
+  margin: 30px;
   font-size: 50px;
   font-style: bold;
   color: var(--scoreText);
+  border: solid 2px var(--casinoYellow);
+  border-radius: 10px;
 }
 
 #playerScoreBox {
-  right: 0;
+  transform: translateX(300px);
+}
+
+#handsContainer {
+  width: 500px;
+}
+.hands {
+  /* align-items: left; */
+  /* width: 75%; */
+  height: 60px;
+  border-radius: 20px;
+  border: solid 3px var(--casinoRed);
+  padding: 20px;
+  margin: 10px;
 }
