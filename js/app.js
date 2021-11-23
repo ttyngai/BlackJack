@@ -122,7 +122,9 @@ function deal() {
       runDealCard(true, 'dealersArray', cardSum.d);
       enableHitStayButton();
     }, timeDelay);
-    render();
+    setTimeout(function () {
+      render();
+    }, timeDelay);
   }, timeDelay);
 }
 
@@ -168,9 +170,6 @@ function render() {
     score.d++;
     winningDialogueIsPlayer(false);
   }
-
-  //   convertFaceToTen(secretCard)
-
   if (
     !gameEnded &&
     !playerEndedTurn &&
@@ -184,6 +183,8 @@ function render() {
       suits[randomSuits()]
     }${ranks[dealersHiddenCard - 1]}`;
     dealerBlackJack();
+    enableDealButton();
+    disableHitStayButton();
   }
 
   //   Stay is pressed
@@ -240,12 +241,14 @@ function runDealCard(hide, array, cardSumArray, dealer) {
   let faceToTen = convertFaceToTen(newCard);
   let aceToEleven = convertAceToEleven(faceToTen);
   if (dealer === true) {
-    dealersFirstCard = newCard;
+    // dealersFirstCard = newCard;
+    dealersFirstCard = 11;
   }
   if (hide === true) {
     newCardEl.innerHTML += `<div id="hiddenCard" class="card back-red"></div>`;
     secretCard = aceToEleven;
     dealersHiddenCard = secretCard;
+    cardSum.d.push(secretCard);
   } else {
     newCardEl.innerHTML += `<div class="card ${suits[randomSuits()]}${
       ranks[newCard - 1]
