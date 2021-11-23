@@ -81,18 +81,19 @@ img {
 .sumBox {
   border-radius: 20px;
   border: solid 3px var(--casinoRed);
-  padding: 0 25px;
-  margin: 10px;
+  padding: 15px;
+  margin: 10px 20px;
   color: white;
-  width: 50px;
+  width: 70px;
   text-align: center;
+  height: 60px;
 }
 
 .hands {
   height: 60px;
   border-radius: 20px;
   border: solid 3px var(--casinoRed);
-  margin: 10px;
+  margin: 10px 20px;
   color: white;
   width: 400px;
 }
@@ -107,21 +108,22 @@ img {
 
 .hands {
   font-size: 50px;
-  padding: 0 25px;
+  padding: 5px 0 25px 25px;
+  margin: auto;
 }
 
 .dialogue {
   position: absolute;
   color: white;
   font-size: 30px;
-  margin: 250px 0 0 0;
+  margin: 255px 0 0 0;
   text-align: center;
   width: 600px;
   text-shadow: black 0 0 10px;
 }
 
 #playerSays {
-  margin: 280px 0 0 0;
+  margin: 290px 0 0 0;
 }
 
 .card {

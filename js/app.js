@@ -168,14 +168,12 @@ function render() {
     tieDialogue();
   }
 
-  //   Need to implement TIE logic at 21
   for (let num in cardSum) {
     sumBox[num].textContent = cardSum[num].reduce((a, b) => a + b);
   }
   for (let num in scoreBox) {
     scoreBox[num].textContent = score[num];
   }
-  console.log('a', cardSum.d, 'b', cardSum.p, 'c', score.d, 'd', score.p);
 }
 
 // Random card from 1-13
@@ -195,7 +193,7 @@ function runDealCard(hide, array, cardSumArray) {
   let faceToTen = convertFaceToTen(newCard);
   let aceToEleven = convertAceToEleven(faceToTen);
   if (hide === true) {
-    newCardEl.append(` # `);
+    newCardEl.innerHTML += `<div class="card s02"></div>`;
     secretCard = aceToEleven;
   } else {
     newCardEl.innerHTML += `<div class="card s02"></div>`;
