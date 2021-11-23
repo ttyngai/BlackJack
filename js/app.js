@@ -172,6 +172,8 @@ function render() {
   if (playersSum > 21) {
     disableHitStayButton();
     enableDealButton();
+    cardSum.d.push(convertFaceToTen(secretCard));
+    showHiddenCard();
     gameEnded = true;
     score.d++;
     winningDialogueIsPlayer(false);
