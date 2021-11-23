@@ -546,7 +546,7 @@ img {
   box-shadow: -2px 2px 3px 0 rgba(41, 41, 41, 0.75);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 800px) {
   #playerImg {
     max-width: 600px;
   }
