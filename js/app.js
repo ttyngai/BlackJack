@@ -2,6 +2,23 @@
 let enabledButtonColor = '#0d331f';
 let disabledButtonColor = '#06170e';
 
+const suits = ['s', 'c', 'd', 'h'];
+const ranks = [
+  'A',
+  '02',
+  '03',
+  '04',
+  '05',
+  '06',
+  '07',
+  '08',
+  '09',
+  '10',
+  'J',
+  'Q',
+  'K',
+];
+
 // const playersArray = document.getElementById('playersArray');
 // const dealersArray = document.getElementById('dealersArray');
 
@@ -49,6 +66,9 @@ let buttonStatus = {
   s: document.getElementById('stay'),
 };
 
+let dealersFirstCard;
+let dealersHiddenCard;
+
 /*----- event listeners -----*/
 document.getElementById('init').addEventListener('click', init);
 document.getElementById('deal').addEventListener('click', deal);
@@ -64,6 +84,7 @@ function init() {
     dialogues.c[randomDialogue()];
   enableDealButton();
   disableHitStayButton();
+
   cardSum = {
     d: [0],
     p: [0],
@@ -79,6 +100,8 @@ function init() {
 
 // Deal is pressed
 function deal() {
+  dealersFirstCard = '';
+  dealersHiddenCard = '';
   document.getElementById('playerSays').textContent = '';
   document.getElementById('dealerSays').textContent = '';
   document.getElementById('dealerSays').textContent =
@@ -90,10 +113,13 @@ function deal() {
     d: [0],
     p: [0],
   };
+  let dealer = true;
   document.getElementById('playersArray').textContent = '';
   document.getElementById('dealersArray').textContent = '';
   setTimeout(function () {
-    runDealCard(false, 'dealersArray', cardSum.d);
+    runDealCard(false, 'dealersArray', cardSum.d, dealer);
+    dealer = false;
+
     setTimeout(function () {
       runDealCard(true, 'dealersArray', cardSum.d);
       enableHitStayButton();
@@ -124,9 +150,11 @@ function stay() {
   disableHitStayButton();
   enableDealButton();
   cardSum.d[2] = secretCard;
+
   document.getElementById(
     'dealersArray'
-  ).textContent = `${cardSum.d[1]} ${cardSum.d[2]}`;
+  ).innerHTML = `${cardSum.d[1]} ${cardSum.d[2]}`;
+
   render();
   while (!gameEnded && cardSum.d.reduce((a, b) => a + b) < 17) {
     runDealCard(false, 'dealersArray', cardSum.d);
@@ -183,24 +211,37 @@ function randomCard() {
 function randomDialogue() {
   return Math.floor(Math.random() * 4);
 }
+function randomSuits() {
+  return Math.floor(Math.random() * 4);
+}
 
 // Deal card logic
-function runDealCard(hide, array, cardSumArray) {
+function runDealCard(hide, array, cardSumArray, dealer) {
   let newCard = randomCard();
   let newCardEl = document.getElementById(array);
   let aced = displayAce(newCard);
   let faced = convertFaceToLetters(aced);
   let faceToTen = convertFaceToTen(newCard);
   let aceToEleven = convertAceToEleven(faceToTen);
+  console.log(newCard);
+  if (dealer === true) {
+    dealersFirstCard = newCard;
+  }
+  console.log(dealersFirstCard);
   if (hide === true) {
-    newCardEl.innerHTML += `<div class="card s02"></div>`;
+    newCardEl.innerHTML += `<div class="card back-red"></div>`;
     secretCard = aceToEleven;
+    dealersHiddenCard = secretCard;
   } else {
-    newCardEl.innerHTML += `<div class="card s02"></div>`;
+    newCardEl.innerHTML += `<div class="card ${suits[randomSuits()]}${
+      ranks[newCard - 1]
+    }"></div>`;
+
     // newCardEl.append(` ${faced} `);
 
     cardSumArray.push(aceToEleven);
   }
+
   checkAndReduceAce(cardSumArray);
   return cardSumArray[cardSumArray.length - 1];
 }
@@ -287,23 +328,7 @@ function disableHitStayButton() {
   buttonStatus.s.style.background = disabledButtonColor;
 }
 
-// /*----- constants -----*/
-// const suits = ['s', 'c', 'd', 'h'];
-// const ranks = [
-//   '02',
-//   '03',
-//   '04',
-//   '05',
-//   '06',
-//   '07',
-//   '08',
-//   '09',
-//   '10',
-//   'J',
-//   'Q',
-//   'K',
-//   'A',
-// ];
+/*----- constants -----*/
 
 // // Build a 'master' deck of 'card' objects used to create shuffled decks
 // const masterDeck = buildMasterDeck();
