@@ -41,6 +41,7 @@ const dialogues = {
 };
 
 /*----- app's state (variables) -----*/
+let secretCard;
 let score = {};
 let cardSum = {
   d: [0],
@@ -50,7 +51,6 @@ let timeDelay = 400;
 let playerEndedTurn;
 
 /*----- cached element references -----*/
-let secretCard;
 let gameEnded;
 let scoreBox = {
   d: document.getElementById('dealersScoreBox'),
@@ -84,7 +84,6 @@ function init() {
     dialogues.c[randomDialogue()];
   enableDealButton();
   disableHitStayButton();
-
   cardSum = {
     d: [0],
     p: [0],
@@ -149,12 +148,11 @@ function stay() {
   playerEndedTurn = true;
   disableHitStayButton();
   enableDealButton();
-  cardSum.d[2] = secretCard;
 
-  document.getElementById(
-    'dealersArray'
-  ).innerHTML = `${cardSum.d[1]} ${cardSum.d[2]}`;
-
+  cardSum.d.push(convertFaceToTen(secretCard));
+  document.getElementById('hiddenCard').className = `card ${
+    suits[randomSuits()]
+  }${ranks[dealersHiddenCard - 1]}`;
   render();
   while (!gameEnded && cardSum.d.reduce((a, b) => a + b) < 17) {
     runDealCard(false, 'dealersArray', cardSum.d);
@@ -223,13 +221,11 @@ function runDealCard(hide, array, cardSumArray, dealer) {
   let faced = convertFaceToLetters(aced);
   let faceToTen = convertFaceToTen(newCard);
   let aceToEleven = convertAceToEleven(faceToTen);
-  console.log(newCard);
   if (dealer === true) {
     dealersFirstCard = newCard;
   }
-  console.log(dealersFirstCard);
   if (hide === true) {
-    newCardEl.innerHTML += `<div class="card back-red"></div>`;
+    newCardEl.innerHTML += `<div id="hiddenCard" class="card back-red"></div>`;
     secretCard = aceToEleven;
     dealersHiddenCard = secretCard;
   } else {
@@ -327,75 +323,3 @@ function disableHitStayButton() {
   buttonStatus.s.disabled = true;
   buttonStatus.s.style.background = disabledButtonColor;
 }
-
-/*----- constants -----*/
-
-// // Build a 'master' deck of 'card' objects used to create shuffled decks
-// const masterDeck = buildMasterDeck();
-// renderDeckInContainer(
-//   masterDeck,
-//   document.getElementById('master-deck-container')
-// );
-
-// /*----- app's state (variables) -----*/
-// let shuffledDeck;
-
-// /*----- cached element references -----*/
-// const shuffledContainer = document.getElementById('shuffled-deck-container');
-
-// /*----- event listeners -----*/
-// document
-//   .querySelector('button')
-//   .addEventListener('click', renderNewShuffledDeck);
-
-// /*----- functions -----*/
-// function getNewShuffledDeck() {
-//   // Create a copy of the masterDeck (leave masterDeck untouched!)
-//   const tempDeck = [...masterDeck];
-//   const newShuffledDeck = [];
-//   while (tempDeck.length) {
-//     // Get a random index for a card still in the tempDeck
-//     const rndIdx = Math.floor(Math.random() * tempDeck.length);
-//     // Note the [0] after splice - this is because splice always returns an array and we just want the card object in that array
-//     newShuffledDeck.push(tempDeck.splice(rndIdx, 1)[0]);
-//   }
-//   return newShuffledDeck;
-// }
-
-// function renderNewShuffledDeck() {
-//   // Create a copy of the masterDeck (leave masterDeck untouched!)
-//   shuffledDeck = getNewShuffledDeck();
-//   renderDeckInContainer(shuffledDeck, shuffledContainer);
-// }
-
-// function renderDeckInContainer(deck, container) {
-//   container.innerHTML = '';
-//   // Let's build the cards as a string of HTML
-//   let cardsHtml = '';
-//   deck.forEach(function (card) {
-//     cardsHtml += `<div class="card ${card.face}"></div>`;
-//   });
-//   // Or, use reduce to 'reduce' the array into a single thing - in this case a string of HTML markup
-//   // const cardsHtml = deck.reduce(function(html, card) {
-//   //   return html + `<div class="card ${card.face}"></div>`;
-//   // }, '');
-//   container.innerHTML = cardsHtml;
-// }
-
-// function buildMasterDeck() {
-//   const deck = [];
-//   // Use nested forEach to generate card objects
-//   suits.forEach(function (suit) {
-//     ranks.forEach(function (rank) {
-//       deck.push({
-//         // The 'face' property maps to the library's CSS classes for cards
-//         face: `${suit}${rank}`,
-//         // Setting the 'value' property for game of blackjack, not war
-//         value: Number(rank) || (rank === 'A' ? 11 : 10),
-//       });
-//     });
-//   });
-//   return deck;
-// }
-
-// renderNewShuffledDeck();
