@@ -53,8 +53,8 @@ document.getElementById('stay').addEventListener('click', stay);
 
 /*----- functions -----*/
 
+// Page is loaded or Reset button pressed
 init();
-
 function init() {
   document.getElementById('dealerSays').textContent =
     dialogues.c[randomDialogue()];
@@ -73,6 +73,7 @@ function init() {
   render();
 }
 
+// Deal is pressed
 function deal() {
   document.getElementById('playerSays').textContent = '';
   document.getElementById('dealerSays').textContent = '';
@@ -87,16 +88,12 @@ function deal() {
   };
   document.getElementById('playersArray').textContent = '';
   document.getElementById('dealersArray').textContent = '';
-
   setTimeout(function () {
     runDealCard(false, 'dealersArray', cardSum.d);
-
     setTimeout(function () {
       runDealCard(true, 'dealersArray', cardSum.d);
-
       enableHitStayButton();
     }, timeDelay);
-
     if (cardSum.d.reduce((a, b) => a + b) === 21) {
       document.getElementById('dealersArray').innerHTML = 'BlackJack!';
     }
@@ -104,6 +101,7 @@ function deal() {
   }, timeDelay);
 }
 
+// Player hits
 function hit() {
   disableHitStayButton();
   document.getElementById('playerSays').textContent = '';
@@ -116,30 +114,28 @@ function hit() {
   }, timeDelay);
 }
 
+// Player stays and ends turn
 function stay() {
   playerEndedTurn = true;
   disableHitStayButton();
   enableDealButton();
-
   cardSum.d[2] = secretCard;
-
   document.getElementById(
     'dealersArray'
   ).textContent = `${cardSum.d[1]} ${cardSum.d[2]}`;
-
   render();
-
   while (!gameEnded && cardSum.d.reduce((a, b) => a + b) < 17) {
     runDealCard(false, 'dealersArray', cardSum.d);
     render();
   }
 }
 
+// Render function
 function render() {
   let playerSum = cardSum.p.reduce((a, b) => a + b);
   let dealerSum = cardSum.d.reduce((a, b) => a + b);
 
-  //   while hit is being pressed
+  //   Hit is pressed
   if (playerSum > 21) {
     disableHitStayButton();
     enableDealButton();
@@ -147,7 +143,8 @@ function render() {
     score.d++;
     winningDialogueIsPlayer(false);
   }
-  //   after stay is pressed
+
+  //   Stay is pressed
   if (!gameEnded && playerEndedTurn) {
     if (dealerSum > 21) {
       gameEnded = true;
@@ -166,8 +163,8 @@ function render() {
   if (playerSum === dealerSum && dealerSum >= 17) {
     tieDialogue();
   }
-  //   Need to implement TIE logic at 21
 
+  //   Need to implement TIE logic at 21
   for (let num in cardSum) {
     sumBox[num].textContent = cardSum[num].reduce((a, b) => a + b);
   }
@@ -228,6 +225,7 @@ function convertFaceToLetters(newCard) {
   }
   return newCard;
 }
+
 // Converts 1 to 11
 function convertAceToEleven(newCard) {
   if (newCard === 1) return 11;

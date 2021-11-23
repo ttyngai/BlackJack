@@ -8,6 +8,7 @@
   --scoreBackground: #9b880c6b;
   --scoreText: white;
 }
+
 body {
   display: flex;
   flex-direction: column;
@@ -23,9 +24,11 @@ img {
   border: solid 2px var(--casinoYellow);
   width: 100vw;
 }
+
 #playerImg {
   max-width: 500px;
 }
+
 #dealerImg {
   max-width: 500px;
 }
@@ -115,6 +118,7 @@ img {
   width: 500px;
   text-shadow: #000 0px 0px 1px;
 }
+
 #playerSays {
   padding: 210px 0 0 0;
 }
