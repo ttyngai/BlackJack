@@ -8,6 +8,8 @@ let cardSum = {
   d: [0],
   p: [0],
 };
+let timeDelay = 0;
+let playerEndedTurn;
 /*----- cached element references -----*/
 
 let scoreBox = {
@@ -25,13 +27,14 @@ let buttonStatus = {
 };
 
 let secretCard;
+let gameEnded;
 
 /*----- event listeners -----*/
 
 document.getElementById('init').addEventListener('click', init);
 document.getElementById('deal').addEventListener('click', deal);
-document.getElementById('hit').addEventListener('click', hitPlayer);
-document.getElementById('stay').addEventListener('click', endTurn);
+document.getElementById('hit').addEventListener('click', hit);
+document.getElementById('stay').addEventListener('click', stay);
 
 /*----- functions -----*/
 
@@ -57,40 +60,47 @@ function init() {
 }
 
 function deal() {
+  disableDealButton();
+  playerEndedTurn = false;
+  gameEnded = false;
   // add function to disable deal button
   cardSum = {
     d: [0],
     p: [0],
   };
-  disableDealButton();
-  enableHitStayButton();
+
   document.getElementById('playersArray').textContent = '';
   document.getElementById('dealersArray').textContent = '';
 
   // run deal cards with parameters set, first parameter is whether card is hidden
 
-  runDealCards(false, 'dealersArray', cardSum.d);
+  setTimeout(function () {
+    runDealCard(false, 'dealersArray', cardSum.d);
 
-  runDealCards(true, 'dealersArray', cardSum.d);
+    setTimeout(function () {
+      runDealCard(true, 'dealersArray', cardSum.d);
 
-  if (cardSum.d.reduce((a, b) => a + b) === 21) {
-    document.getElementById('dealersArray').innerHTML = 'BlackJack!';
-  }
+      enableHitStayButton();
+    }, timeDelay);
 
-  render();
+    if (cardSum.d.reduce((a, b) => a + b) === 21) {
+      document.getElementById('dealersArray').innerHTML = 'BlackJack!';
+    }
+
+    render();
+  }, timeDelay);
 }
 
-function hitPlayer() {
-  console.log('HIT');
-
-  runDealCards(0, 'playersArray', cardSum.p);
-
-  render();
+function hit() {
+  setTimeout(function () {
+    runDealCard(false, 'playersArray', cardSum.p);
+    render();
+  }, timeDelay);
 }
 
-function endTurn() {
+function stay() {
   console.log('STAY');
-
+  playerEndedTurn = true;
   disableHitStayButton();
   enableDealButton();
 
@@ -101,61 +111,79 @@ function endTurn() {
   ).textContent = `${cardSum.d[1]} ${cardSum.d[2]}`;
 
   render();
-  //   runDealCards(0, 'dealersArray', cardSum.d);
-  //   render();
+  console.log('check again ended game', gameEnded);
+  while (!gameEnded && cardSum.d.reduce((a, b) => a + b) < 17) {
+    runDealCard(false, 'dealersArray', cardSum.d);
+
+    render();
+  }
 }
 
+// Render
+
 function render() {
-  for (let num in cardSum) {
-    sumBox[num].textContent = cardSum[num].reduce((a, b) => a + b);
-  }
-  if (cardSum.p.reduce((a, b) => a + b) > 21) {
-    console.log('Player BUSTED!');
+  let playerSum = cardSum.p.reduce((a, b) => a + b);
+  let dealerSum = cardSum.d.reduce((a, b) => a + b);
+
+  //   while hit is being pressed
+  if (playerSum > 21) {
     disableHitStayButton();
     enableDealButton();
+    gameEnded = true;
     score.d++;
   }
-  if (cardSum.d.reduce((a, b) => a + b) > 21) {
-    console.log('Dealer BUSTED!');
-    score.p++;
+  //   after stay is pressed
+  if (!gameEnded && playerEndedTurn) {
+    if (dealerSum > 21) {
+      gameEnded = true;
+      score.p++;
+    } else if (dealerSum <= 21 && dealerSum > playerSum && dealerSum >= 17) {
+      score.d++;
+      gameEnded = true;
+    } else if (playerSum <= 21 && dealerSum >= 17 && dealerSum < playerSum) {
+      score.p++;
+      gameEnded = true;
+    }
+  }
+  if (playerSum === 21 && dealerSum === 21) {
+    console.log('tie');
+  }
+  //   Need to implement TIE logic at 21
+
+  for (let num in cardSum) {
+    sumBox[num].textContent = cardSum[num].reduce((a, b) => a + b);
   }
   for (let num in scoreBox) {
     scoreBox[num].textContent = score[num];
   }
-  console.log(cardSum);
+  console.log('a', cardSum.d, 'b', cardSum.p, 'c', score.d, 'd', score.p);
 }
 
-// Helper Function
+// Random Card from 1-13
 function randomCard() {
   return Math.floor(Math.random() * 12 + 1);
 }
 
-// adjust array if anything is 11 and score over 21 turn the first 11 into 1
-
-// Helper function: if array is over 21,
-// checks if any arrays is 11(ace),
-// converts first one it finds to a 1,
-// returns array
-
-function runDealCards(hide, array, cardSumArray) {
+// Deal card logic
+function runDealCard(hide, array, cardSumArray) {
   let newCard = randomCard();
   let newCardEl = document.getElementById(array);
-  let aceFy = displayAce(newCard);
-  let faceFy = convertFaceToLetters(aceFy);
+  let aced = displayAce(newCard);
+  let faced = convertFaceToLetters(aced);
   let faceToTen = convertFaceToTen(newCard);
   let aceToEleven = convertAceToEleven(faceToTen);
   if (hide === true) {
     newCardEl.append(` # `);
     secretCard = aceToEleven;
   } else {
-    newCardEl.append(` ${faceFy} `);
+    newCardEl.append(` ${faced} `);
     cardSumArray.push(aceToEleven);
   }
   checkAndReduceAce(cardSumArray);
-
   return cardSumArray[cardSumArray.length - 1];
 }
 
+// Checks if busted total contains Ace that could be converted from 11 to 1
 function checkAndReduceAce(array) {
   if (array.reduce((a, b) => a + b) >= 22 && array.includes(11)) {
     array[array.indexOf(11)] = 1;
@@ -163,20 +191,13 @@ function checkAndReduceAce(array) {
   return array;
 }
 
-// For display, turns any 1(Ace) into the string 1/11
+// Converts all 1 to Ace for display
 function displayAce(newCard) {
   if (newCard !== 1) return newCard;
   else return 'A';
 }
 
-// converts 1 to 11
-function convertAceToEleven(newCard) {
-  if (newCard === 1) return 11;
-  return newCard;
-}
-
-// converts face cards to letter for display
-
+// Converts face cards to letter for display
 function convertFaceToLetters(newCard) {
   if (newCard === 11) return 'J';
   else if (newCard === 12) {
@@ -186,13 +207,19 @@ function convertFaceToLetters(newCard) {
   }
   return newCard;
 }
+// Converts 1 to 11
+function convertAceToEleven(newCard) {
+  if (newCard === 1) return 11;
+  return newCard;
+}
 
-// Converts all facecards to number 10
+// Converts all face cards to 10
 function convertFaceToTen(newCard) {
   if (newCard >= 11) return 10;
   return newCard;
 }
 
+// Button enable/disable
 function enableDealButton() {
   buttonStatus.d.disabled = false;
   buttonStatus.d.style.background = enabledButtonColor;
