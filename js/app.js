@@ -1,32 +1,66 @@
 /*----- constants -----*/
 
+let enabledButtonColor = '#0d331f';
+let disabledButtonColor = '#06170e';
 /*----- app's state (variables) -----*/
-let score = {};
+let score = {
+  d: 10,
+  p: 0,
+};
 let cardSum = {
-  d: [],
-  p: [],
+  d: [0],
+  p: [0],
 };
 /*----- cached element references -----*/
+
+let scoreBox = {
+  d: document.getElementById('dealersScoreBox'),
+  p: document.getElementById('playersScoreBox'),
+};
 let sumBox = {
   d: document.getElementById('dealersSumBox'),
   p: document.getElementById('playersSumBox'),
 };
+let buttonStatus = {
+  d: document.getElementById('deal'),
+  h: document.getElementById('hit'),
+  s: document.getElementById('stay'),
+};
 
 /*----- event listeners -----*/
 
-// document.getElementById('reset').addEventListener('click', init);
-document.getElementById('newRound').addEventListener('click', deal);
+document.getElementById('reset').addEventListener('click', reset);
+document.getElementById('deal').addEventListener('click', deal);
 document.getElementById('hit').addEventListener('click', hitPlayer);
 document.getElementById('stay').addEventListener('click', endTurn);
 
 /*----- functions -----*/
 
-// init();
+reset();
 
-deal();
+function reset() {
+  enableDealButton();
+  disableHitStayButton();
+  cardSum = {
+    d: [0],
+    p: [0],
+  };
+  score = {
+    d: [0],
+    p: [0],
+  };
+
+  document.getElementById('dealersArray').innerHTML = '';
+  document.getElementById('playersArray').innerHTML = '';
+
+  render();
+}
 
 function deal() {
   // add function to disable deal button
+  disableDealButton();
+  enableHitStayButton();
+
   cardSum = {
     d: [0],
     p: [0],
@@ -67,7 +101,13 @@ function render() {
     sumBox[num].textContent = cardSum[num].reduce((a, b) => a + b);
   }
   if (cardSum.p.reduce((a, b) => a + b) > 21) {
-    console.log('BUSTED!');
+    console.log('Player BUSTED!');
+    disableHitStayButton();
+    enableDealButton();
+    score.d++;
+  }
+  for (let num in scoreBox) {
+    scoreBox[num].textContent = score[num];
   }
 }
 
@@ -75,7 +115,6 @@ function render() {
 function randomCard() {
   return Math.floor(Math.random() * 12 + 1);
 }
-console.log(randomCard());
 
 // adjust array if anything is 11 and score over 21 turn the first 11 into 1
 
@@ -119,4 +158,26 @@ function convertFaceToLetters(newCard) {
 function convertFaceToTen(newCard) {
   if (newCard >= 11) return 10;
   return newCard;
+}
+
+function enableDealButton() {
+  buttonStatus.d.disabled = false;
+  buttonStatus.d.style.background = enabledButtonColor;
+}
+function disableDealButton() {
+  buttonStatus.d.disabled = true;
+  buttonStatus.d.style.background = disabledButtonColor;
+}
+
+function enableHitStayButton() {
+  buttonStatus.h.disabled = false;
+  buttonStatus.h.style.background = enabledButtonColor;
+  buttonStatus.s.disabled = false;
+  buttonStatus.s.style.background = enabledButtonColor;
+}
+function disableHitStayButton() {
+  buttonStatus.h.disabled = true;
+  buttonStatus.h.style.background = disabledButtonColor;
+  buttonStatus.s.disabled = true;
+  buttonStatus.s.style.background = disabledButtonColor;
 }
