@@ -3,10 +3,7 @@
 let enabledButtonColor = '#0d331f';
 let disabledButtonColor = '#06170e';
 /*----- app's state (variables) -----*/
-let score = {
-  d: 10,
-  p: 0,
-};
+let score = {};
 let cardSum = {
   d: [0],
   p: [0],
@@ -26,6 +23,8 @@ let buttonStatus = {
   h: document.getElementById('hit'),
   s: document.getElementById('stay'),
 };
+
+let secretCard;
 
 /*----- event listeners -----*/
 
@@ -68,9 +67,15 @@ function deal() {
   document.getElementById('playersArray').textContent = '';
   document.getElementById('dealersArray').textContent = '';
 
-  // run deal cards with parameters set, 2 for dealer, 7 for player, and 5 more for dealer
+  // run deal cards with parameters set, first parameter is whether card is hidden
 
-  runDealCards(0, 'dealersArray', cardSum.d);
+  runDealCards(false, 'dealersArray', cardSum.d);
+
+  runDealCards(true, 'dealersArray', cardSum.d);
+
+  if (cardSum.d.reduce((a, b) => a + b) === 21) {
+    document.getElementById('dealersArray').innerHTML = 'BlackJack!';
+  }
 
   render();
 }
@@ -85,8 +90,19 @@ function hitPlayer() {
 
 function endTurn() {
   console.log('STAY');
-  runDealCards(0, 'dealersArray', cardSum.d);
+
+  disableHitStayButton();
+  enableDealButton();
+
+  cardSum.d[2] = secretCard;
+
+  document.getElementById(
+    'dealersArray'
+  ).textContent = `${cardSum.d[1]} ${cardSum.d[2]}`;
+
   render();
+  //   runDealCards(0, 'dealersArray', cardSum.d);
+  //   render();
 }
 
 function render() {
@@ -106,6 +122,7 @@ function render() {
   for (let num in scoreBox) {
     scoreBox[num].textContent = score[num];
   }
+  console.log(cardSum);
 }
 
 // Helper Function
@@ -120,16 +137,23 @@ function randomCard() {
 // converts first one it finds to a 1,
 // returns array
 
-function runDealCards(count, array, cardSumKey) {
+function runDealCards(hide, array, cardSumArray) {
   let newCard = randomCard();
   let newCardEl = document.getElementById(array);
   let aceFy = displayAce(newCard);
   let faceFy = convertFaceToLetters(aceFy);
-  newCardEl.append(` ${faceFy} `);
   let faceToTen = convertFaceToTen(newCard);
   let aceToEleven = convertAceToEleven(faceToTen);
-  cardSumKey.push(aceToEleven);
-  checkAndReduceAce(cardSumKey);
+  if (hide === true) {
+    newCardEl.append(` # `);
+    secretCard = aceToEleven;
+  } else {
+    newCardEl.append(` ${faceFy} `);
+    cardSumArray.push(aceToEleven);
+  }
+  checkAndReduceAce(cardSumArray);
+
+  return cardSumArray[cardSumArray.length - 1];
 }
 
 function checkAndReduceAce(array) {
