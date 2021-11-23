@@ -26,11 +26,11 @@ img {
 }
 
 #playerImg {
-  max-width: 500px;
+  max-width: 300px;
 }
 
 #dealerImg {
-  max-width: 500px;
+  max-width: 300px;
 }
 
 #playHands {
@@ -38,39 +38,36 @@ img {
 }
 
 #gameTitle {
-  border-radius: 30px;
-  font-size: 25px;
   border: solid 3px var(--casinoRed);
   color: var(--interfaceGrey);
-  padding: 10px 50px;
-  margin: 10px;
   text-align: center;
-}
-
-#controls button {
-  background-color: var(--buttonsBackground);
-  width: 100px;
-  padding: 10px;
-  margin: 0 10px;
   border-radius: 30px;
-  font-size: 20px;
-  font-style: bold;
-  color: var(--buttonText);
+  font-size: 17px;
+  padding: 10px 25px;
+  margin: 10px;
 }
 
 .scoreBox {
   position: absolute;
-  padding: 5px 30px;
-  margin: 50px 30px;
-  font-size: 50px;
   font-style: bold;
   color: var(--scoreText);
   background-color: var(--scoreBackground);
   border: solid 3px var(--casinoYellow);
-  border-radius: 10px;
-  min-width: 30px;
-  min-height: 40px;
   text-align: center;
+  padding: 0 20px;
+  margin: 35px 30px;
+  font-size: 30px;
+  border-radius: 5px;
+  min-width: 20px;
+  min-height: 30px;
+}
+
+.nameCard {
+  position: absolute;
+  color: white;
+  transform: translate(30px, 0px);
+  font-size: 15px;
+  text-align: right;
 }
 
 .handsContainer {
@@ -80,63 +77,62 @@ img {
 }
 
 .sumBox {
-  border-radius: 20px;
   border: solid 3px var(--casinoRed);
-  padding: 15px;
-  margin: 10px 10px;
   color: white;
-  width: 70px;
   text-align: center;
-  height: 60px;
+  border-radius: 15px;
+  padding: 13px 17px 17px 15px;
+  margin: 5px;
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
 }
 
 .hands {
-  height: 60px;
-  border-radius: 20px;
   border: solid 3px var(--casinoRed);
-  margin: 10px 0px;
   color: white;
-  width: 350px;
-}
-
-.nameCard {
-  position: absolute;
-  color: white;
-  transform: translate(30px, -5px);
-  font-size: 25px;
-  text-align: right;
-}
-
-.hands {
+  height: 25px;
+  border-radius: 15px;
+  margin: auto 5px;
+  width: 185px;
   font-size: 50px;
-  padding: 5px 0 25px 25px;
-  margin: auto;
+  padding: 5px 0px 30px 10px;
+}
+
+.controlButtons {
+  background-color: var(--buttonsBackground);
+  width: 60px;
+  padding: 10px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-style: bold;
+  color: var(--buttonText);
 }
 
 .dialogue {
   position: absolute;
   color: white;
-  font-size: 30px;
-  margin: 210px 0 0 0;
   text-align: center;
-  width: 500px;
+  width: 300px;
+  font-size: 15px;
+  margin: 130px 0 100px 0;
   text-shadow: black 0 0 10px;
 }
-
 #playerSays {
-  margin: 240px 0 0 0;
+  margin: 150px 0 100px 0;
 }
 
+/* Card CSS */
 .card {
   box-sizing: border-box;
   display: inline-block;
-  margin: 5px 5px 50px 5px;
+  margin: 8px 5px 50px 0px;
   cursor: pointer;
   /* Set the card's dimensions, and size it relative to
      it's font size. */
   font-size: inherit;
-  width: 1.1em;
-  height: 1.4em;
+  width: 0.5em;
+  height: 0.7em;
   /* Add a default background color and border. */
   background-color: #fff;
   border-radius: 0.1em;
@@ -544,4 +540,67 @@ img {
 .card.east.shadow,
 .card.E.shadow {
   box-shadow: -2px 2px 3px 0 rgba(41, 41, 41, 0.75);
+}
+
+@media (min-width: 640px) {
+  #playerImg {
+    max-width: 500px;
+  }
+
+  #dealerImg {
+    max-width: 500px;
+  }
+  .controlButtons {
+    width: 100px;
+    padding: 20px;
+    margin: 0 10px;
+  }
+
+  .nameCard {
+    font-size: 25px;
+  }
+
+  .dialogue {
+    width: 500px;
+    font-size: 30px;
+    margin: 210px 0 0 0;
+  }
+  #playerSays {
+    margin: 240px 0 0 0;
+  }
+  .sumBox {
+    border-radius: 20px;
+    padding: 15px;
+    margin: 10px 10px;
+    width: 70px;
+    height: 60px;
+  }
+
+  .hands {
+    height: 60px;
+    border-radius: 20px;
+    margin: 10px 0px;
+    width: 375px;
+    font-size: 50px;
+    padding: 5px 0 25px 25px;
+  }
+
+  .scoreBox {
+    padding: 5px 30px;
+    margin: 50px 30px;
+    font-size: 50px;
+    border-radius: 10px;
+    min-width: 30px;
+    min-height: 40px;
+  }
+  #gameTitle {
+    border-radius: 30px;
+    font-size: 25px;
+    padding: 10px 50px;
+    margin: 10px;
+  }
+  .card {
+    width: 1em;
+    height: 1.3em;
+  }
 }
