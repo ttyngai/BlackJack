@@ -26,11 +26,11 @@ img {
 }
 
 #playerImg {
-  max-width: 600px;
+  max-width: 500px;
 }
 
 #dealerImg {
-  max-width: 600px;
+  max-width: 500px;
 }
 
 #playHands {
@@ -39,18 +39,19 @@ img {
 
 #gameTitle {
   border-radius: 30px;
+  font-size: 25px;
   border: solid 3px var(--casinoRed);
   color: var(--interfaceGrey);
   padding: 10px 50px;
-  margin: 15px;
+  margin: 10px;
   text-align: center;
 }
 
 #controls button {
   background-color: var(--buttonsBackground);
-  width: 120px;
+  width: 100px;
   padding: 10px;
-  margin: 10px;
+  margin: 0 10px;
   border-radius: 30px;
   font-size: 20px;
   font-style: bold;
@@ -82,7 +83,7 @@ img {
   border-radius: 20px;
   border: solid 3px var(--casinoRed);
   padding: 15px;
-  margin: 10px 20px;
+  margin: 10px 10px;
   color: white;
   width: 70px;
   text-align: center;
@@ -93,9 +94,9 @@ img {
   height: 60px;
   border-radius: 20px;
   border: solid 3px var(--casinoRed);
-  margin: 10px 20px;
+  margin: 10px 0px;
   color: white;
-  width: 400px;
+  width: 350px;
 }
 
 .nameCard {
@@ -116,14 +117,14 @@ img {
   position: absolute;
   color: white;
   font-size: 30px;
-  margin: 255px 0 0 0;
+  margin: 210px 0 0 0;
   text-align: center;
-  width: 600px;
+  width: 500px;
   text-shadow: black 0 0 10px;
 }
 
 #playerSays {
-  margin: 290px 0 0 0;
+  margin: 240px 0 0 0;
 }
 
 .card {
