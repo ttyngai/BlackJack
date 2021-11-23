@@ -94,11 +94,13 @@ function init() {
   };
   document.getElementById('dealersArray').innerHTML = '';
   document.getElementById('playersArray').innerHTML = '';
+  document.getElementById('deal').innerHTML = 'Deal';
   render();
 }
 
 // Deal is pressed
 function deal() {
+  resetScoreBox();
   dealersFirstCard = '';
   dealersHiddenCard = '';
   document.getElementById('playerSays').textContent = '';
@@ -106,6 +108,9 @@ function deal() {
   document.getElementById('dealerSays').textContent =
     dialogues.c[randomDialogue()];
   disableDealButton();
+  setTimeout(function () {
+    document.getElementById('deal').innerHTML = 'Again';
+  }, timeDelay * 4);
   playerEndedTurn = false;
   gameEnded = false;
   cardSum = {
@@ -170,13 +175,13 @@ function render() {
 
   //   Hit is pressed
   if (playersSum > 21) {
+    gameEnded = true;
+    score.d++;
     disableHitStayButton();
     enableDealButton();
     cardSum.d.push(convertFaceToTen(secretCard));
     showHiddenCard();
-    gameEnded = true;
-    score.d++;
-    winningDialogueIsPlayer(false);
+    bustedDialogue();
   }
   if (
     !gameEnded &&
@@ -301,6 +306,17 @@ function showHiddenCard() {
   }${ranks[dealersHiddenCard - 1]}`;
 }
 
+// Reset scorebox after restart
+function resetScoreBox() {
+  cardSum = {
+    d: [0],
+    p: [0],
+  };
+  for (let num in cardSum) {
+    sumBox[num].textContent = cardSum[num].reduce((a, b) => a + b);
+  }
+}
+
 // Dialoge function
 function winningDialogueIsPlayer(boolean) {
   if (boolean) {
@@ -328,6 +344,13 @@ function dealerBlackJack() {
   document.getElementById('playerSays').textContent = '(Lose) Ohhh ffs...';
   document.getElementById('dealerSays').textContent = '';
   document.getElementById('dealerSays').textContent = '(Win) BLACK JACK BABY!';
+}
+
+function bustedDialogue() {
+  document.getElementById('playerSays').textContent = '';
+  document.getElementById('playerSays').textContent = '(Lose) Ohhh f.....';
+  document.getElementById('dealerSays').textContent = '';
+  document.getElementById('dealerSays').textContent = '(Win) You busted!';
 }
 
 // Button enable/disable
