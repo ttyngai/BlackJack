@@ -12,7 +12,7 @@ const dialogues = {
     `(Win) Empty your pocket.`,
   ],
   l: [
-    `(Lose) Wait what?`,
+    `(Lose) What the...?`,
     `(Lose) ..I'm actually broke`,
     `(Lose) Impossible..`,
     `(Lose) M.I.6 shall pay`,
@@ -25,7 +25,7 @@ let cardSum = {
   d: [0],
   p: [0],
 };
-let timeDelay = 500;
+let timeDelay = 400;
 let playerEndedTurn;
 
 /*----- cached element references -----*/
