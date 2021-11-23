@@ -29,18 +29,19 @@ let buttonStatus = {
 
 /*----- event listeners -----*/
 
-document.getElementById('reset').addEventListener('click', reset);
+document.getElementById('init').addEventListener('click', init);
 document.getElementById('deal').addEventListener('click', deal);
 document.getElementById('hit').addEventListener('click', hitPlayer);
 document.getElementById('stay').addEventListener('click', endTurn);
 
 /*----- functions -----*/
 
-reset();
+init();
 
-function reset() {
+function init() {
   enableDealButton();
   disableHitStayButton();
+
   cardSum = {
     d: [0],
     p: [0],
@@ -58,41 +59,33 @@ function reset() {
 
 function deal() {
   // add function to disable deal button
-  disableDealButton();
-  enableHitStayButton();
-
   cardSum = {
     d: [0],
     p: [0],
   };
-  let newCardEl = document.getElementById('playersArray');
-  newCardEl.textContent = '';
+  disableDealButton();
+  enableHitStayButton();
+  document.getElementById('playersArray').textContent = '';
+  document.getElementById('dealersArray').textContent = '';
+
+  // run deal cards with parameters set, 2 for dealer, 7 for player, and 5 more for dealer
+
+  runDealCards(0, 'dealersArray', cardSum.d);
 
   render();
 }
 
 function hitPlayer() {
   console.log('HIT');
-  let newCard = randomCard();
 
-  let newCardEl = document.getElementById('playersArray');
-
-  let aceFy = displayAce(newCard);
-
-  let faceFy = convertFaceToLetters(aceFy);
-
-  newCardEl.append(` ${faceFy} `);
-
-  let faceToTen = convertFaceToTen(newCard);
-  let aceToEleven = convertAceToEleven(faceToTen);
-  cardSum.p.push(aceToEleven);
-  checkAndReduceAce(cardSum.p);
+  runDealCards(0, 'playersArray', cardSum.p);
 
   render();
 }
 
 function endTurn() {
   console.log('STAY');
+  runDealCards(0, 'dealersArray', cardSum.d);
   render();
 }
 
@@ -105,6 +98,10 @@ function render() {
     disableHitStayButton();
     enableDealButton();
     score.d++;
+  }
+  if (cardSum.d.reduce((a, b) => a + b) > 21) {
+    console.log('Dealer BUSTED!');
+    score.p++;
   }
   for (let num in scoreBox) {
     scoreBox[num].textContent = score[num];
@@ -122,6 +119,18 @@ function randomCard() {
 // checks if any arrays is 11(ace),
 // converts first one it finds to a 1,
 // returns array
+
+function runDealCards(count, array, cardSumKey) {
+  let newCard = randomCard();
+  let newCardEl = document.getElementById(array);
+  let aceFy = displayAce(newCard);
+  let faceFy = convertFaceToLetters(aceFy);
+  newCardEl.append(` ${faceFy} `);
+  let faceToTen = convertFaceToTen(newCard);
+  let aceToEleven = convertAceToEleven(faceToTen);
+  cardSumKey.push(aceToEleven);
+  checkAndReduceAce(cardSumKey);
+}
 
 function checkAndReduceAce(array) {
   if (array.reduce((a, b) => a + b) >= 22 && array.includes(11)) {
