@@ -27,10 +27,12 @@ img {
 
 #playerImg {
   max-width: 300px;
+  margin: 3px 0;
 }
 
 #dealerImg {
   max-width: 300px;
+  margin: 3px 0;
 }
 
 #playHands {
@@ -81,22 +83,23 @@ img {
   color: white;
   text-align: center;
   border-radius: 15px;
-  padding: 13px 17px 17px 15px;
-  margin: 5px;
-  width: 30px;
-  height: 30px;
-  font-size: 30px;
+  margin: auto 5px;
+  width: 25px;
+  height: 10px;
+  font-size: 25px;
+  padding: 10px 15px 30px 15px;
+  text-align: center;
 }
 
 .hands {
   border: solid 3px var(--casinoRed);
   color: white;
-  height: 25px;
+  height: 15px;
   border-radius: 15px;
   margin: auto 5px;
   width: 185px;
   font-size: 50px;
-  padding: 5px 0px 30px 10px;
+  padding: 0px 0px 35px 10px;
 }
 
 .controlButtons {
@@ -107,6 +110,7 @@ img {
   font-size: 12px;
   font-style: bold;
   color: var(--buttonText);
+  margin: 5px 0;
 }
 
 .dialogue {
@@ -544,16 +548,17 @@ img {
 
 @media (min-width: 640px) {
   #playerImg {
-    max-width: 500px;
+    max-width: 600px;
   }
 
   #dealerImg {
-    max-width: 500px;
+    max-width: 600px;
   }
   .controlButtons {
-    width: 100px;
+    width: 120px;
     padding: 20px;
-    margin: 0 10px;
+    margin: 10px;
+    font-size: 25px;
   }
 
   .nameCard {
@@ -572,22 +577,23 @@ img {
     border-radius: 20px;
     padding: 15px;
     margin: 10px 10px;
-    width: 70px;
+    width: 80px;
     height: 60px;
+    font-size: 50px;
   }
 
   .hands {
     height: 60px;
     border-radius: 20px;
     margin: 10px 0px;
-    width: 375px;
+    width: 400px;
     font-size: 50px;
     padding: 5px 0 25px 25px;
   }
 
   .scoreBox {
     padding: 5px 30px;
-    margin: 50px 30px;
+    margin: 60px 30px;
     font-size: 50px;
     border-radius: 10px;
     min-width: 30px;
@@ -595,7 +601,7 @@ img {
   }
   #gameTitle {
     border-radius: 30px;
-    font-size: 25px;
+    font-size: 35px;
     padding: 10px 50px;
     margin: 10px;
   }
