@@ -118,14 +118,10 @@ function deal() {
   setTimeout(function () {
     runDealCard(false, 'dealersArray', cardSum.d, dealer);
     dealer = false;
-
     setTimeout(function () {
       runDealCard(true, 'dealersArray', cardSum.d);
       enableHitStayButton();
     }, timeDelay);
-    if (cardSum.d.reduce((a, b) => a + b) === 21) {
-      document.getElementById('dealersArray').innerHTML = 'BlackJack!';
-    }
     render();
   }, timeDelay);
 }
@@ -148,7 +144,6 @@ function stay() {
   playerEndedTurn = true;
   disableHitStayButton();
   enableDealButton();
-
   cardSum.d.push(convertFaceToTen(secretCard));
   document.getElementById('hiddenCard').className = `card ${
     suits[randomSuits()]
@@ -162,11 +157,11 @@ function stay() {
 
 // Render function
 function render() {
-  let playerSum = cardSum.p.reduce((a, b) => a + b);
-  let dealerSum = cardSum.d.reduce((a, b) => a + b);
+  let playersSum = cardSum.p.reduce((a, b) => a + b);
+  let dealersSum = cardSum.d.reduce((a, b) => a + b);
 
   //   Hit is pressed
-  if (playerSum > 21) {
+  if (playersSum > 21) {
     disableHitStayButton();
     enableDealButton();
     gameEnded = true;
@@ -174,23 +169,48 @@ function render() {
     winningDialogueIsPlayer(false);
   }
 
+  //   convertFaceToTen(secretCard)
+
+  if (
+    !gameEnded &&
+    !playerEndedTurn &&
+    dealersSum === 21 &&
+    dealersHiddenCard >= 10
+  ) {
+    gameEnded = true;
+    score.d++;
+    winningDialogueIsPlayer(false);
+    document.getElementById('hiddenCard').className = `card ${
+      suits[randomSuits()]
+    }${ranks[dealersHiddenCard - 1]}`;
+    dealerBlackJack();
+  }
+
   //   Stay is pressed
   if (!gameEnded && playerEndedTurn) {
-    if (dealerSum > 21) {
+    if (dealersSum > 21) {
       gameEnded = true;
       score.p++;
       winningDialogueIsPlayer(true);
-    } else if (dealerSum <= 21 && dealerSum > playerSum && dealerSum >= 17) {
+    } else if (
+      dealersSum <= 21 &&
+      dealersSum > playersSum &&
+      dealersSum >= 17
+    ) {
       gameEnded = true;
       score.d++;
       winningDialogueIsPlayer(false);
-    } else if (playerSum <= 21 && dealerSum >= 17 && dealerSum < playerSum) {
+    } else if (
+      playersSum <= 21 &&
+      dealersSum >= 17 &&
+      dealersSum < playersSum
+    ) {
       gameEnded = true;
       score.p++;
       winningDialogueIsPlayer(true);
     }
   }
-  if (playerSum === dealerSum && dealerSum >= 17) {
+  if (playersSum === dealersSum && dealersSum >= 17) {
     tieDialogue();
   }
 
@@ -217,8 +237,6 @@ function randomSuits() {
 function runDealCard(hide, array, cardSumArray, dealer) {
   let newCard = randomCard();
   let newCardEl = document.getElementById(array);
-  let aced = displayAce(newCard);
-  let faced = convertFaceToLetters(aced);
   let faceToTen = convertFaceToTen(newCard);
   let aceToEleven = convertAceToEleven(faceToTen);
   if (dealer === true) {
@@ -232,12 +250,8 @@ function runDealCard(hide, array, cardSumArray, dealer) {
     newCardEl.innerHTML += `<div class="card ${suits[randomSuits()]}${
       ranks[newCard - 1]
     }"></div>`;
-
-    // newCardEl.append(` ${faced} `);
-
     cardSumArray.push(aceToEleven);
   }
-
   checkAndReduceAce(cardSumArray);
   return cardSumArray[cardSumArray.length - 1];
 }
@@ -248,12 +262,6 @@ function checkAndReduceAce(array) {
     array[array.indexOf(11)] = 1;
   }
   return array;
-}
-
-// Converts all 1 to Ace for display
-function displayAce(newCard) {
-  if (newCard !== 1) return newCard;
-  else return 'A';
 }
 
 // Converts face cards to letter for display
@@ -300,6 +308,12 @@ function winningDialogueIsPlayer(boolean) {
 function tieDialogue() {
   document.getElementById('playerSays').textContent = '(Tie) No way.';
   document.getElementById('dealerSays').textContent = '(Tie) Its destiny.';
+}
+function dealerBlackJack() {
+  document.getElementById('playerSays').textContent = '';
+  document.getElementById('playerSays').textContent = '(Lose) Ohhh ffs...';
+  document.getElementById('dealerSays').textContent = '';
+  document.getElementById('dealerSays').textContent = '(Win) BLACK JACK BABY!';
 }
 
 // Button enable/disable
