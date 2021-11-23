@@ -115,15 +115,22 @@ function deal() {
   let dealer = true;
   document.getElementById('playersArray').textContent = '';
   document.getElementById('dealersArray').textContent = '';
+
   setTimeout(function () {
     runDealCard(false, 'dealersArray', cardSum.d, dealer);
     dealer = false;
     setTimeout(function () {
       runDealCard(true, 'dealersArray', cardSum.d);
-      enableHitStayButton();
-    }, timeDelay);
-    setTimeout(function () {
-      render();
+      setTimeout(function () {
+        runDealCard(false, 'playersArray', cardSum.p);
+        setTimeout(function () {
+          runDealCard(false, 'playersArray', cardSum.p);
+          setTimeout(function () {
+            render();
+            enableHitStayButton();
+          }, timeDelay);
+        }, timeDelay);
+      }, timeDelay);
     }, timeDelay);
   }, timeDelay);
 }
@@ -146,10 +153,9 @@ function stay() {
   playerEndedTurn = true;
   disableHitStayButton();
   enableDealButton();
+
   cardSum.d.push(convertFaceToTen(secretCard));
-  document.getElementById('hiddenCard').className = `card ${
-    suits[randomSuits()]
-  }${ranks[dealersHiddenCard - 1]}`;
+  showHiddenCard();
   render();
   while (!gameEnded && cardSum.d.reduce((a, b) => a + b) < 17) {
     runDealCard(false, 'dealersArray', cardSum.d);
@@ -179,9 +185,7 @@ function render() {
     gameEnded = true;
     score.d++;
     winningDialogueIsPlayer(false);
-    document.getElementById('hiddenCard').className = `card ${
-      suits[randomSuits()]
-    }${ranks[dealersHiddenCard - 1]}`;
+    showHiddenCard();
     dealerBlackJack();
     enableDealButton();
     disableHitStayButton();
@@ -241,14 +245,12 @@ function runDealCard(hide, array, cardSumArray, dealer) {
   let faceToTen = convertFaceToTen(newCard);
   let aceToEleven = convertAceToEleven(faceToTen);
   if (dealer === true) {
-    // dealersFirstCard = newCard;
-    dealersFirstCard = 11;
+    dealersFirstCard = newCard;
   }
   if (hide === true) {
     newCardEl.innerHTML += `<div id="hiddenCard" class="card back-red"></div>`;
     secretCard = aceToEleven;
     dealersHiddenCard = secretCard;
-    cardSum.d.push(secretCard);
   } else {
     newCardEl.innerHTML += `<div class="card ${suits[randomSuits()]}${
       ranks[newCard - 1]
@@ -288,6 +290,13 @@ function convertAceToEleven(newCard) {
 function convertFaceToTen(newCard) {
   if (newCard >= 11) return 10;
   return newCard;
+}
+
+// Show hidden card
+function showHiddenCard() {
+  document.getElementById('hiddenCard').className = `card ${
+    suits[randomSuits()]
+  }${ranks[dealersHiddenCard - 1]}`;
 }
 
 // Dialoge function
