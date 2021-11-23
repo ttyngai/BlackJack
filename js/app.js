@@ -1,17 +1,19 @@
 /*----- constants -----*/
-
 let enabledButtonColor = '#0d331f';
 let disabledButtonColor = '#06170e';
+
 /*----- app's state (variables) -----*/
 let score = {};
 let cardSum = {
   d: [0],
   p: [0],
 };
-let timeDelay = 0;
+let timeDelay = 300;
 let playerEndedTurn;
-/*----- cached element references -----*/
 
+/*----- cached element references -----*/
+let secretCard;
+let gameEnded;
 let scoreBox = {
   d: document.getElementById('dealersScoreBox'),
   p: document.getElementById('playersScoreBox'),
@@ -26,11 +28,7 @@ let buttonStatus = {
   s: document.getElementById('stay'),
 };
 
-let secretCard;
-let gameEnded;
-
 /*----- event listeners -----*/
-
 document.getElementById('init').addEventListener('click', init);
 document.getElementById('deal').addEventListener('click', deal);
 document.getElementById('hit').addEventListener('click', hit);
@@ -43,7 +41,6 @@ init();
 function init() {
   enableDealButton();
   disableHitStayButton();
-
   cardSum = {
     d: [0],
     p: [0],
@@ -52,10 +49,8 @@ function init() {
     d: [0],
     p: [0],
   };
-
   document.getElementById('dealersArray').innerHTML = '';
   document.getElementById('playersArray').innerHTML = '';
-
   render();
 }
 
@@ -63,16 +58,12 @@ function deal() {
   disableDealButton();
   playerEndedTurn = false;
   gameEnded = false;
-  // add function to disable deal button
   cardSum = {
     d: [0],
     p: [0],
   };
-
   document.getElementById('playersArray').textContent = '';
   document.getElementById('dealersArray').textContent = '';
-
-  // run deal cards with parameters set, first parameter is whether card is hidden
 
   setTimeout(function () {
     runDealCard(false, 'dealersArray', cardSum.d);
@@ -86,7 +77,6 @@ function deal() {
     if (cardSum.d.reduce((a, b) => a + b) === 21) {
       document.getElementById('dealersArray').innerHTML = 'BlackJack!';
     }
-
     render();
   }, timeDelay);
 }
@@ -99,7 +89,6 @@ function hit() {
 }
 
 function stay() {
-  console.log('STAY');
   playerEndedTurn = true;
   disableHitStayButton();
   enableDealButton();
@@ -111,16 +100,14 @@ function stay() {
   ).textContent = `${cardSum.d[1]} ${cardSum.d[2]}`;
 
   render();
-  console.log('check again ended game', gameEnded);
+
   while (!gameEnded && cardSum.d.reduce((a, b) => a + b) < 17) {
     runDealCard(false, 'dealersArray', cardSum.d);
-
     render();
   }
 }
 
 // Render
-
 function render() {
   let playerSum = cardSum.p.reduce((a, b) => a + b);
   let dealerSum = cardSum.d.reduce((a, b) => a + b);
@@ -145,7 +132,7 @@ function render() {
       gameEnded = true;
     }
   }
-  if (playerSum === 21 && dealerSum === 21) {
+  if (playerSum === dealerSum && dealerSum >= 17) {
     console.log('tie');
   }
   //   Need to implement TIE logic at 21
@@ -161,7 +148,8 @@ function render() {
 
 // Random Card from 1-13
 function randomCard() {
-  return Math.floor(Math.random() * 12 + 1);
+  //   return Math.floor(Math.random() * 12 + 1);
+  return 5;
 }
 
 // Deal card logic
@@ -228,7 +216,6 @@ function disableDealButton() {
   buttonStatus.d.disabled = true;
   buttonStatus.d.style.background = disabledButtonColor;
 }
-
 function enableHitStayButton() {
   buttonStatus.h.disabled = false;
   buttonStatus.h.style.background = enabledButtonColor;
