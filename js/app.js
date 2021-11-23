@@ -1,6 +1,23 @@
 /*----- constants -----*/
 let enabledButtonColor = '#0d331f';
 let disabledButtonColor = '#06170e';
+// dialogues
+const dialogues = {
+  c: ['Come at me.', 'You sure?', `Don't even try.`, `I warn you.`],
+  h: [`How'bout my Aston too?`, 'Send it.', `One more.`, `I'm winning.`],
+  w: [
+    `(Win) I owned you.`,
+    `(Win) Pay up.`,
+    `(Win) Where's my money?`,
+    `(Win) Empty your pocket.`,
+  ],
+  l: [
+    `(Lose) Wait what?`,
+    `(Lose) ..I'm actually broke`,
+    `(Lose) Impossible..`,
+    `(Lose) M.I.6 shall pay`,
+  ],
+};
 
 /*----- app's state (variables) -----*/
 let score = {};
@@ -8,7 +25,7 @@ let cardSum = {
   d: [0],
   p: [0],
 };
-let timeDelay = 300;
+let timeDelay = 500;
 let playerEndedTurn;
 
 /*----- cached element references -----*/
@@ -39,6 +56,8 @@ document.getElementById('stay').addEventListener('click', stay);
 init();
 
 function init() {
+  document.getElementById('dealerSays').textContent =
+    dialogues.c[randomDialogue()];
   enableDealButton();
   disableHitStayButton();
   cardSum = {
@@ -55,6 +74,10 @@ function init() {
 }
 
 function deal() {
+  document.getElementById('playerSays').textContent = '';
+  document.getElementById('dealerSays').textContent = '';
+  document.getElementById('dealerSays').textContent =
+    dialogues.c[randomDialogue()];
   disableDealButton();
   playerEndedTurn = false;
   gameEnded = false;
@@ -82,9 +105,14 @@ function deal() {
 }
 
 function hit() {
+  disableHitStayButton();
+  document.getElementById('playerSays').textContent = '';
+  document.getElementById('playerSays').textContent =
+    dialogues.h[randomDialogue()];
   setTimeout(function () {
     runDealCard(false, 'playersArray', cardSum.p);
     render();
+    if (!gameEnded) enableHitStayButton();
   }, timeDelay);
 }
 
@@ -107,7 +135,6 @@ function stay() {
   }
 }
 
-// Render
 function render() {
   let playerSum = cardSum.p.reduce((a, b) => a + b);
   let dealerSum = cardSum.d.reduce((a, b) => a + b);
@@ -118,22 +145,26 @@ function render() {
     enableDealButton();
     gameEnded = true;
     score.d++;
+    winningDialogueIsPlayer(false);
   }
   //   after stay is pressed
   if (!gameEnded && playerEndedTurn) {
     if (dealerSum > 21) {
       gameEnded = true;
       score.p++;
+      winningDialogueIsPlayer(true);
     } else if (dealerSum <= 21 && dealerSum > playerSum && dealerSum >= 17) {
+      gameEnded = true;
       score.d++;
-      gameEnded = true;
+      winningDialogueIsPlayer(false);
     } else if (playerSum <= 21 && dealerSum >= 17 && dealerSum < playerSum) {
-      score.p++;
       gameEnded = true;
+      score.p++;
+      winningDialogueIsPlayer(true);
     }
   }
   if (playerSum === dealerSum && dealerSum >= 17) {
-    console.log('tie');
+    tieDialogue();
   }
   //   Need to implement TIE logic at 21
 
@@ -146,10 +177,12 @@ function render() {
   console.log('a', cardSum.d, 'b', cardSum.p, 'c', score.d, 'd', score.p);
 }
 
-// Random Card from 1-13
+// Random card from 1-13
 function randomCard() {
-  //   return Math.floor(Math.random() * 12 + 1);
-  return 5;
+  return Math.floor(Math.random() * 12 + 1);
+}
+function randomDialogue() {
+  return Math.floor(Math.random() * 4);
 }
 
 // Deal card logic
@@ -205,6 +238,29 @@ function convertAceToEleven(newCard) {
 function convertFaceToTen(newCard) {
   if (newCard >= 11) return 10;
   return newCard;
+}
+
+// Dialoge function
+function winningDialogueIsPlayer(boolean) {
+  if (boolean) {
+    document.getElementById('playerSays').textContent = '';
+    document.getElementById('playerSays').textContent =
+      dialogues.w[randomDialogue()];
+    document.getElementById('dealerSays').textContent = '';
+    document.getElementById('dealerSays').textContent =
+      dialogues.l[randomDialogue()];
+  } else {
+    document.getElementById('playerSays').textContent = '';
+    document.getElementById('playerSays').textContent =
+      dialogues.l[randomDialogue()];
+    document.getElementById('dealerSays').textContent = '';
+    document.getElementById('dealerSays').textContent =
+      dialogues.w[randomDialogue()];
+  }
+}
+function tieDialogue() {
+  document.getElementById('playerSays').textContent = '(Tie) No way.';
+  document.getElementById('dealerSays').textContent = '(Tie) Its destiny.';
 }
 
 // Button enable/disable

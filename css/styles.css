@@ -56,7 +56,7 @@ img {
 .scoreBox {
   position: absolute;
   padding: 5px 30px;
-  margin: 30px;
+  margin: 50px 30px;
   font-size: 50px;
   font-style: bold;
   color: var(--scoreText);
@@ -96,15 +96,25 @@ img {
 .nameCard {
   position: absolute;
   color: white;
-  transform: translate(30px, -70px);
+  transform: translate(30px, -5px);
   font-size: 25px;
-}
-
-#sillyTag {
-  text-decoration: underline;
+  text-align: right;
 }
 
 .hands {
   font-size: 50px;
   padding: 0 25px;
+}
+
+.dialogue {
+  position: absolute;
+  color: white;
+  font-size: 30px;
+  padding: 180px 0 0 0;
+  text-align: center;
+  width: 500px;
+  text-shadow: #000 0px 0px 1px;
+}
+#playerSays {
+  padding: 210px 0 0 0;
 }
