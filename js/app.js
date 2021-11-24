@@ -197,6 +197,7 @@ function render() {
     showHiddenCard();
     bustedDialogue();
   }
+  //   renders blackjack
   if (
     !gameEnded &&
     !playerEndedTurn &&
@@ -260,22 +261,22 @@ function randomSuits() {
 
 // Deal card logic
 function runDealCard(hide, array, cardSumArray, dealer) {
-  let newCard = randomCard();
-  let newCardEl = document.getElementById(array);
-  let faceToTen = convertFaceToTen(newCard);
-  let aceToEleven = convertAceToEleven(faceToTen);
+  const newCard = randomCard();
+  const newCardEl = document.getElementById(array);
+  const processedCard = convertAceToEleven(convertFaceToTen(newCard));
+
   if (dealer === true) {
     dealersFirstCard = newCard;
   }
   if (hide === true) {
     newCardEl.innerHTML += `<div id="hiddenCard" class="card back-red"></div>`;
-    secretCard = aceToEleven;
+    secretCard = processedCard;
     dealersHiddenCard = secretCard;
   } else {
     newCardEl.innerHTML += `<div class="card ${suits[randomSuits()]}${
       ranks[newCard - 1]
     }"></div>`;
-    cardSumArray.push(aceToEleven);
+    cardSumArray.push(processedCard);
   }
   checkAndReduceAce(cardSumArray);
   return cardSumArray[cardSumArray.length - 1];
@@ -287,17 +288,6 @@ function checkAndReduceAce(array) {
     array[array.indexOf(11)] = 1;
   }
   return array;
-}
-
-// Converts face cards to letter for display
-function convertFaceToLetters(newCard) {
-  if (newCard === 11) return 'J';
-  else if (newCard === 12) {
-    return 'Q';
-  } else if (newCard === 13) {
-    return 'K';
-  }
-  return newCard;
 }
 
 // Converts 1 to 11
