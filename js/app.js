@@ -1,6 +1,6 @@
 /*----- constants -----*/
-let enabledButtonColor = '#0d331f';
-let disabledButtonColor = '#06170e';
+const enabledButtonColor = '#0d331f';
+const disabledButtonColor = '#06170e';
 const suits = ['s', 'c', 'd', 'h'];
 const ranks = [
   'A',
@@ -58,7 +58,6 @@ let firstCard;
 let secretCard;
 let dealersFirstCard;
 let dealersHiddenCard;
-
 let score = {};
 let cardSum = {
   d: [0],
@@ -134,7 +133,6 @@ function deal() {
   let dealer = true;
   document.getElementById('playersArray').textContent = '';
   document.getElementById('dealersArray').textContent = '';
-
   setTimeout(function () {
     runDealCard(false, 'dealersArray', cardSum.d, dealer);
     dealer = false;
@@ -190,7 +188,6 @@ function stay() {
   playerEndedTurn = true;
   disableHitStayButton();
   enableAgainButton();
-
   cardSum.d.push(convertFaceToTen(secretCard));
   showHiddenCard();
   render();
