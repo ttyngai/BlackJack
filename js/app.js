@@ -349,14 +349,14 @@ function tieDialogue() {
 }
 function dealerBlackJack() {
   document.getElementById('playerSays').textContent = '';
-  document.getElementById('playerSays').textContent = '(Lose) Ohhh ffs...';
+  document.getElementById('playerSays').textContent = '(Lose) No f*^%ing way..';
   document.getElementById('dealerSays').textContent = '';
   document.getElementById('dealerSays').textContent = '(Win) BLACK JACK BABY!';
 }
 
 function bustedDialogue() {
   document.getElementById('playerSays').textContent = '';
-  document.getElementById('playerSays').textContent = '(Lose) Ohhh f.....';
+  document.getElementById('playerSays').textContent = '(Lose) Ohhh ffs...';
   document.getElementById('dealerSays').textContent = '';
   document.getElementById('dealerSays').textContent = '(Win) You busted!';
 }
