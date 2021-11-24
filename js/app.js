@@ -43,7 +43,7 @@ const dialogues = {
   ],
   l: [
     `(Lose) What in the...?`,
-    `(Lose) ...I'm actually broke`,
+    `(Lose) ...I'm actually broke.`,
     `(Lose) Impossible...`,
     `(Lose) M.I.6 shall pay.`,
     `(Lose) Bill the British taxpayer.`,
@@ -137,15 +137,21 @@ function deal() {
     dealer = false;
     setTimeout(function () {
       runDealCard(true, 'dealersArray', cardSum.d);
+      render();
+      if (!gameEnded) {
+        dealPlayer();
+      }
+    }, timeDelay);
+  }, timeDelay);
+}
+function dealPlayer() {
+  setTimeout(function () {
+    runDealCard(false, 'playersArray', cardSum.p);
+    setTimeout(function () {
+      runDealCard(false, 'playersArray', cardSum.p);
       setTimeout(function () {
-        runDealCard(false, 'playersArray', cardSum.p);
-        setTimeout(function () {
-          runDealCard(false, 'playersArray', cardSum.p);
-          setTimeout(function () {
-            render();
-            enableHitStayButton();
-          }, timeDelay);
-        }, timeDelay);
+        render();
+        enableHitStayButton();
       }, timeDelay);
     }, timeDelay);
   }, timeDelay);
@@ -248,23 +254,11 @@ function render() {
   }
 }
 
-// Random card from 1-13
-function randomCard() {
-  return Math.floor(Math.random() * 12 + 1);
-}
-function randomDialogue() {
-  return Math.floor(Math.random() * 5);
-}
-function randomSuits() {
-  return Math.floor(Math.random() * 4);
-}
-
 // Deal card logic
 function runDealCard(hide, array, cardSumArray, dealer) {
-  const newCard = randomCard();
+  let newCard = randomCard();
   const newCardEl = document.getElementById(array);
   const processedCard = convertAceToEleven(convertFaceToTen(newCard));
-
   if (dealer === true) {
     dealersFirstCard = newCard;
   }
@@ -280,6 +274,17 @@ function runDealCard(hide, array, cardSumArray, dealer) {
   }
   checkAndReduceAce(cardSumArray);
   return cardSumArray[cardSumArray.length - 1];
+}
+
+// Random card from 1-13
+function randomCard() {
+  return Math.floor(Math.random() * 12 + 1);
+}
+function randomDialogue() {
+  return Math.floor(Math.random() * 5);
+}
+function randomSuits() {
+  return Math.floor(Math.random() * 4);
 }
 
 // Checks if busted total contains Ace that could be converted from 11 to 1
