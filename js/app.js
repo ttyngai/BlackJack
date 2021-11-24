@@ -140,14 +140,11 @@ function deal() {
     dealer = false;
     setTimeout(function () {
       runDealCard(true, 'dealersArray', cardSum.d);
-      console.log(cardSum.d);
-      console.log(dealersHiddenCard);
       if (checkForDealerBlackJack()) {
         gameEnded = true;
         score.d++;
         showHiddenCard();
         dealerBlackJack();
-        console.log('BlackJack', cardSum.d);
         render();
         disableHitStayButton();
         enableAgainButton();
