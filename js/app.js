@@ -356,7 +356,7 @@ function dealerBlackJack() {
 
 function bustedDialogue() {
   document.getElementById('playerSays').textContent = '';
-  document.getElementById('playerSays').textContent = '(Lose) Ohhh ffs...';
+  document.getElementById('playerSays').textContent = '(Lose) Ohh ffs...';
   document.getElementById('dealerSays').textContent = '';
   document.getElementById('dealerSays').textContent = '(Win) You busted!';
 }

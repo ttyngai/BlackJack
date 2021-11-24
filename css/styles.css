@@ -548,11 +548,11 @@ img {
 
 @media (min-width: 800px) {
   #playerImg {
-    max-width: 600px;
+    max-width: 550px;
   }
 
   #dealerImg {
-    max-width: 600px;
+    max-width: 550px;
   }
   .controlButtons {
     width: 120px;
@@ -566,12 +566,12 @@ img {
   }
 
   .dialogue {
-    width: 600px;
+    width: 550px;
     font-size: 35px;
-    margin: 250px 0 0 0;
+    margin: 230px 0 0 0;
   }
   #playerSays {
-    margin: 285px 0 0 0;
+    margin: 265px 0 0 0;
   }
   .sumBox {
     border-radius: 20px;
