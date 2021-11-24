@@ -567,11 +567,11 @@ img {
 
   .dialogue {
     width: 600px;
-    font-size: 30px;
+    font-size: 35px;
     margin: 250px 0 0 0;
   }
   #playerSays {
-    margin: 280px 0 0 0;
+    margin: 285px 0 0 0;
   }
   .sumBox {
     border-radius: 20px;

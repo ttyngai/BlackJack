@@ -1,7 +1,6 @@
 /*----- constants -----*/
 let enabledButtonColor = '#0d331f';
 let disabledButtonColor = '#06170e';
-
 const suits = ['s', 'c', 'd', 'h'];
 const ranks = [
   'A',
@@ -19,24 +18,35 @@ const ranks = [
   'K',
 ];
 
-// const playersArray = document.getElementById('playersArray');
-// const dealersArray = document.getElementById('dealersArray');
-
 // dialogues
 const dialogues = {
-  c: ['Come at me.', 'You sure?', `Don't even try.`, `I warn you.`],
-  h: [`How'bout my Aston too?`, 'Send it.', `One more.`, `I'm winning.`],
+  c: [
+    'Come at me.',
+    'You sure?',
+    `Don't even try.`,
+    `I'm warning you.`,
+    `I can read your mind.`,
+  ],
+  h: [
+    `How'bout my Aston too?`,
+    'Send it.',
+    `One more.`,
+    `I'm winning.`,
+    `I'll eat your lunch.`,
+  ],
   w: [
     `(Win) I owned you.`,
     `(Win) Pay up.`,
     `(Win) Where's my money?`,
     `(Win) Empty your pockets.`,
+    `(Win) Bankruptcy incoming.`,
   ],
   l: [
     `(Lose) What the...?`,
     `(Lose) ..I'm actually broke`,
     `(Lose) Impossible..`,
     `(Lose) M.I.6 shall pay`,
+    `(Lose) Here's some british tax money`,
   ],
 };
 
@@ -65,7 +75,6 @@ let buttonStatus = {
   h: document.getElementById('hit'),
   s: document.getElementById('stay'),
 };
-
 let dealersFirstCard;
 let dealersHiddenCard;
 
@@ -225,7 +234,6 @@ function render() {
   if (playersSum === dealersSum && dealersSum >= 17) {
     tieDialogue();
   }
-
   for (let num in cardSum) {
     sumBox[num].textContent = cardSum[num].reduce((a, b) => a + b);
   }
@@ -239,7 +247,7 @@ function randomCard() {
   return Math.floor(Math.random() * 12 + 1);
 }
 function randomDialogue() {
-  return Math.floor(Math.random() * 4);
+  return Math.floor(Math.random() * 5);
 }
 function randomSuits() {
   return Math.floor(Math.random() * 4);
