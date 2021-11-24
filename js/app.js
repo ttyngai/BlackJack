@@ -64,7 +64,7 @@ let cardSum = {
   d: [0],
   p: [0],
 };
-let timeDelay = 00;
+let timeDelay = 250;
 let playerEndedTurn;
 
 /*----- cached element references -----*/
