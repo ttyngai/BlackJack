@@ -39,7 +39,7 @@ const dialogues = {
     `(Win) Pay up.`,
     `(Win) Where's my money?`,
     `(Win) Empty your pockets.`,
-    `(Win) Bankruptcy incoming.`,
+    `(Win) You smell like bankrupcy.`,
   ],
   l: [
     `(Lose) What the...?`,
