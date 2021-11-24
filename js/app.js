@@ -46,7 +46,7 @@ const dialogues = {
     `(Lose) ...I'm actually broke`,
     `(Lose) Impossible...`,
     `(Lose) M.I.6 shall pay.`,
-    `(Lose) Bill the british taxpayer.`,
+    `(Lose) Bill the British taxpayer.`,
   ],
   t: ['(Tie) No way.', '(Tie) Its destiny.'],
   bj: ['(Lose) No f*^%ing way..', '(Win) BLACK JACK BABY!'],
