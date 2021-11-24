@@ -105,7 +105,7 @@ function init() {
   };
   document.getElementById('dealersArray').innerHTML = '';
   document.getElementById('playersArray').innerHTML = '';
-  document.getElementById('deal').innerHTML = 'Deal';
+  document.getElementById('deal').innerHTML = 'Start';
   render();
 }
 
