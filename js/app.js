@@ -18,11 +18,11 @@ const ranks = [
   'K',
 ];
 
-// dialogues
+// dialogues (Win/loss message)
 const dialogues = {
   c: [
     'Come at me.',
-    'You sure?',
+    'You sure you want this?',
     `Don't even try.`,
     `I'm warning you.`,
     `I can read your mind.`,
@@ -42,12 +42,15 @@ const dialogues = {
     `(Win) You smell like bankrupcy.`,
   ],
   l: [
-    `(Lose) What the...?`,
-    `(Lose) ..I'm actually broke`,
-    `(Lose) Impossible..`,
-    `(Lose) M.I.6 shall pay`,
-    `(Lose) Here's some british tax money`,
+    `(Lose) What in the...?`,
+    `(Lose) ...I'm actually broke`,
+    `(Lose) Impossible...`,
+    `(Lose) M.I.6 shall pay.`,
+    `(Lose) Bill the british taxpayer.`,
   ],
+  t: ['(Tie) No way.', '(Tie) Its destiny.'],
+  bj: ['(Lose) No f*^%ing way..', '(Win) BLACK JACK BABY!'],
+  b: ['(Lose) Ohh ffs...', '(Win) You BUSTED!'],
 };
 
 /*----- app's state (variables) -----*/
@@ -85,7 +88,6 @@ document.getElementById('hit').addEventListener('click', hit);
 document.getElementById('stay').addEventListener('click', stay);
 
 /*----- functions -----*/
-
 // Page is loaded or Reset button pressed
 init();
 function init() {
@@ -155,6 +157,9 @@ function hit() {
   document.getElementById('playerSays').textContent = '';
   document.getElementById('playerSays').textContent =
     dialogues.h[randomDialogue()];
+  document.getElementById('dealerSays').textContent = '';
+  document.getElementById('dealerSays').textContent =
+    dialogues.c[randomDialogue()];
   setTimeout(function () {
     runDealCard(false, 'playersArray', cardSum.p);
     render();
@@ -344,21 +349,21 @@ function winningDialogueIsPlayer(boolean) {
   }
 }
 function tieDialogue() {
-  document.getElementById('playerSays').textContent = '(Tie) No way.';
-  document.getElementById('dealerSays').textContent = '(Tie) Its destiny.';
+  document.getElementById('playerSays').textContent = dialogues.t[0];
+  document.getElementById('dealerSays').textContent = dialogues.t[1];
 }
 function dealerBlackJack() {
   document.getElementById('playerSays').textContent = '';
-  document.getElementById('playerSays').textContent = '(Lose) No f*^%ing way..';
+  document.getElementById('playerSays').textContent = dialogues.bj[0];
   document.getElementById('dealerSays').textContent = '';
-  document.getElementById('dealerSays').textContent = '(Win) BLACK JACK BABY!';
+  document.getElementById('dealerSays').textContent = dialogues.bj[1];
 }
 
 function bustedDialogue() {
   document.getElementById('playerSays').textContent = '';
-  document.getElementById('playerSays').textContent = '(Lose) Ohh ffs...';
+  document.getElementById('playerSays').textContent = dialogues.b[0];
   document.getElementById('dealerSays').textContent = '';
-  document.getElementById('dealerSays').textContent = '(Win) You busted!';
+  document.getElementById('dealerSays').textContent = dialogues.b[1];
 }
 
 // Button enable/disable
