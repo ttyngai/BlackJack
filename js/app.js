@@ -54,13 +54,17 @@ const dialogues = {
 };
 
 /*----- app's state (variables) -----*/
+let firstCard;
 let secretCard;
+let dealersFirstCard;
+let dealersHiddenCard;
+
 let score = {};
 let cardSum = {
   d: [0],
   p: [0],
 };
-let timeDelay = 400;
+let timeDelay = 00;
 let playerEndedTurn;
 
 /*----- cached element references -----*/
@@ -78,8 +82,6 @@ let buttonStatus = {
   h: document.getElementById('hit'),
   s: document.getElementById('stay'),
 };
-let dealersFirstCard;
-let dealersHiddenCard;
 
 /*----- event listeners -----*/
 document.getElementById('init').addEventListener('click', init);
@@ -93,7 +95,7 @@ init();
 function init() {
   document.getElementById('dealerSays').textContent =
     dialogues.c[randomDialogue()];
-  enableDealButton();
+  enableAgainButton();
   disableHitStayButton();
   cardSum = {
     d: [0],
@@ -111,6 +113,7 @@ function init() {
 
 // Deal is pressed
 function deal() {
+  firstCard = 0;
   resetScoreBox();
   dealersFirstCard = '';
   dealersHiddenCard = '';
@@ -118,7 +121,7 @@ function deal() {
   document.getElementById('dealerSays').textContent = '';
   document.getElementById('dealerSays').textContent =
     dialogues.c[randomDialogue()];
-  disableDealButton();
+  disableAgainButton();
   setTimeout(function () {
     document.getElementById('deal').innerHTML = 'Again';
   }, timeDelay * 4);
@@ -137,9 +140,21 @@ function deal() {
     dealer = false;
     setTimeout(function () {
       runDealCard(true, 'dealersArray', cardSum.d);
-      render();
+      console.log(cardSum.d);
+      console.log(dealersHiddenCard);
+      if (checkForDealerBlackJack()) {
+        gameEnded = true;
+        score.d++;
+        showHiddenCard();
+        dealerBlackJack();
+        console.log('BlackJack', cardSum.d);
+        render();
+        disableHitStayButton();
+        enableAgainButton();
+      }
       if (!gameEnded) {
         dealPlayer();
+        render();
       }
     }, timeDelay);
   }, timeDelay);
@@ -177,7 +192,7 @@ function hit() {
 function stay() {
   playerEndedTurn = true;
   disableHitStayButton();
-  enableDealButton();
+  enableAgainButton();
 
   cardSum.d.push(convertFaceToTen(secretCard));
   showHiddenCard();
@@ -198,25 +213,10 @@ function render() {
     gameEnded = true;
     score.d++;
     disableHitStayButton();
-    enableDealButton();
+    enableAgainButton();
     cardSum.d.push(convertFaceToTen(secretCard));
     showHiddenCard();
     bustedDialogue();
-  }
-  //   renders blackjack
-  if (
-    !gameEnded &&
-    !playerEndedTurn &&
-    dealersSum === 21 &&
-    dealersHiddenCard >= 10
-  ) {
-    gameEnded = true;
-    score.d++;
-    winningDialogueIsPlayer(false);
-    showHiddenCard();
-    dealerBlackJack();
-    enableDealButton();
-    disableHitStayButton();
   }
 
   //   Stay is pressed
@@ -257,6 +257,9 @@ function render() {
 // Deal card logic
 function runDealCard(hide, array, cardSumArray, dealer) {
   let newCard = randomCard();
+  if (!hide && dealer) {
+    firstCard = newCard;
+  }
   const newCardEl = document.getElementById(array);
   const processedCard = convertAceToEleven(convertFaceToTen(newCard));
   if (dealer === true) {
@@ -265,7 +268,7 @@ function runDealCard(hide, array, cardSumArray, dealer) {
   if (hide === true) {
     newCardEl.innerHTML += `<div id="hiddenCard" class="card back-red"></div>`;
     secretCard = processedCard;
-    dealersHiddenCard = secretCard;
+    dealersHiddenCard = newCard;
   } else {
     newCardEl.innerHTML += `<div class="card ${suits[randomSuits()]}${
       ranks[newCard - 1]
@@ -274,6 +277,16 @@ function runDealCard(hide, array, cardSumArray, dealer) {
   }
   checkAndReduceAce(cardSumArray);
   return cardSumArray[cardSumArray.length - 1];
+}
+
+// BlackJack check for dealer
+function checkForDealerBlackJack() {
+  if (firstCard === 1 && dealersHiddenCard >= 11) {
+    return true;
+  } else if (firstCard >= 11 && dealersHiddenCard === 1) {
+    return true;
+  }
+  return false;
 }
 
 // Random card from 1-13
@@ -326,8 +339,8 @@ function resetScoreBox() {
 }
 
 // Dialoge function
-function winningDialogueIsPlayer(boolean) {
-  if (boolean) {
+function winningDialogueIsPlayer(isTrue) {
+  if (isTrue) {
     document.getElementById('playerSays').textContent = '';
     document.getElementById('playerSays').textContent =
       dialogues.w[randomDialogue()];
@@ -362,11 +375,11 @@ function bustedDialogue() {
 }
 
 // Button enable/disable
-function enableDealButton() {
+function enableAgainButton() {
   buttonStatus.d.disabled = false;
   buttonStatus.d.style.background = enabledButtonColor;
 }
-function disableDealButton() {
+function disableAgainButton() {
   buttonStatus.d.disabled = true;
   buttonStatus.d.style.background = disabledButtonColor;
 }
