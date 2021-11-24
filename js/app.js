@@ -185,7 +185,9 @@ function hit() {
 
 // Player stays and ends turn
 function stay() {
+  cardSum.p = [0, 10, 1, 11];
   playerEndedTurn = true;
+  checkAndReduceAce(cardSum.p);
   disableHitStayButton();
   enableAgainButton();
   cardSum.d.push(convertFaceToTen(secretCard));
