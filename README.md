@@ -15,7 +15,6 @@ On top of this, the code will check for hands that are over 21, but contains an 
 - Javascript.
 
 **Please click this link to start the game:**
-
 https://ttyngai.github.io/BlackJack/
 
 Future improvements in the future would be to add bank account and split/double functions.
