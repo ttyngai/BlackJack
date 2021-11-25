@@ -178,7 +178,6 @@ function dealPlayer() {
 
 // Player hits
 function hit() {
-  let playersSum = dealtCards.p.reduce((a, b) => a + b);
   disableHitStayButton();
   document.getElementById('playerSays').innerHTML = '';
   document.getElementById('playerSays').innerHTML =
@@ -190,6 +189,7 @@ function hit() {
     runDealCard(false, 'playersArray', dealtCards.p);
     render();
     if (!gameEnded) enableHitStayButton();
+    let playersSum = dealtCards.p.reduce((a, b) => a + b);
     if (playersSum === 21) {
       disableHitButton();
     }
