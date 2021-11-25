@@ -64,7 +64,7 @@ let dealtCards = {
   d: [0],
   p: [0],
 };
-let timeDelay = 250;
+let timeDelay = 00;
 
 /*----- cached element references -----*/
 let gameEnded;
@@ -154,6 +154,7 @@ function deal() {
         render();
         disableHitStayButton();
         enableAgainButton();
+        enableInitButton();
       }
       if (!gameEnded) {
         dealPlayer();
@@ -294,8 +295,10 @@ function runDealCard(hide, array, dealtCardsArray, dealer) {
 // BlackJack check for dealer
 function checkForDealerBlackJack() {
   if (firstCard === 1 && hiddenCardDisplay >= 11) {
+    dealtCards.d.push(convertAceToEleven(hiddenCardDisplay));
     return true;
   } else if (firstCard >= 11 && hiddenCardDisplay === 1) {
+    dealtCards.d.push(convertAceToEleven(hiddenCardDisplay));
     return true;
   }
   return false;
