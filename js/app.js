@@ -64,7 +64,7 @@ let dealtCards = {
   d: [0],
   p: [0],
 };
-let timeDelay = 00;
+let timeDelay = 250;
 
 /*----- cached element references -----*/
 let gameEnded;
