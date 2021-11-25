@@ -8,6 +8,10 @@ Major challenge was the hidding of the second card but simultaneously having it'
 
 On top of this, the code will check for hands that are over 21, but contains an Ace in which it could reduce to 1. This reduction function is called before checking for any busts.
 
+**This game is sized for desktop and mobile phone screen sized. The breakpoint is set to 800px**
+
+### **Gameplay Screenshots:**
+
 ![Game of BlackJack](https://i.imgur.com/QsyVWtP.png 'ScreenShot of Gameplay')
 
 **Tehcnologies used:**
