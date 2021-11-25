@@ -77,6 +77,7 @@ let sumBox = {
   p: document.getElementById('playersSumBox'),
 };
 let buttonStatus = {
+  i: document.getElementById('init'),
   d: document.getElementById('again'),
   h: document.getElementById('hit'),
   s: document.getElementById('stay'),
@@ -95,6 +96,7 @@ init();
 function init() {
   enableAgainButton();
   disableHitStayButton();
+
   dealtCards = {
     d: [0],
     p: [0],
@@ -115,6 +117,7 @@ function init() {
 
 // Deal is pressed
 function deal() {
+  disableInitButton();
   firstCard = 0;
   resetScoreBox();
   dealersFirstCard = '';
@@ -167,6 +170,7 @@ function dealPlayer() {
       setTimeout(function () {
         render();
         enableHitStayButton();
+        enableInitButton();
       }, timeDelay);
     }, timeDelay);
   }, timeDelay);
@@ -380,6 +384,14 @@ function bustedDialogue() {
 }
 
 // Button enable/disable
+function enableInitButton() {
+  buttonStatus.i.disabled = false;
+  buttonStatus.i.style.background = enabledButtonColor;
+}
+function disableInitButton() {
+  buttonStatus.i.disabled = true;
+  buttonStatus.i.style.background = disabledButtonColor;
+}
 function enableAgainButton() {
   buttonStatus.d.disabled = false;
   buttonStatus.d.style.background = enabledButtonColor;

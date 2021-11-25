@@ -8,6 +8,8 @@ Major challenge was the hidding of the second card but simultaneously having it'
 
 On top of this, the code will check for hands that are over 21, but contains an Ace in which it could reduce to 1. This reduction function is called before checking for any busts.
 
+With timeout functions to similate some delays, I also needed to make sure buttons can't be pressed during timeout. Hence there is a block of code to manage button enable/disable with corresponding color change.
+
 **This game is sized for desktop and mobile phone screen sized. The breakpoint is set to 800px**
 
 ### **Gameplay Screenshots:**
