@@ -15,6 +15,6 @@ Tehcnologies used:
 - Javascript.
 
 Please click this link to start the game:
-<https://ttyngai.github.io/BlackJack/ "BlackJack">
+https://ttyngai.github.io/BlackJack/
 
 Future improvements in the future would be to add bank account and split/double functions.
