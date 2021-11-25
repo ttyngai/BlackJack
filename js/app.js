@@ -178,6 +178,7 @@ function dealPlayer() {
 
 // Player hits
 function hit() {
+  let playersSum = dealtCards.p.reduce((a, b) => a + b);
   disableHitStayButton();
   document.getElementById('playerSays').innerHTML = '';
   document.getElementById('playerSays').innerHTML =
@@ -189,6 +190,9 @@ function hit() {
     runDealCard(false, 'playersArray', dealtCards.p);
     render();
     if (!gameEnded) enableHitStayButton();
+    if (playersSum === 21) {
+      disableHitButton();
+    }
   }, timeDelay);
 }
 
@@ -227,7 +231,6 @@ function render() {
     showHiddenCard();
     bustedDialogue();
   }
-
   //   Stay is pressed
   if (!gameEnded && playerEndedTurn) {
     if (dealersSum > 21) {
@@ -411,4 +414,8 @@ function disableHitStayButton() {
   buttonStatus.h.style.background = disabledButtonColor;
   buttonStatus.s.disabled = true;
   buttonStatus.s.style.background = disabledButtonColor;
+}
+function disableHitButton() {
+  buttonStatus.h.disabled = true;
+  buttonStatus.h.style.background = disabledButtonColor;
 }
