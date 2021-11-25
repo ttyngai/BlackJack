@@ -10,7 +10,7 @@ On top of this, the code will check for hands that are over 21, but contains an 
 
 With timeout functions to simulate some delays, I also needed to make sure buttons can't be pressed again during timeout. Hence there is a block of code to manage button enable/disable with corresponding color change.
 
-**This game is sized for desktop and mobile phone screen sized. The breakpoint is set to 800px**
+**This game is sized for both desktop and mobile phone screens. The breakpoint is set to 800px**
 
 ### **Gameplay Screenshots:**
 
