@@ -77,19 +77,20 @@ let sumBox = {
   p: document.getElementById('playersSumBox'),
 };
 let buttonStatus = {
-  d: document.getElementById('deal'),
+  d: document.getElementById('again'),
   h: document.getElementById('hit'),
   s: document.getElementById('stay'),
 };
 
 /*----- event listeners -----*/
 document.getElementById('init').addEventListener('click', init);
-document.getElementById('deal').addEventListener('click', deal);
+document.getElementById('again').addEventListener('click', deal);
 document.getElementById('hit').addEventListener('click', hit);
 document.getElementById('stay').addEventListener('click', stay);
 
 /*----- functions -----*/
 init();
+
 // Page is loaded or Reset button pressed
 function init() {
   enableAgainButton();
@@ -104,12 +105,12 @@ function init() {
   };
   document.getElementById('dealersArray').innerHTML = '';
   document.getElementById('playersArray').innerHTML = '';
-  document.getElementById('deal').innerHTML = 'Start';
   document.getElementById('dealerSays').innerHTML =
     dialogues.c[randomDialogue()];
   document.getElementById('playerSays').innerHTML =
     dialogues.h[randomDialogue()];
   render();
+  deal();
 }
 
 // Deal is pressed
@@ -132,7 +133,7 @@ function deal() {
     dialogues.h[randomDialogue()];
   disableAgainButton();
   setTimeout(function () {
-    document.getElementById('deal').innerHTML = 'Again';
+    document.getElementById('again').innerHTML = 'Again';
   }, timeDelay * 4);
   document.getElementById('playersArray').innerHTML = '';
   document.getElementById('dealersArray').innerHTML = '';
