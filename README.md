@@ -8,13 +8,14 @@ On top of this, the code will check for hands that are over 21, but contains an 
 
 ![Game of BlackJack](https://i.imgur.com/QsyVWtP.png 'ScreenShot of Gameplay')
 
-Tehcnologies used:
+**Tehcnologies used:**
 
 - CSS
 - HTML
 - Javascript.
 
-Please click this link to start the game:
+**Please click this link to start the game:**
+
 https://ttyngai.github.io/BlackJack/
 
 Future improvements in the future would be to add bank account and split/double functions.
