@@ -1,4 +1,4 @@
-###CASINO 7 - NO TIME TO BUST
+### **CASINO 7 - NO TIME TO BUST**
 
 Game of BlackJack with Jame's Bond Theme. The story is situated at the movie Casino Royale, so naturally the responses would be subtitles just like you are watching a movie. The game is coded for Dealer's BlackJack condition only for Ace with facecards. If this condition is triggered it is an automatic win for the dealer. This is not true for the players, hence the game is sided slightly towards the dealer, as real casinos are designed. Dealer also will hit any hands under 17.
 
@@ -9,7 +9,10 @@ On top of this, the code will check for hands that are over 21, but contains an 
 ![Game of BlackJack](https://i.imgur.com/QsyVWtP.png 'ScreenShot of Gameplay')
 
 Tehcnologies used:
-CSS, HTML and Javascript.
+
+- CSS
+- HTML
+- Javascript.
 
 Please click this link to start the game:
 <https://ttyngai.github.io/BlackJack/ "BlackJack">
