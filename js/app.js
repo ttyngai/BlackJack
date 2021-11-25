@@ -96,7 +96,6 @@ init();
 function init() {
   enableAgainButton();
   disableHitStayButton();
-
   dealtCards = {
     d: [0],
     p: [0],
@@ -200,9 +199,7 @@ function hit() {
 // Player stays and ends turn
 function stay() {
   playerEndedTurn = true;
-  dealtCards.d.push(
-    convertAceToEleven(convertFaceToTen(hiddenCardProcessedValue))
-  );
+  dealtCards.d.push(convertAceToEleven(convertFaceToTen(hiddenCardDisplay)));
   showHiddenCard();
   checkAndReduceAce(dealtCards.d);
   checkAndReduceAce(dealtCards.p);
@@ -226,9 +223,7 @@ function render() {
     score.d++;
     disableHitStayButton();
     enableAgainButton();
-    dealtCards.d.push(
-      convertAceToEleven(convertFaceToTen(hiddenCardProcessedValue))
-    );
+    dealtCards.d.push(convertAceToEleven(hiddenCardProcessedValue));
     showHiddenCard();
     bustedDialogue();
   }
