@@ -610,7 +610,7 @@ img {
     border-radius: 30px;
     font-size: 35px;
     padding: 10px 30px;
-    margin: 15px;
+    margin: 10px 0 5px 0;
   }
   .card {
     width: 1em;
