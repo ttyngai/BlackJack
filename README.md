@@ -4,7 +4,7 @@ Game of BlackJack with Jame's Bond Theme. The story is situated at the movie Cas
 
 The game is coded for dealer's "BlackJack" condition only for ace with facecards(not 10, as per convention). As a result code needs to differentiate between a 10 card, and facecard with value also as 10! - a coding beginner's nightmare! If this condition is triggered it is an automatic win for the dealer. This is not true for the players(again as per convention), hence the game is sided slightly towards the dealer, as real casinos are designed. Dealer also will hit any hands under 17.
 
-Major challenge was the hiding of the second card but simultaneously having it's value stored and showing an SVG with the backside. The backside `<div>` generated carries a unique id `id='hiddenCard'` in which the code finds and swaps it with the corresponding(correct) facecard SVG.
+Major challenge was the hiding of the second card but simultaneously having it's value stored and showing an SVG with the backside. The backside card element `<div>` generated carries a unique id `id='hiddenCard'`. When hands are to be shown, the code finds and swaps the facecard `<div>` carrying the corresponding(correct) SVG.
 
 At the end card's value is checked and processed for any facecard to changed to numeric 10, as well as any ace card to 11. On top of this, the code will check for hands that are over 21, but contains an ace in which it could reduce to 1. This reduction function is called before checking for any busts.
 
