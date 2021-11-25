@@ -54,17 +54,17 @@ const dialogues = {
 };
 
 /*----- app's state (variables) -----*/
-let firstCard;
-let secretCard;
-let dealersFirstCard;
-let dealersHiddenCard;
+let firstCard,
+  hiddenCardProcessedValue,
+  dealersFirstCard,
+  hiddenCardDisplay,
+  playerEndedTurn;
 let score = {};
 let cardSum = {
   d: [0],
   p: [0],
 };
 let timeDelay = 250;
-let playerEndedTurn;
 
 /*----- cached element references -----*/
 let gameEnded;
@@ -89,11 +89,9 @@ document.getElementById('hit').addEventListener('click', hit);
 document.getElementById('stay').addEventListener('click', stay);
 
 /*----- functions -----*/
-// Page is loaded or Reset button pressed
 init();
+// Page is loaded or Reset button pressed
 function init() {
-  document.getElementById('dealerSays').textContent =
-    dialogues.c[randomDialogue()];
   enableAgainButton();
   disableHitStayButton();
   cardSum = {
@@ -107,6 +105,10 @@ function init() {
   document.getElementById('dealersArray').innerHTML = '';
   document.getElementById('playersArray').innerHTML = '';
   document.getElementById('deal').innerHTML = 'Start';
+  document.getElementById('dealerSays').innerHTML =
+    dialogues.c[randomDialogue()];
+  document.getElementById('playerSays').innerHTML =
+    dialogues.h[randomDialogue()];
   render();
 }
 
@@ -115,24 +117,26 @@ function deal() {
   firstCard = 0;
   resetScoreBox();
   dealersFirstCard = '';
-  dealersHiddenCard = '';
-  document.getElementById('playerSays').textContent = '';
-  document.getElementById('dealerSays').textContent = '';
-  document.getElementById('dealerSays').textContent =
-    dialogues.c[randomDialogue()];
-  disableAgainButton();
-  setTimeout(function () {
-    document.getElementById('deal').innerHTML = 'Again';
-  }, timeDelay * 4);
+  hiddenCardDisplay = '';
   playerEndedTurn = false;
   gameEnded = false;
   cardSum = {
     d: [0],
     p: [0],
   };
+  document.getElementById('playerSays').innerHTML = '';
+  document.getElementById('dealerSays').innerHTML = '';
+  document.getElementById('dealerSays').innerHTML =
+    dialogues.c[randomDialogue()];
+  document.getElementById('playerSays').innerHTML =
+    dialogues.h[randomDialogue()];
+  disableAgainButton();
+  setTimeout(function () {
+    document.getElementById('deal').innerHTML = 'Again';
+  }, timeDelay * 4);
+  document.getElementById('playersArray').innerHTML = '';
+  document.getElementById('dealersArray').innerHTML = '';
   let dealer = true;
-  document.getElementById('playersArray').textContent = '';
-  document.getElementById('dealersArray').textContent = '';
   setTimeout(function () {
     runDealCard(false, 'dealersArray', cardSum.d, dealer);
     dealer = false;
@@ -170,11 +174,11 @@ function dealPlayer() {
 // Player hits
 function hit() {
   disableHitStayButton();
-  document.getElementById('playerSays').textContent = '';
-  document.getElementById('playerSays').textContent =
+  document.getElementById('playerSays').innerHTML = '';
+  document.getElementById('playerSays').innerHTML =
     dialogues.h[randomDialogue()];
-  document.getElementById('dealerSays').textContent = '';
-  document.getElementById('dealerSays').textContent =
+  document.getElementById('dealerSays').innerHTML = '';
+  document.getElementById('dealerSays').innerHTML =
     dialogues.c[randomDialogue()];
   setTimeout(function () {
     runDealCard(false, 'playersArray', cardSum.p);
@@ -186,11 +190,14 @@ function hit() {
 // Player stays and ends turn
 function stay() {
   playerEndedTurn = true;
+  cardSum.d.push(
+    convertAceToEleven(convertFaceToTen(hiddenCardProcessedValue))
+  );
+  showHiddenCard();
+  checkAndReduceAce(cardSum.d);
   checkAndReduceAce(cardSum.p);
   disableHitStayButton();
   enableAgainButton();
-  cardSum.d.push(convertFaceToTen(secretCard));
-  showHiddenCard();
   render();
   while (!gameEnded && cardSum.d.reduce((a, b) => a + b) < 17) {
     runDealCard(false, 'dealersArray', cardSum.d);
@@ -209,7 +216,9 @@ function render() {
     score.d++;
     disableHitStayButton();
     enableAgainButton();
-    cardSum.d.push(convertFaceToTen(secretCard));
+    cardSum.d.push(
+      convertAceToEleven(convertFaceToTen(hiddenCardProcessedValue))
+    );
     showHiddenCard();
     bustedDialogue();
   }
@@ -242,10 +251,10 @@ function render() {
     tieDialogue();
   }
   for (let num in cardSum) {
-    sumBox[num].textContent = cardSum[num].reduce((a, b) => a + b);
+    sumBox[num].innerHTML = cardSum[num].reduce((a, b) => a + b);
   }
   for (let num in scoreBox) {
-    scoreBox[num].textContent = score[num];
+    scoreBox[num].innerHTML = score[num];
   }
 }
 
@@ -262,8 +271,8 @@ function runDealCard(hide, array, cardSumArray, dealer) {
   }
   if (hide === true) {
     newCardEl.innerHTML += `<div id="hiddenCard" class="card back-red"></div>`;
-    secretCard = processedCard;
-    dealersHiddenCard = newCard;
+    hiddenCardProcessedValue = processedCard;
+    hiddenCardDisplay = newCard;
   } else {
     newCardEl.innerHTML += `<div class="card ${suits[randomSuits()]}${
       ranks[newCard - 1]
@@ -276,9 +285,9 @@ function runDealCard(hide, array, cardSumArray, dealer) {
 
 // BlackJack check for dealer
 function checkForDealerBlackJack() {
-  if (firstCard === 1 && dealersHiddenCard >= 11) {
+  if (firstCard === 1 && hiddenCardDisplay >= 11) {
     return true;
-  } else if (firstCard >= 11 && dealersHiddenCard === 1) {
+  } else if (firstCard >= 11 && hiddenCardDisplay === 1) {
     return true;
   }
   return false;
@@ -319,7 +328,7 @@ function convertFaceToTen(newCard) {
 function showHiddenCard() {
   document.getElementById('hiddenCard').className = `card ${
     suits[randomSuits()]
-  }${ranks[dealersHiddenCard - 1]}`;
+  }${ranks[hiddenCardDisplay - 1]}`;
 }
 
 // Reset scorebox after restart
@@ -329,44 +338,44 @@ function resetScoreBox() {
     p: [0],
   };
   for (let num in cardSum) {
-    sumBox[num].textContent = cardSum[num].reduce((a, b) => a + b);
+    sumBox[num].innerHTML = cardSum[num].reduce((a, b) => a + b);
   }
 }
 
 // Dialoge function
 function winningDialogueIsPlayer(isTrue) {
   if (isTrue) {
-    document.getElementById('playerSays').textContent = '';
-    document.getElementById('playerSays').textContent =
+    document.getElementById('playerSays').innerHTML = '';
+    document.getElementById('playerSays').innerHTML =
       dialogues.w[randomDialogue()];
-    document.getElementById('dealerSays').textContent = '';
-    document.getElementById('dealerSays').textContent =
+    document.getElementById('dealerSays').innerHTML = '';
+    document.getElementById('dealerSays').innerHTML =
       dialogues.l[randomDialogue()];
   } else {
-    document.getElementById('playerSays').textContent = '';
-    document.getElementById('playerSays').textContent =
+    document.getElementById('playerSays').innerHTML = '';
+    document.getElementById('playerSays').innerHTML =
       dialogues.l[randomDialogue()];
-    document.getElementById('dealerSays').textContent = '';
-    document.getElementById('dealerSays').textContent =
+    document.getElementById('dealerSays').innerHTML = '';
+    document.getElementById('dealerSays').innerHTML =
       dialogues.w[randomDialogue()];
   }
 }
 function tieDialogue() {
-  document.getElementById('playerSays').textContent = dialogues.t[0];
-  document.getElementById('dealerSays').textContent = dialogues.t[1];
+  document.getElementById('playerSays').innerHTML = dialogues.t[0];
+  document.getElementById('dealerSays').innerHTML = dialogues.t[1];
 }
 function dealerBlackJack() {
-  document.getElementById('playerSays').textContent = '';
-  document.getElementById('playerSays').textContent = dialogues.bj[0];
-  document.getElementById('dealerSays').textContent = '';
-  document.getElementById('dealerSays').textContent = dialogues.bj[1];
+  document.getElementById('playerSays').innerHTML = '';
+  document.getElementById('playerSays').innerHTML = dialogues.bj[0];
+  document.getElementById('dealerSays').innerHTML = '';
+  document.getElementById('dealerSays').innerHTML = dialogues.bj[1];
 }
 
 function bustedDialogue() {
-  document.getElementById('playerSays').textContent = '';
-  document.getElementById('playerSays').textContent = dialogues.b[0];
-  document.getElementById('dealerSays').textContent = '';
-  document.getElementById('dealerSays').textContent = dialogues.b[1];
+  document.getElementById('playerSays').innerHTML = '';
+  document.getElementById('playerSays').innerHTML = dialogues.b[0];
+  document.getElementById('dealerSays').innerHTML = '';
+  document.getElementById('dealerSays').innerHTML = dialogues.b[1];
 }
 
 // Button enable/disable
