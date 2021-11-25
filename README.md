@@ -2,11 +2,11 @@
 
 Game of BlackJack with Jame's Bond Theme. The story is situated at the movie Casino Royale, so naturally the responses would be subtitles just like you are watching a movie.
 
-The game is coded for Dealer's BlackJack condition only for Ace with facecards(not 10). If this condition is triggered it is an automatic win for the dealer. This is not true for the players, hence the game is sided slightly towards the dealer, as real casinos are designed. Dealer also will hit any hands under 17.
+The game is coded for dealer's "BlackJack" condition only for ace with facecards(not 10, as per convention). As a result code needs to differentiate between a 10 card, and facecard with value also as 10! - a coding beginner's nightmare! If this condition is triggered it is an automatic win for the dealer. This is not true for the players(again as per convention), hence the game is sided slightly towards the dealer, as real casinos are designed. Dealer also will hit any hands under 17.
 
-Major challenge was the hiding of the second card but simultaneously having it's value stored and showing an SVG with the backside. After the action is completed, the card's value is checked and processed for any facecard to changed to numeric 10, as well as any ace card to 11.
+Major challenge was the hiding of the second card but simultaneously having it's value stored and showing an SVG with the backside. The backside `<div>` generated carries a unique id in which the code finds and swaps it with the corresponding(correct) facecard SVG.
 
-On top of this, the code will check for hands that are over 21, but contains an ace in which it could reduce to 1. This reduction function is called before checking for any busts.
+At the end card's value is checked and processed for any facecard to changed to numeric 10, as well as any ace card to 11. On top of this, the code will check for hands that are over 21, but contains an ace in which it could reduce to 1. This reduction function is called before checking for any busts.
 
 With timeout functions to simulate some delays, I also needed to make sure buttons can't be pressed again during timeout. Hence there is a block of code to manage button enable/disable with corresponding color change.
 
