@@ -60,7 +60,7 @@ let firstCard,
   hiddenCardDisplay,
   playerEndedTurn;
 let score = {};
-let cardSum = {
+let dealtCards = {
   d: [0],
   p: [0],
 };
@@ -94,7 +94,7 @@ init();
 function init() {
   enableAgainButton();
   disableHitStayButton();
-  cardSum = {
+  dealtCards = {
     d: [0],
     p: [0],
   };
@@ -120,7 +120,7 @@ function deal() {
   hiddenCardDisplay = '';
   playerEndedTurn = false;
   gameEnded = false;
-  cardSum = {
+  dealtCards = {
     d: [0],
     p: [0],
   };
@@ -138,10 +138,10 @@ function deal() {
   document.getElementById('dealersArray').innerHTML = '';
   let dealer = true;
   setTimeout(function () {
-    runDealCard(false, 'dealersArray', cardSum.d, dealer);
+    runDealCard(false, 'dealersArray', dealtCards.d, dealer);
     dealer = false;
     setTimeout(function () {
-      runDealCard(true, 'dealersArray', cardSum.d);
+      runDealCard(true, 'dealersArray', dealtCards.d);
       if (checkForDealerBlackJack()) {
         gameEnded = true;
         score.d++;
@@ -160,9 +160,9 @@ function deal() {
 }
 function dealPlayer() {
   setTimeout(function () {
-    runDealCard(false, 'playersArray', cardSum.p);
+    runDealCard(false, 'playersArray', dealtCards.p);
     setTimeout(function () {
-      runDealCard(false, 'playersArray', cardSum.p);
+      runDealCard(false, 'playersArray', dealtCards.p);
       setTimeout(function () {
         render();
         enableHitStayButton();
@@ -181,7 +181,7 @@ function hit() {
   document.getElementById('dealerSays').innerHTML =
     dialogues.c[randomDialogue()];
   setTimeout(function () {
-    runDealCard(false, 'playersArray', cardSum.p);
+    runDealCard(false, 'playersArray', dealtCards.p);
     render();
     if (!gameEnded) enableHitStayButton();
   }, timeDelay);
@@ -190,25 +190,25 @@ function hit() {
 // Player stays and ends turn
 function stay() {
   playerEndedTurn = true;
-  cardSum.d.push(
+  dealtCards.d.push(
     convertAceToEleven(convertFaceToTen(hiddenCardProcessedValue))
   );
   showHiddenCard();
-  checkAndReduceAce(cardSum.d);
-  checkAndReduceAce(cardSum.p);
+  checkAndReduceAce(dealtCards.d);
+  checkAndReduceAce(dealtCards.p);
   disableHitStayButton();
   enableAgainButton();
   render();
-  while (!gameEnded && cardSum.d.reduce((a, b) => a + b) < 17) {
-    runDealCard(false, 'dealersArray', cardSum.d);
+  while (!gameEnded && dealtCards.d.reduce((a, b) => a + b) < 17) {
+    runDealCard(false, 'dealersArray', dealtCards.d);
     render();
   }
 }
 
 // Render function
 function render() {
-  let playersSum = cardSum.p.reduce((a, b) => a + b);
-  let dealersSum = cardSum.d.reduce((a, b) => a + b);
+  let playersSum = dealtCards.p.reduce((a, b) => a + b);
+  let dealersSum = dealtCards.d.reduce((a, b) => a + b);
 
   //   Hit is pressed
   if (playersSum > 21) {
@@ -216,7 +216,7 @@ function render() {
     score.d++;
     disableHitStayButton();
     enableAgainButton();
-    cardSum.d.push(
+    dealtCards.d.push(
       convertAceToEleven(convertFaceToTen(hiddenCardProcessedValue))
     );
     showHiddenCard();
@@ -250,8 +250,8 @@ function render() {
   if (playersSum === dealersSum && dealersSum >= 17) {
     tieDialogue();
   }
-  for (let num in cardSum) {
-    sumBox[num].innerHTML = cardSum[num].reduce((a, b) => a + b);
+  for (let num in dealtCards) {
+    sumBox[num].innerHTML = dealtCards[num].reduce((a, b) => a + b);
   }
   for (let num in scoreBox) {
     scoreBox[num].innerHTML = score[num];
@@ -259,7 +259,7 @@ function render() {
 }
 
 // Deal card logic
-function runDealCard(hide, array, cardSumArray, dealer) {
+function runDealCard(hide, array, dealtCardsArray, dealer) {
   let newCard = randomCard();
   if (!hide && dealer) {
     firstCard = newCard;
@@ -277,10 +277,10 @@ function runDealCard(hide, array, cardSumArray, dealer) {
     newCardEl.innerHTML += `<div class="card ${suits[randomSuits()]}${
       ranks[newCard - 1]
     }"></div>`;
-    cardSumArray.push(processedCard);
+    dealtCardsArray.push(processedCard);
   }
-  checkAndReduceAce(cardSumArray);
-  return cardSumArray[cardSumArray.length - 1];
+  checkAndReduceAce(dealtCardsArray);
+  return dealtCardsArray[dealtCardsArray.length - 1];
 }
 
 // BlackJack check for dealer
@@ -333,12 +333,12 @@ function showHiddenCard() {
 
 // Reset scorebox after restart
 function resetScoreBox() {
-  cardSum = {
+  dealtCards = {
     d: [0],
     p: [0],
   };
-  for (let num in cardSum) {
-    sumBox[num].innerHTML = cardSum[num].reduce((a, b) => a + b);
+  for (let num in dealtCards) {
+    sumBox[num].innerHTML = dealtCards[num].reduce((a, b) => a + b);
   }
 }
 
