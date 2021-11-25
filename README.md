@@ -8,7 +8,7 @@ Major challenge was the hiding of the second card but simultaneously having it's
 
 At the end card's value is checked and processed for any facecard to changed to numeric 10, as well as any ace card to 11. On top of this, the code will check for hands that are over 21, but contains an ace in which it could reduce to 1. This reduction function is called before checking for any busts.
 
-With timeout functions to simulate some delays, I also needed to make sure buttons can't be pressed again during timeout. Hence there is a block of code to manage button enable/disable with corresponding color change.
+With `setTimeout` functions to simulate some delays, I also needed to make sure buttons can't be pressed again during timeout. Hence there is a block of code to manage button enable/disable with corresponding color change.
 
 **This game is sized for both desktop and mobile phone screens. The breakpoint is set to 800px**
 
