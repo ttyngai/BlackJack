@@ -2,13 +2,13 @@
 
 Game of BlackJack with Jame's Bond Theme. The story is situated at the movie Casino Royale, so naturally the responses would be subtitles just like you are watching a movie.
 
-The game is coded for Dealer's BlackJack condition only for Ace with facecards(Not 10). If this condition is triggered it is an automatic win for the dealer. This is not true for the players, hence the game is sided slightly towards the dealer, as real casinos are designed. Dealer also will hit any hands under 17.
+The game is coded for Dealer's BlackJack condition only for Ace with facecards(not 10). If this condition is triggered it is an automatic win for the dealer. This is not true for the players, hence the game is sided slightly towards the dealer, as real casinos are designed. Dealer also will hit any hands under 17.
 
-Major challenge was the hidding of the second card but simultaneously having it's value stored and showing an SVG with the backside. After the game is complete, the card's value is checked and processed for any facecard to changed to numeric 10, as well as any Ace card to 11.
+Major challenge was the hiding of the second card but simultaneously having it's value stored and showing an SVG with the backside. After the action is completed, the card's value is checked and processed for any facecard to changed to numeric 10, as well as any ace card to 11.
 
-On top of this, the code will check for hands that are over 21, but contains an Ace in which it could reduce to 1. This reduction function is called before checking for any busts.
+On top of this, the code will check for hands that are over 21, but contains an ace in which it could reduce to 1. This reduction function is called before checking for any busts.
 
-With timeout functions to similate some delays, I also needed to make sure buttons can't be pressed during timeout. Hence there is a block of code to manage button enable/disable with corresponding color change.
+With timeout functions to simulate some delays, I also needed to make sure buttons can't be pressed again during timeout. Hence there is a block of code to manage button enable/disable with corresponding color change.
 
 **This game is sized for desktop and mobile phone screen sized. The breakpoint is set to 800px**
 
