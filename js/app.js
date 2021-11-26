@@ -121,6 +121,7 @@ function init() {
   render();
   enableAgainButton();
   disableInitButton();
+  document.getElementById('again').innerHTML = 'Start';
 }
 
 // Deal is pressed
