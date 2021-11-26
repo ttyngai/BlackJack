@@ -90,11 +90,19 @@ document.getElementById('hit').addEventListener('click', hit);
 document.getElementById('stay').addEventListener('click', stay);
 
 /*----- functions -----*/
-init();
 
+disableHitStayButton();
+disableInitButton();
+dealtCards = {
+  d: [0],
+  p: [0],
+};
+score = {
+  d: [0],
+  p: [0],
+};
 // Page is loaded or Reset button pressed
 function init() {
-  enableAgainButton();
   disableHitStayButton();
   dealtCards = {
     d: [0],
@@ -111,7 +119,8 @@ function init() {
   document.getElementById('playerSays').innerHTML =
     dialogues.h[randomDialogue()];
   render();
-  deal();
+  enableAgainButton();
+  disableInitButton();
 }
 
 // Deal is pressed
@@ -171,6 +180,7 @@ function dealPlayer() {
         render();
         enableHitStayButton();
         enableInitButton();
+        document.getElementById('init').innerHTML = 'Reset';
       }, timeDelay);
     }, timeDelay);
   }, timeDelay);
