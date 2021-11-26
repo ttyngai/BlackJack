@@ -44,9 +44,9 @@ img {
   color: var(--interfaceGrey);
   text-align: center;
   border-radius: 30px;
-  font-size: 17px;
-  padding: 10px 25px;
-  margin: 10px;
+  font-size: 20px;
+  padding: 7px 20px;
+  margin: 10px 0 5px 0;
   text-shadow: black 0 0 10px;
 }
 
@@ -57,12 +57,12 @@ img {
   background-color: var(--scoreBackground);
   border: solid 3px var(--casinoYellow);
   text-align: center;
-  padding: 0 20px;
+  padding: 5px 15px 0 15px;
   margin: 35px 30px;
   font-size: 30px;
   border-radius: 5px;
   min-width: 20px;
-  min-height: 30px;
+  min-height: 40px;
 }
 
 .nameCard {
@@ -109,7 +109,7 @@ img {
 .controlButtons {
   background-color: var(--buttonsBackground);
   width: 60px;
-  padding: 10px;
+  padding: 5px 5px;
   border-radius: 30px;
   font-size: 12px;
   font-style: bold;
@@ -560,8 +560,8 @@ img {
   }
   .controlButtons {
     width: 120px;
-    padding: 20px;
-    margin: 10px;
+    padding: 10px 20px;
+    margin: 5px;
     font-size: 25px;
   }
 
@@ -603,7 +603,7 @@ img {
     font-size: 50px;
     border-radius: 10px;
     min-width: 30px;
-    min-height: 40px;
+    min-height: 60px;
   }
   #gameTitle {
     border: solid 4px var(--casinoRed);
