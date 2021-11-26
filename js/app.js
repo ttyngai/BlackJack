@@ -77,32 +77,34 @@ let sumBox = {
   p: document.getElementById('playersSumBox'),
 };
 let buttonStatus = {
-  i: document.getElementById('init'),
+  i: document.getElementById('reset'),
   d: document.getElementById('again'),
   h: document.getElementById('hit'),
   s: document.getElementById('stay'),
 };
 
 /*----- event listeners -----*/
-document.getElementById('init').addEventListener('click', init);
+document.getElementById('reset').addEventListener('click', reset);
 document.getElementById('again').addEventListener('click', deal);
 document.getElementById('hit').addEventListener('click', hit);
 document.getElementById('stay').addEventListener('click', stay);
 
 /*----- functions -----*/
-
-disableHitStayButton();
-disableInitButton();
-dealtCards = {
-  d: [0],
-  p: [0],
-};
-score = {
-  d: [0],
-  p: [0],
-};
-// Page is loaded or Reset button pressed
+init();
 function init() {
+  disableHitStayButton();
+  disableInitButton();
+  dealtCards = {
+    d: [0],
+    p: [0],
+  };
+  score = {
+    d: [0],
+    p: [0],
+  };
+  render();
+}
+function reset() {
   disableHitStayButton();
   dealtCards = {
     d: [0],
