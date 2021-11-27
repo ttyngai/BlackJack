@@ -1,6 +1,6 @@
 ## **CASINO 7 - NO TIME TO BUST**
 
-Game of BlackJack with Jame's Bond Theme. The story is situated at the movie Casino Royale, so naturally the responses would be subtitles just like you are watching a movie.
+Game of BlackJack with James Bond Theme. The story is situated at the movie Casino Royale, so naturally the responses would be subtitles just like you are watching a movie.
 
 The game is coded for dealer's "BlackJack" condition only for ace with facecards(not 10, as per convention). As a result code needs to differentiate between a 10 card, and facecard with value also as 10! - a coding beginner's nightmare! If this condition is triggered it is an automatic win for the dealer. This is not true for the players(again as per convention), hence the game is sided slightly towards the dealer, as real casinos are designed. Dealer also will hit any hands under 17.
 
