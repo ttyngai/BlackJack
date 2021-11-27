@@ -67,8 +67,8 @@ let dealtCards = {
 };
 let cardIdCount = 0;
 let maxRound = 7;
-let timeDelay = 500;
-let cardDealTime = 50;
+let cardDealDelay = 500;
+let computerFlowDelay = 50;
 /*----- cached element references -----*/
 let gameEnded;
 let scoreBox = {
@@ -151,7 +151,7 @@ function deal() {
   disableAgainButton();
   setTimeout(function () {
     document.getElementById('again').innerHTML = 'Again';
-  }, timeDelay * 4);
+  }, cardDealDelay * 4);
   document.getElementById('playersArray').innerHTML = '';
   document.getElementById('dealersArray').innerHTML = '';
   let dealer = true;
@@ -174,8 +174,8 @@ function deal() {
         dealPlayer();
         render();
       }
-    }, timeDelay);
-  }, timeDelay);
+    }, cardDealDelay);
+  }, cardDealDelay);
 }
 function dealPlayer() {
   setTimeout(function () {
@@ -187,9 +187,9 @@ function dealPlayer() {
         enableHitStayButton();
         enableInitButton();
         document.getElementById('reset').innerHTML = 'Reset';
-      }, timeDelay);
-    }, timeDelay);
-  }, timeDelay);
+      }, cardDealDelay);
+    }, cardDealDelay);
+  }, cardDealDelay);
 }
 
 // Player hits
@@ -209,7 +209,7 @@ function hit() {
     if (playersSum === 21) {
       disableHitButton();
     }
-  }, timeDelay);
+  }, cardDealDelay);
 }
 
 // Player stays and ends turn
@@ -222,7 +222,9 @@ function stay() {
   disableHitStayButton();
   enableAgainButton();
   render();
-  dealDealerRemaining();
+  setTimeout(function () {
+    dealDealerRemaining();
+  }, cardDealDelay * 1.5);
 }
 
 // Call back dealers delay function
@@ -233,7 +235,7 @@ function dealDealerRemaining() {
       runDealCard(false, 'dealersArray', dealtCards.d);
       render();
       dealDealerRemaining();
-    }, timeDelay);
+    }, cardDealDelay);
   } else return;
 }
 
@@ -249,7 +251,9 @@ function render() {
     disableHitStayButton();
     enableAgainButton();
     dealtCards.d.push(convertAceToEleven(hiddenCardProcessedValue));
-    showHiddenCard();
+    setTimeout(function () {
+      showHiddenCard();
+    }, cardDealDelay);
     bustedDialogue();
   }
   //   Stay is pressed
@@ -306,7 +310,7 @@ function runDealCard(hide, array, dealtCardsArray, dealer) {
       document
         .getElementById(`${cardIdCount}`)
         .classList.add('cardDealAnimation');
-    }, cardDealTime);
+    }, computerFlowDelay);
     hiddenCardProcessedValue = processedCard;
     hiddenCardDisplay = newCard;
   } else {
@@ -317,9 +321,7 @@ function runDealCard(hide, array, dealtCardsArray, dealer) {
       document
         .getElementById(`${cardIdCount}`)
         .classList.add('cardDealAnimation');
-      console.log(cardIdCount);
-    }, cardDealTime);
-
+    }, computerFlowDelay);
     dealtCardsArray.push(processedCard);
   }
   checkAndReduceAce(dealtCardsArray);
@@ -371,9 +373,19 @@ function convertFaceToTen(newCard) {
 
 // Show hidden card
 function showHiddenCard() {
-  document.getElementById(hiddenCardId).className = `cardDealAnimation card ${
-    suits[randomSuits()]
-  }${ranks[hiddenCardDisplay - 1]}`;
+  setTimeout(function () {
+    document.getElementById(hiddenCardId).classList.add('hiddenCardFlipOne');
+  }, computerFlowDelay);
+
+  setTimeout(function () {
+    document.getElementById(hiddenCardId).className = `card ${
+      suits[randomSuits()]
+    }${ranks[hiddenCardDisplay - 1]}`;
+    document.getElementById(hiddenCardId).classList.add(`hiddenCardRotated`);
+    setTimeout(function () {
+      document.getElementById(hiddenCardId).classList.add('hiddenCardFlipTwo');
+    }, computerFlowDelay);
+  }, cardDealDelay);
 }
 
 // Reset scorebox after restart
