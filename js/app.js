@@ -58,14 +58,16 @@ let firstCard,
   hiddenCardProcessedValue,
   dealersFirstCard,
   hiddenCardDisplay,
-  playerEndedTurn;
+  playerEndedTurn,
+  hiddenCardId,
+  cardIdCount = 0;
 let score = {};
 let dealtCards = {
   d: [0],
   p: [0],
 };
-let timeDelay = 250;
-
+let timeDelay = 500;
+let cardDealTime = 50;
 /*----- cached element references -----*/
 let gameEnded;
 let scoreBox = {
@@ -191,7 +193,6 @@ function dealPlayer() {
 
 // Player hits
 function hit() {
-  document.getElementById('hiddenCard').classList.add('cardDealAnimation');
   disableHitStayButton();
   document.getElementById('playerSays').innerHTML = '';
   document.getElementById('playerSays').innerHTML =
@@ -279,6 +280,7 @@ function render() {
 // Deal card logic
 function runDealCard(hide, array, dealtCardsArray, dealer) {
   let newCard = randomCard();
+  cardIdCount++;
   if (!hide && dealer) {
     firstCard = newCard;
   }
@@ -288,13 +290,25 @@ function runDealCard(hide, array, dealtCardsArray, dealer) {
     dealersFirstCard = newCard;
   }
   if (hide === true) {
-    newCardEl.innerHTML += `<div id="hiddenCard" class="card back-red"></div>`;
+    hiddenCardId = cardIdCount;
+    newCardEl.innerHTML += `<div id="${cardIdCount}" class="card back-red"></div>`;
+    setTimeout(function () {
+      document
+        .getElementById(`${cardIdCount}`)
+        .classList.add('cardDealAnimation');
+    }, cardDealTime);
     hiddenCardProcessedValue = processedCard;
     hiddenCardDisplay = newCard;
   } else {
-    newCardEl.innerHTML += `<div class="card ${suits[randomSuits()]}${
-      ranks[newCard - 1]
-    }"></div>`;
+    newCardEl.innerHTML += `<div id="${cardIdCount}" class="card ${
+      suits[randomSuits()]
+    }${ranks[newCard - 1]}"></div>`;
+    setTimeout(function () {
+      document
+        .getElementById(`${cardIdCount}`)
+        .classList.add('cardDealAnimation');
+      console.log(cardIdCount);
+    }, cardDealTime);
 
     dealtCardsArray.push(processedCard);
   }
@@ -347,7 +361,7 @@ function convertFaceToTen(newCard) {
 
 // Show hidden card
 function showHiddenCard() {
-  document.getElementById('hiddenCard').className = `card ${
+  document.getElementById(hiddenCardId).className = `cardDealAnimation card ${
     suits[randomSuits()]
   }${ranks[hiddenCardDisplay - 1]}`;
 }

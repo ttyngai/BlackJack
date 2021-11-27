@@ -132,15 +132,15 @@ img {
 
 /* Card CSS */
 .card {
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
   display: inline-block;
-  margin: 8px 5px 50px 0px;
+  margin: -15px -12px -15px -12px;
   cursor: pointer;
   /* Set the card's dimensions, and size it relative to
      it's font size. */
   font-size: inherit;
-  width: 0.5em;
-  height: 0.7em;
+  width: 1em;
+  height: 1.4em;
   /* Add a default background color and border. */
   background-color: #fff;
   border-radius: 0.1em;
@@ -158,8 +158,12 @@ img {
   /* Optional styles for cards: borderless and drop shadow. */
   /* Not a card, but a card-shaped outline to represent a
      droppable place, like an empty pile. */
-  transform: scale(0.6);
-  transition: transform 0.3s ease-in-out;
+  /* transform: scale(0.6);
+  transition: transform 0.3s ease-in-out; */
+}
+.cardDealAnimation {
+  transform: scale(0.5);
+  transition: all 0.5s ease-in-out;
 }
 
 .card.small {
@@ -620,9 +624,9 @@ img {
     height: 2em;
     margin: -10px -15px -5px -10px;
   }
-}
 
-.cardDealAnimation {
-  transform: scale(0.6);
-  transition: all 0.3s ease-in-out;
+  .cardDealAnimation {
+    transform: scale(0.6);
+    transition: all 0.5s ease-in-out;
+  }
 }
