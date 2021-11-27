@@ -127,6 +127,8 @@ function reset() {
   enableAgainButton();
   disableInitButton();
   document.getElementById('again').innerHTML = 'Start';
+  scoreBoxBlingIsPlayer(true);
+  scoreBoxBlingIsPlayer(false);
 }
 
 // Deal is pressed
@@ -163,6 +165,7 @@ function deal() {
       if (checkForDealerBlackJack()) {
         gameEnded = true;
         score.d++;
+        scoreBoxBlingIsPlayer(false);
         showHiddenCard();
         dealerBlackJack();
         render();
@@ -248,6 +251,7 @@ function render() {
   if (playersSum > 21) {
     gameEnded = true;
     score.d++;
+    scoreBoxBlingIsPlayer(false);
     disableHitStayButton();
     enableAgainButton();
     dealtCards.d.push(convertAceToEleven(hiddenCardProcessedValue));
@@ -261,6 +265,7 @@ function render() {
     if (dealersSum > 21) {
       gameEnded = true;
       score.p++;
+      scoreBoxBlingIsPlayer(true);
       winningDialogueIsPlayer(true);
     } else if (
       dealersSum <= 21 &&
@@ -269,6 +274,7 @@ function render() {
     ) {
       gameEnded = true;
       score.d++;
+      scoreBoxBlingIsPlayer(false);
       winningDialogueIsPlayer(false);
     } else if (
       playersSum <= 21 &&
@@ -277,6 +283,7 @@ function render() {
     ) {
       gameEnded = true;
       score.p++;
+      scoreBoxBlingIsPlayer(true);
       winningDialogueIsPlayer(true);
     }
   }
@@ -386,6 +393,22 @@ function showHiddenCard() {
       document.getElementById(hiddenCardId).classList.add('hiddenCardFlipTwo');
     }, computerFlowDelay);
   }, cardDealDelay);
+}
+
+// Score Box Bling
+function scoreBoxBlingIsPlayer(isTrue) {
+  if (isTrue) {
+    scoreBox.p.classList.remove('scoreBoxBling');
+
+    setTimeout(function () {
+      scoreBox.p.classList.add('scoreBoxBling');
+    }, computerFlowDelay);
+  } else {
+    scoreBox.d.classList.remove('scoreBoxBling');
+    setTimeout(function () {
+      scoreBox.d.classList.add('scoreBoxBling');
+    }, computerFlowDelay);
+  }
 }
 
 // Reset scorebox after restart
