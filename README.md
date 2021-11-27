@@ -6,6 +6,8 @@ The game is coded for dealer's "BlackJack" condition only for ace with facecards
 
 Major challenge was the hiding of the second card but simultaneously having it's value stored and showing an SVG with the backside. The backside card element `<div>` generated carries a unique id `id='hiddenCard'`. When hands are to be shown, the code finds and swaps the facecard `<div>` carrying the corresponding(correct) SVG.
 
+An even bigger challenge is to animating cards dealt and assigning ID to track which one to animate with a `setTimeout()` function, since javascript does not animate when class is initially added.
+
 At the end card's value is checked and processed for any facecard to changed to numeric 10, as well as any ace card to 11. On top of this, the code will check for hands that are over 21, but contains an ace in which it could reduce to 1. This reduction function is called before checking for any busts.
 
 With `setTimeout()` functions to simulate some delays, I also needed to make sure buttons can't be pressed again during timeout. Hence there is a block of code to manage button enable/disable with corresponding color change.
