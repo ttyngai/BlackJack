@@ -80,7 +80,7 @@ let sumBox = {
   p: document.getElementById('playersSumBox'),
 };
 let buttonStatus = {
-  i: document.getElementById('reset'),
+  r: document.getElementById('reset'),
   d: document.getElementById('again'),
   h: document.getElementById('hit'),
   s: document.getElementById('stay'),
@@ -96,7 +96,7 @@ document.getElementById('stay').addEventListener('click', stay);
 init();
 function init() {
   disableHitStayButton();
-  disableInitButton();
+  disableResetButton();
   dealtCards = {
     d: [0],
     p: [0],
@@ -125,7 +125,7 @@ function reset() {
     dialogues.h[randomDialogue()];
   render();
   enableAgainButton();
-  disableInitButton();
+  disableResetButton();
   document.getElementById('again').innerHTML = 'Start';
   scoreBoxBlingIsPlayer(true);
   scoreBoxBlingIsPlayer(false);
@@ -133,7 +133,7 @@ function reset() {
 
 // Deal is pressed
 function deal() {
-  disableInitButton();
+  disableResetButton();
   firstCard = 0;
   resetScoreBox();
   dealersFirstCard = '';
@@ -171,7 +171,7 @@ function deal() {
         render();
         disableHitStayButton();
         enableAgainButton();
-        enableInitButton();
+        enableResetButton();
       }
       if (!gameEnded) {
         dealPlayer();
@@ -188,7 +188,7 @@ function dealPlayer() {
       setTimeout(function () {
         render();
         enableHitStayButton();
-        enableInitButton();
+        enableResetButton();
         document.getElementById('reset').innerHTML = 'Reset';
       }, cardDealDelay);
     }, cardDealDelay);
@@ -198,6 +198,7 @@ function dealPlayer() {
 // Player hits
 function hit() {
   disableHitStayButton();
+  disableResetButton();
   document.getElementById('playerSays').innerHTML = '';
   document.getElementById('playerSays').innerHTML =
     dialogues.h[randomDialogue()];
@@ -212,26 +213,29 @@ function hit() {
     if (playersSum === 21) {
       disableHitButton();
     }
+    enableResetButton();
   }, cardDealDelay);
 }
 
 // Player stays and ends turn
 function stay() {
+  disableResetButton();
   playerEndedTurn = true;
   dealtCards.d.push(convertAceToEleven(convertFaceToTen(hiddenCardDisplay)));
   showHiddenCard();
   checkAndReduceAce(dealtCards.d);
   checkAndReduceAce(dealtCards.p);
   disableHitStayButton();
-  enableAgainButton();
+
   render();
   setTimeout(function () {
     dealDealerRemaining();
+    enableAgainButton();
+    enableResetButton();
   }, cardDealDelay * 1.5);
 }
 
 // Call back dealers delay function
-
 function dealDealerRemaining() {
   if (!gameEnded && dealtCards.d.reduce((a, b) => a + b) < 17) {
     setTimeout(function () {
@@ -459,13 +463,13 @@ function bustedDialogue() {
 }
 
 // Button enable/disable
-function enableInitButton() {
-  buttonStatus.i.disabled = false;
-  buttonStatus.i.style.background = enabledButtonColor;
+function enableResetButton() {
+  buttonStatus.r.disabled = false;
+  buttonStatus.r.style.background = enabledButtonColor;
 }
-function disableInitButton() {
-  buttonStatus.i.disabled = true;
-  buttonStatus.i.style.background = disabledButtonColor;
+function disableResetButton() {
+  buttonStatus.r.disabled = true;
+  buttonStatus.r.style.background = disabledButtonColor;
 }
 function enableAgainButton() {
   buttonStatus.d.disabled = false;
