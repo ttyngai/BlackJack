@@ -59,13 +59,14 @@ let firstCard,
   dealersFirstCard,
   hiddenCardDisplay,
   playerEndedTurn,
-  hiddenCardId,
-  cardIdCount = 0;
+  hiddenCardId;
 let score = {};
 let dealtCards = {
   d: [0],
   p: [0],
 };
+let cardIdCount = 0;
+let maxRound = 7;
 let timeDelay = 500;
 let cardDealTime = 50;
 /*----- cached element references -----*/
@@ -221,10 +222,19 @@ function stay() {
   disableHitStayButton();
   enableAgainButton();
   render();
-  while (!gameEnded && dealtCards.d.reduce((a, b) => a + b) < 17) {
-    runDealCard(false, 'dealersArray', dealtCards.d);
-    render();
-  }
+  dealDealerRemaining();
+}
+
+// Call back dealers delay function
+
+function dealDealerRemaining() {
+  if (!gameEnded && dealtCards.d.reduce((a, b) => a + b) < 17) {
+    setTimeout(function () {
+      runDealCard(false, 'dealersArray', dealtCards.d);
+      render();
+      dealDealerRemaining();
+    }, timeDelay);
+  } else return;
 }
 
 // Render function
