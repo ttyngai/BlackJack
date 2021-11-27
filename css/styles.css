@@ -134,13 +134,13 @@ img {
 .card {
   /* box-sizing: border-box; */
   display: inline-block;
-  margin: -15px -12px -15px -12px;
+  margin: -13.5px -13px -15px -14px;
   cursor: pointer;
   /* Set the card's dimensions, and size it relative to
      it's font size. */
   font-size: inherit;
-  width: 1em;
-  height: 1.4em;
+  width: 1.1em;
+  height: 1.5em;
   /* Add a default background color and border. */
   background-color: #fff;
   border-radius: 0.1em;
@@ -158,12 +158,30 @@ img {
   /* Optional styles for cards: borderless and drop shadow. */
   /* Not a card, but a card-shaped outline to represent a
      droppable place, like an empty pile. */
-  /* transform: scale(0.6);
-  transition: transform 0.3s ease-in-out; */
+  transform: rotate(-20deg);
 }
 .cardDealAnimation {
+  transform: rotate(0deg) scale(0.5);
+  transition: all 0.5s ease-in-out;
+}
+.hiddenCardRotated {
+  transform: rotate(0) scaleX(0.01);
+}
+.cardDealAnimation {
+  transform: rotate(0deg) scale(0.5);
+  transition: all 0.5s ease-in-out;
+}
+.hiddenCardFlipOne {
+  transform: scaleX(0.01);
+  transition: all 0.5s ease-in-out;
+}
+.hiddenCardFlipTwo {
   transform: scale(0.5);
   transition: all 0.5s ease-in-out;
+}
+.cardFlipTwo {
+  transform: scale(-0.5, -0.5);
+  transition: transform 0.5s ease-in-out;
 }
 
 .card.small {
@@ -620,13 +638,28 @@ img {
     margin: 10px 0 5px 0;
   }
   .card {
-    width: 1.5em;
-    height: 2em;
-    margin: -10px -15px -5px -10px;
+    width: 1.9em;
+    height: 2.6em;
+    margin: -26px -20px -20px -25px;
+    transform: rotate(-20deg);
   }
-
+  .hiddenCardRotated {
+    transform: rotate(0) scaleX(0.01);
+  }
   .cardDealAnimation {
-    transform: scale(0.6);
+    transform: rotate(0deg) scale(0.5);
     transition: all 0.5s ease-in-out;
+  }
+  .hiddenCardFlipOne {
+    transform: scaleX(0.01);
+    transition: all 0.5s ease-in-out;
+  }
+  .hiddenCardFlipTwo {
+    transform: scale(0.5);
+    transition: all 0.5s ease-in-out;
+  }
+  .cardFlipTwo {
+    transform: scale(-0.5, -0.5);
+    transition: transform 0.5s ease-in-out;
   }
 }
