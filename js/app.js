@@ -183,7 +183,7 @@ function dealPlayer() {
         render();
         enableHitStayButton();
         enableInitButton();
-        document.getElementById('init').innerHTML = 'Reset';
+        document.getElementById('reset').innerHTML = 'Reset';
       }, timeDelay);
     }, timeDelay);
   }, timeDelay);
@@ -288,12 +288,14 @@ function runDealCard(hide, array, dealtCardsArray, dealer) {
   }
   if (hide === true) {
     newCardEl.innerHTML += `<div id="hiddenCard" class="card back-red"></div>`;
+    // newCardEl.classList.add('cardDealAnimation');
     hiddenCardProcessedValue = processedCard;
     hiddenCardDisplay = newCard;
   } else {
     newCardEl.innerHTML += `<div class="card ${suits[randomSuits()]}${
       ranks[newCard - 1]
     }"></div>`;
+    // newCardEl.addClass(' cardDealAnimation');
     dealtCardsArray.push(processedCard);
   }
   checkAndReduceAce(dealtCardsArray);

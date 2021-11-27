@@ -158,7 +158,10 @@ img {
   /* Optional styles for cards: borderless and drop shadow. */
   /* Not a card, but a card-shaped outline to represent a
      droppable place, like an empty pile. */
+  transform: scale(0.6);
+  transition: transform 0.3s ease-in-out;
 }
+
 .card.small {
   font-size: 12px;
 }
@@ -613,7 +616,12 @@ img {
     margin: 10px 0 5px 0;
   }
   .card {
-    width: 1em;
-    height: 1.3em;
+    width: 1.5em;
+    height: 2em;
+    margin: -10px -15px -5px -10px;
+  }
+  .cardDealAnimation {
+    transform: scale(0.6);
+    transition: transform 0.3s ease-in-out;
   }
 }
