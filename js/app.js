@@ -191,6 +191,7 @@ function dealPlayer() {
 
 // Player hits
 function hit() {
+  document.getElementById('hiddenCard').classList.add('cardDealAnimation');
   disableHitStayButton();
   document.getElementById('playerSays').innerHTML = '';
   document.getElementById('playerSays').innerHTML =
@@ -288,14 +289,13 @@ function runDealCard(hide, array, dealtCardsArray, dealer) {
   }
   if (hide === true) {
     newCardEl.innerHTML += `<div id="hiddenCard" class="card back-red"></div>`;
-    // newCardEl.classList.add('cardDealAnimation');
     hiddenCardProcessedValue = processedCard;
     hiddenCardDisplay = newCard;
   } else {
     newCardEl.innerHTML += `<div class="card ${suits[randomSuits()]}${
       ranks[newCard - 1]
     }"></div>`;
-    // newCardEl.addClass(' cardDealAnimation');
+
     dealtCardsArray.push(processedCard);
   }
   checkAndReduceAce(dealtCardsArray);
@@ -305,7 +305,7 @@ function runDealCard(hide, array, dealtCardsArray, dealer) {
 // BlackJack check for dealer
 function checkForDealerBlackJack() {
   if (firstCard === 1 && hiddenCardDisplay >= 11) {
-    dealtCards.d.push(convertAceToEleven(hiddenCardDisplay));
+    dealtCards.d.push(convertFaceToTen(hiddenCardDisplay));
     return true;
   } else if (firstCard >= 11 && hiddenCardDisplay === 1) {
     dealtCards.d.push(convertAceToEleven(hiddenCardDisplay));

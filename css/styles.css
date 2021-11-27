@@ -620,8 +620,9 @@ img {
     height: 2em;
     margin: -10px -15px -5px -10px;
   }
-  .cardDealAnimation {
-    transform: scale(0.6);
-    transition: transform 0.3s ease-in-out;
-  }
+}
+
+.cardDealAnimation {
+  transform: scale(0.6);
+  transition: all 0.3s ease-in-out;
 }
