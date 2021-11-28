@@ -40,7 +40,7 @@ body {
   border-radius: 15px;
   background-color: var(--tableBackground);
   border: solid 2px var(--casinoYellow);
-  margin: -200px 0 0 0;
+  margin: -150px 0 0 0;
 }
 #intro {
   padding: 10px 20px;
@@ -674,7 +674,7 @@ img {
     max-width: 350px;
     border-radius: 15px;
     border: solid 2px var(--casinoYellow);
-    margin: -300px 0 0 0;
+    margin: -200px 0 0 0;
   }
   #intro {
     padding: 15px 25px;
@@ -703,6 +703,7 @@ img {
 
   .nameCard {
     font-size: 25px;
+    margin: 25px 10px;
   }
 
   .dialogue {
@@ -735,7 +736,7 @@ img {
 
   .scoreBox {
     padding: 5px 30px;
-    margin: 60px 30px;
+    margin: 60px 50px;
     font-size: 50px;
     border-radius: 10px;
     min-width: 30px;
