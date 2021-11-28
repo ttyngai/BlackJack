@@ -88,12 +88,57 @@ let buttonStatus = {
 
 /*----- event listeners -----*/
 document.getElementById('startMission').addEventListener('click', startMission);
+document.getElementById('autoPilot').addEventListener('click', autoPilot);
 document.getElementById('reset').addEventListener('click', reset);
 document.getElementById('again').addEventListener('click', deal);
 document.getElementById('hit').addEventListener('click', hit);
 document.getElementById('stay').addEventListener('click', stay);
 
 /*----- functions -----*/
+
+function autoPilot() {
+  cardDealDelay = 200;
+  startMission();
+  runAutoPilot();
+}
+
+function runAutoPilot() {
+  setTimeout(function () {
+    deal();
+    setTimeout(function () {
+      autoHit();
+    }, cardDealDelay * 4);
+  }, cardDealDelay * 4);
+}
+
+function autoHit() {
+  if (!gameEnded && dealtCards.p.reduce((a, b) => a + b) < 17) {
+    hit();
+    setTimeout(function () {
+      autoHit();
+    }, cardDealDelay * 6);
+  } else if (
+    !gameEnded &&
+    (dealtCards.d[1] === 5 || dealtCards.d[1] === 6) &&
+    dealtCards.p.reduce((a, b) => a + b) >= 12 &&
+    dealtCards.p.reduce((a, b) => a + b) <= 16
+  ) {
+    stay();
+    setTimeout(function () {
+      runAutoPilot();
+    }, cardDealDelay);
+  } else if (!gameEnded && dealtCards.p.reduce((a, b) => a + b) >= 17) {
+    stay();
+    setTimeout(function () {
+      runAutoPilot();
+    }, cardDealDelay);
+  } else if (gameEnded) {
+    setTimeout(function () {
+      runAutoPilot();
+    }, cardDealDelay * 2);
+  }
+}
+
 function startMission() {
   document.getElementById('introContainer').remove();
   document.getElementById('coverPage').classList.add('introFadeOut');
