@@ -199,7 +199,8 @@ function dealPlayer() {
       runDealCard(false, 'playersArray', dealtCards.p);
       setTimeout(function () {
         render();
-        enableHitStayButton();
+        enableHitButton();
+        enableStayButton();
         enableResetButton();
         document.getElementById('reset').innerHTML = 'Reset';
       }, cardDealDelay);
@@ -220,11 +221,13 @@ function hit() {
   setTimeout(function () {
     runDealCard(false, 'playersArray', dealtCards.p);
     render();
-    if (!gameEnded) enableHitStayButton();
-    let playersSum = dealtCards.p.reduce((a, b) => a + b);
-    if (playersSum === 21) {
-      disableHitButton();
+    if (!gameEnded) {
+      enableStayButton();
     }
+    let playersSum = dealtCards.p.reduce((a, b) => a + b);
+    if (playersSum >= 21) {
+      disableHitButton();
+    } else enableHitButton();
     enableResetButton();
   }, cardDealDelay);
 }
@@ -499,14 +502,18 @@ function disableAgainButton() {
   buttonStatus.d.disabled = true;
   buttonStatus.d.style.background = disabledButtonColor;
 }
-function enableHitStayButton() {
+function enableHitButton() {
   buttonStatus.h.disabled = false;
   buttonStatus.h.style.background = enabledButtonColor;
+
+  buttonBling('hit');
+}
+function enableStayButton() {
   buttonStatus.s.disabled = false;
   buttonStatus.s.style.background = enabledButtonColor;
-  buttonBling('hit');
   buttonBling('stay');
 }
+
 function disableHitStayButton() {
   buttonStatus.h.disabled = true;
   buttonStatus.h.style.background = disabledButtonColor;
