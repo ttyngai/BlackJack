@@ -87,12 +87,24 @@ let buttonStatus = {
 };
 
 /*----- event listeners -----*/
+document.getElementById('startMission').addEventListener('click', startMission);
 document.getElementById('reset').addEventListener('click', reset);
 document.getElementById('again').addEventListener('click', deal);
 document.getElementById('hit').addEventListener('click', hit);
 document.getElementById('stay').addEventListener('click', stay);
 
 /*----- functions -----*/
+function startMission() {
+  document.getElementById('introContainer').remove();
+  document.getElementById('coverPage').classList.add('introFadeOut');
+  setTimeout(function () {
+    document.getElementById('coverPage').remove();
+    scoreBoxBlingIsPlayer(true);
+    scoreBoxBlingIsPlayer(false);
+    buttonBling('again');
+  }, 2000);
+}
+
 init();
 function init() {
   disableHitStayButton();
@@ -415,6 +427,13 @@ function scoreBoxBlingIsPlayer(isTrue) {
   }
 }
 
+function buttonBling(buttonId) {
+  document.getElementById(buttonId).classList.remove('buttonBling');
+  setTimeout(function () {
+    document.getElementById(buttonId).classList.add('buttonBling');
+  }, computerFlowDelay);
+}
+
 // Reset scorebox after restart
 function resetScoreBox() {
   dealtCards = {
@@ -474,6 +493,7 @@ function disableResetButton() {
 function enableAgainButton() {
   buttonStatus.d.disabled = false;
   buttonStatus.d.style.background = enabledButtonColor;
+  buttonBling('again');
 }
 function disableAgainButton() {
   buttonStatus.d.disabled = true;
@@ -484,6 +504,8 @@ function enableHitStayButton() {
   buttonStatus.h.style.background = enabledButtonColor;
   buttonStatus.s.disabled = false;
   buttonStatus.s.style.background = enabledButtonColor;
+  buttonBling('hit');
+  buttonBling('stay');
 }
 function disableHitStayButton() {
   buttonStatus.h.disabled = true;
