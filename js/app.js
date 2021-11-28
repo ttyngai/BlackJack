@@ -69,6 +69,7 @@ let cardId = 0;
 let maxRound = 7;
 let cardDealDelay = 500;
 let computerFlowDelay = 50;
+let isAutoPilot = false;
 /*----- cached element references -----*/
 let gameEnded;
 let scoreBox = {
@@ -80,27 +81,45 @@ let sumBox = {
   p: document.getElementById('playersSumBox'),
 };
 let buttonStatus = {
+  sm: document.getElementById('startMission'),
+  ap: document.getElementById('autoPilot'),
   r: document.getElementById('reset'),
   d: document.getElementById('again'),
   h: document.getElementById('hit'),
   s: document.getElementById('stay'),
 };
+let dialogueContainer = {
+  d: document.getElementById('dealerSays'),
+  p: document.getElementById('playerSays'),
+};
 
 /*----- event listeners -----*/
-document.getElementById('startMission').addEventListener('click', startMission);
-document.getElementById('autoPilot').addEventListener('click', autoPilot);
-document.getElementById('reset').addEventListener('click', reset);
-document.getElementById('again').addEventListener('click', deal);
-document.getElementById('hit').addEventListener('click', hit);
-document.getElementById('stay').addEventListener('click', stay);
+buttonStatus.sm.addEventListener('click', startMission);
+buttonStatus.ap.addEventListener('click', autoPilot);
+buttonStatus.r.addEventListener('click', reset);
+buttonStatus.d.addEventListener('click', deal);
+buttonStatus.h.addEventListener('click', hit);
+buttonStatus.s.addEventListener('click', stay);
 
 /*----- functions -----*/
 
 function autoPilot() {
   // min is 50
-  cardDealDelay = 250;
+  buttonStatus.r.removeEventListener('click', reset);
+  buttonStatus.r.addEventListener('click', reloadPage);
+  buttonStatus.r.innerHTML = 'Exit';
+  buttonStatus.d.remove();
+  buttonStatus.h.remove();
+  buttonStatus.s.remove();
+  enableResetButton();
+  isAutoPilot = true;
+  cardDealDelay = 200;
   startMission();
   runAutoPilot();
+}
+
+function reloadPage() {
+  document.location.reload();
 }
 function runAutoPilot() {
   setTimeout(function () {
@@ -109,15 +128,12 @@ function runAutoPilot() {
       autoHit();
       // cardDealDelay needs to be above 4.5 to be reliable in counting 17 @50ms
     }, cardDealDelay * 6);
-    // cardDealDelay needs to be above 4 to not trip out at 50ms
+    // cardDealDelay needs to be above 4 to not error out @ 50ms
   }, cardDealDelay * 4);
 }
 
 function autoHit() {
-  // Need to address
-  // when you get 10 and Ace, it will think it's 11 and hit
   let playersSum = dealtCards.p.reduce((a, b) => a + b);
-
   // Dealer has 4 - 6, player has 12-16, should stay
   if (
     !gameEnded &&
@@ -202,14 +218,12 @@ function reset() {
   };
   document.getElementById('dealersArray').innerHTML = '';
   document.getElementById('playersArray').innerHTML = '';
-  document.getElementById('dealerSays').innerHTML =
-    dialogues.c[randomDialogue()];
-  document.getElementById('playerSays').innerHTML =
-    dialogues.h[randomDialogue()];
+  dialogueContainer.d.innerHTML = dialogues.c[randomDialogue()];
+  dialogueContainer.p.innerHTML = dialogues.h[randomDialogue()];
   render();
   enableAgainButton();
   disableResetButton();
-  document.getElementById('again').innerHTML = 'Start';
+  buttonStatus.d.innerHTML = 'Start';
   scoreBoxBlingIsPlayer(true);
   scoreBoxBlingIsPlayer(false);
 }
@@ -227,15 +241,13 @@ function deal() {
     d: [0],
     p: [0],
   };
-  document.getElementById('playerSays').innerHTML = '';
-  document.getElementById('dealerSays').innerHTML = '';
-  document.getElementById('dealerSays').innerHTML =
-    dialogues.c[randomDialogue()];
-  document.getElementById('playerSays').innerHTML =
-    dialogues.h[randomDialogue()];
+  dialogueContainer.p.innerHTML = '';
+  dialogueContainer.d.innerHTML = '';
+  dialogueContainer.d.innerHTML = dialogues.c[randomDialogue()];
+  dialogueContainer.p.innerHTML = dialogues.h[randomDialogue()];
   disableAgainButton();
   setTimeout(function () {
-    document.getElementById('again').innerHTML = 'Again';
+    buttonStatus.d.innerHTML = 'Again';
   }, cardDealDelay * 4);
   document.getElementById('playersArray').innerHTML = '';
   document.getElementById('dealersArray').innerHTML = '';
@@ -273,7 +285,6 @@ function dealPlayer() {
         enableHitButton();
         enableStayButton();
         enableResetButton();
-        document.getElementById('reset').innerHTML = 'Reset';
       }, cardDealDelay);
     }, cardDealDelay);
   }, cardDealDelay);
@@ -283,12 +294,10 @@ function dealPlayer() {
 function hit() {
   disableHitStayButton();
   disableResetButton();
-  document.getElementById('playerSays').innerHTML = '';
-  document.getElementById('playerSays').innerHTML =
-    dialogues.h[randomDialogue()];
-  document.getElementById('dealerSays').innerHTML = '';
-  document.getElementById('dealerSays').innerHTML =
-    dialogues.c[randomDialogue()];
+  dialogueContainer.p.innerHTML = '';
+  dialogueContainer.p.innerHTML = dialogues.h[randomDialogue()];
+  dialogueContainer.d.innerHTML = '';
+  dialogueContainer.d.innerHTML = dialogues.c[randomDialogue()];
   setTimeout(function () {
     runDealCard(false, 'playersArray', dealtCards.p);
     render();
@@ -393,7 +402,6 @@ function render() {
 // Deal card logic
 function runDealCard(hide, array, dealtCardsArray, dealer) {
   let newCard = randomCard();
-  // let newCard = 1;
 
   cardId++;
   if (!hide && dealer) {
@@ -502,10 +510,12 @@ function scoreBoxBlingIsPlayer(isTrue) {
 }
 
 function buttonBling(buttonId) {
-  document.getElementById(buttonId).classList.remove('buttonBling');
-  setTimeout(function () {
-    document.getElementById(buttonId).classList.add('buttonBling');
-  }, computerFlowDelay);
+  if (!isAutoPilot) {
+    document.getElementById(buttonId).classList.remove('buttonBling');
+    setTimeout(function () {
+      document.getElementById(buttonId).classList.add('buttonBling');
+    }, computerFlowDelay);
+  }
 }
 
 // Reset scorebox after restart
@@ -522,37 +532,33 @@ function resetScoreBox() {
 // Dialoge function
 function winningDialogueIsPlayer(isTrue) {
   if (isTrue) {
-    document.getElementById('playerSays').innerHTML = '';
-    document.getElementById('playerSays').innerHTML =
-      dialogues.w[randomDialogue()];
-    document.getElementById('dealerSays').innerHTML = '';
-    document.getElementById('dealerSays').innerHTML =
-      dialogues.l[randomDialogue()];
+    dialogueContainer.p.innerHTML = '';
+    dialogueContainer.p.innerHTML = dialogues.w[randomDialogue()];
+    dialogueContainer.d.innerHTML = '';
+    dialogueContainer.d.innerHTML = dialogues.l[randomDialogue()];
   } else {
-    document.getElementById('playerSays').innerHTML = '';
-    document.getElementById('playerSays').innerHTML =
-      dialogues.l[randomDialogue()];
-    document.getElementById('dealerSays').innerHTML = '';
-    document.getElementById('dealerSays').innerHTML =
-      dialogues.w[randomDialogue()];
+    dialogueContainer.p.innerHTML = '';
+    dialogueContainer.p.innerHTML = dialogues.l[randomDialogue()];
+    dialogueContainer.d.innerHTML = '';
+    dialogueContainer.d.innerHTML = dialogues.w[randomDialogue()];
   }
 }
 function tieDialogue() {
-  document.getElementById('playerSays').innerHTML = dialogues.t[0];
-  document.getElementById('dealerSays').innerHTML = dialogues.t[1];
+  dialogueContainer.p.innerHTML = dialogues.t[0];
+  dialogueContainer.d.innerHTML = dialogues.t[1];
 }
 function dealerBlackJack() {
-  document.getElementById('playerSays').innerHTML = '';
-  document.getElementById('playerSays').innerHTML = dialogues.bj[0];
-  document.getElementById('dealerSays').innerHTML = '';
-  document.getElementById('dealerSays').innerHTML = dialogues.bj[1];
+  dialogueContainer.p.innerHTML = '';
+  dialogueContainer.p.innerHTML = dialogues.bj[0];
+  dialogueContainer.d.innerHTML = '';
+  dialogueContainer.d.innerHTML = dialogues.bj[1];
 }
 
 function bustedDialogue() {
-  document.getElementById('playerSays').innerHTML = '';
-  document.getElementById('playerSays').innerHTML = dialogues.b[0];
-  document.getElementById('dealerSays').innerHTML = '';
-  document.getElementById('dealerSays').innerHTML = dialogues.b[1];
+  dialogueContainer.p.innerHTML = '';
+  dialogueContainer.p.innerHTML = dialogues.b[0];
+  dialogueContainer.d.innerHTML = '';
+  dialogueContainer.d.innerHTML = dialogues.b[1];
 }
 
 // Button enable/disable
@@ -561,8 +567,10 @@ function enableResetButton() {
   buttonStatus.r.style.background = enabledButtonColor;
 }
 function disableResetButton() {
-  buttonStatus.r.disabled = true;
-  buttonStatus.r.style.background = disabledButtonColor;
+  if (!isAutoPilot) {
+    buttonStatus.r.disabled = true;
+    buttonStatus.r.style.background = disabledButtonColor;
+  }
 }
 function enableAgainButton() {
   buttonStatus.d.disabled = false;
@@ -576,7 +584,6 @@ function disableAgainButton() {
 function enableHitButton() {
   buttonStatus.h.disabled = false;
   buttonStatus.h.style.background = enabledButtonColor;
-
   buttonBling('hit');
 }
 function enableStayButton() {
