@@ -40,6 +40,7 @@ body {
   border-radius: 15px;
   background-color: var(--tableBackground);
   border: solid 2px var(--casinoYellow);
+  margin: -200px 0 0 0;
 }
 #intro {
   padding: 10px 20px;
@@ -673,6 +674,7 @@ img {
     max-width: 350px;
     border-radius: 15px;
     border: solid 2px var(--casinoYellow);
+    margin: -300px 0 0 0;
   }
   #intro {
     padding: 15px 25px;
