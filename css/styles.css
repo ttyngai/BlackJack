@@ -18,6 +18,7 @@ body {
   justify-content: center;
   background-color: var(--tableBackground);
   padding: 10px;
+  text-align: center;
 }
 
 #coverPage {
