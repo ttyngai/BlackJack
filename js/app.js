@@ -65,7 +65,7 @@ let dealtCards = {
   d: [0],
   p: [0],
 };
-let cardIdCount = 0;
+let cardId = 0;
 let maxRound = 7;
 let cardDealDelay = 500;
 let computerFlowDelay = 50;
@@ -97,41 +97,30 @@ document.getElementById('stay').addEventListener('click', stay);
 /*----- functions -----*/
 
 function autoPilot() {
-  cardDealDelay = 200;
+  // min is 50
+  cardDealDelay = 50;
   startMission();
   runAutoPilot();
 }
-function changeResetToReload() {
-  document
-    .getElementById('reset')
-    .addEventListener('click', changeResetToReload);
-}
-
 function runAutoPilot() {
   setTimeout(function () {
     deal();
     setTimeout(function () {
       autoHit();
-    }, cardDealDelay * 2);
+    }, cardDealDelay * 6);
   }, cardDealDelay * 4);
 }
 
 function autoHit() {
-  if (!gameEnded && dealtCards.p.reduce((a, b) => a + b) < 17) {
-    setTimeout(function () {
-      hit();
-      setTimeout(function () {
-        autoHit();
-      }, cardDealDelay * 4);
-    }, cardDealDelay * 4);
-  }
+  let playersSum = dealtCards.p.reduce((a, b) => a + b);
+
   // Dealer has 4 - 6, player has 12-16, should stay
-  else if (
+  if (
     !gameEnded &&
     dealtCards.d[1] >= 4 &&
     dealtCards.d[1] <= 6 &&
-    dealtCards.p.reduce((a, b) => a + b) >= 12 &&
-    dealtCards.p.reduce((a, b) => a + b) <= 16
+    playersSum >= 12 &&
+    playersSum <= 16
   ) {
     stay();
     setTimeout(function () {
@@ -143,25 +132,32 @@ function autoHit() {
     !gameEnded &&
     dealtCards.d[1] >= 2 &&
     dealtCards.d[1] <= 3 &&
-    dealtCards.p.reduce((a, b) => a + b) >= 13 &&
-    dealtCards.p.reduce((a, b) => a + b) <= 16
+    playersSum >= 13 &&
+    playersSum <= 16
   ) {
     stay();
     setTimeout(function () {
       runAutoPilot();
     }, cardDealDelay);
+  } else if (!gameEnded && playersSum < 17) {
+    setTimeout(function () {
+      hit();
+      setTimeout(function () {
+        autoHit();
+      }, cardDealDelay);
+    }, cardDealDelay);
   }
-
   // Player has over 17, should stay
-  else if (!gameEnded && dealtCards.p.reduce((a, b) => a + b) >= 17) {
+  else if (!gameEnded && playersSum >= 17) {
     stay();
     setTimeout(function () {
       runAutoPilot();
-    }, cardDealDelay);
+      // cardDealDelay min *4
+    }, cardDealDelay * 4);
   } else if (gameEnded) {
     setTimeout(function () {
       runAutoPilot();
-    }, cardDealDelay * 2);
+    }, cardDealDelay);
   }
 }
 
@@ -314,11 +310,12 @@ function stay() {
   disableHitStayButton();
 
   render();
+  // moved out of timeout to prevent 3rd card in autopuiilot
   setTimeout(function () {
     dealDealerRemaining();
     enableAgainButton();
     enableResetButton();
-  }, cardDealDelay * 1.5);
+  }, cardDealDelay);
 }
 
 // Call back dealers delay function
@@ -391,7 +388,8 @@ function render() {
 // Deal card logic
 function runDealCard(hide, array, dealtCardsArray, dealer) {
   let newCard = randomCard();
-  cardIdCount++;
+  // let newCard = 1;
+  cardId++;
   if (!hide && dealer) {
     firstCard = newCard;
   }
@@ -401,23 +399,19 @@ function runDealCard(hide, array, dealtCardsArray, dealer) {
     dealersFirstCard = newCard;
   }
   if (hide === true) {
-    hiddenCardId = cardIdCount;
-    newCardEl.innerHTML += `<div id="${cardIdCount}" class="card back-red"></div>`;
+    hiddenCardId = cardId;
+    newCardEl.innerHTML += `<div id="${cardId}" class="card back-red"></div>`;
     setTimeout(function () {
-      document
-        .getElementById(`${cardIdCount}`)
-        .classList.add('cardDealAnimation');
+      document.getElementById(`${cardId}`).classList.add('cardDealAnimation');
     }, computerFlowDelay);
     hiddenCardProcessedValue = processedCard;
     hiddenCardDisplay = newCard;
   } else {
-    newCardEl.innerHTML += `<div id="${cardIdCount}" class="card ${
+    newCardEl.innerHTML += `<div id="${cardId}" class="card ${
       suits[randomSuits()]
     }${ranks[newCard - 1]}"></div>`;
     setTimeout(function () {
-      document
-        .getElementById(`${cardIdCount}`)
-        .classList.add('cardDealAnimation');
+      document.getElementById(`${cardId}`).classList.add('cardDealAnimation');
     }, computerFlowDelay);
     dealtCardsArray.push(processedCard);
   }
