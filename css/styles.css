@@ -20,6 +20,54 @@ body {
   margin: auto;
 }
 
+#coverPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 1;
+  text-align: center;
+}
+#introContainer {
+  max-width: 250px;
+  border-radius: 15px;
+  background-color: var(--tableBackground);
+  border: solid 2px var(--casinoYellow);
+}
+#intro {
+  padding: 10px 20px;
+  font-size: 11px;
+  font-weight: bold;
+  font-family: 'Helvetica';
+  text-align: justify;
+  color: var(--scoreText);
+}
+#startMission {
+  padding: 5px 10px;
+  margin: 10px 0 20px 0;
+  border-radius: 20px;
+  font-weight: bold;
+  background-color: var(--casinoRed);
+  color: white;
+}
+
+.introFadeOut {
+  animation: fadeAni 2s ease-in-out;
+}
+@keyframes fadeAni {
+  0% {
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 0);
+  }
+}
+
 img {
   border-radius: 30px;
   border: solid 2px var(--casinoYellow);
@@ -34,6 +82,13 @@ img {
 #dealerImg {
   max-width: 300px;
   margin: 3px 0;
+}
+
+#coverPageImage {
+  border-radius: 0;
+  border: none;
+  max-width: 100%;
+  border-radius: 15px;
 }
 
 #playHands {
@@ -68,17 +123,33 @@ img {
 .scoreBoxBling {
   animation: scoreAni 0.6s ease-in-out;
 }
+
 @keyframes scoreAni {
   0% {
     transform: scale(1);
   }
   50% {
-    transform: scale(2);
+    transform: scale(1.5);
     background-color: var(--scoreBoxBlingBackground);
   }
   100% {
     transform: scale(1);
     background-color: var(--scoreBackground);
+  }
+}
+.buttonBling {
+  animation: buttonAni 0.3s ease-in-out;
+}
+
+@keyframes buttonAni {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 
@@ -90,7 +161,7 @@ img {
   text-align: right;
 }
 #sillyTag {
-  font-style: italic;
+  text-decoration: underline;
 }
 
 .handsContainer {
@@ -143,9 +214,9 @@ img {
   margin: 130px 0 100px 0;
   text-shadow: black 0 0 10px;
 }
-#playerSays {
+/* #playerSays {
   margin: 150px 0 100px 0;
-}
+} */
 
 /* Card CSS */
 .card {
@@ -593,6 +664,22 @@ img {
 }
 
 @media (min-width: 800px) {
+  #introContainer {
+    max-width: 350px;
+    border-radius: 15px;
+    border: solid 2px var(--casinoYellow);
+  }
+  #intro {
+    padding: 15px 25px;
+    font-size: 16px;
+  }
+  #startMission {
+    padding: 10px 20px;
+    margin: 10px 0 20px 0;
+    border-radius: 20px;
+    font-size: 15px;
+  }
+
   #playerImg {
     max-width: 500px;
   }
@@ -613,12 +700,12 @@ img {
 
   .dialogue {
     width: 500px;
-    font-size: 35px;
+    font-size: 30px;
     margin: 210px 0 0 0;
   }
-  #playerSays {
+  /* #playerSays {
     margin: 240px 0 0 0;
-  }
+  } */
   .sumBox {
     border: solid 4px var(--casinoRed);
     border-radius: 20px;
@@ -652,7 +739,7 @@ img {
     border-radius: 30px;
     font-size: 35px;
     padding: 10px 30px;
-    margin: 10px 0 5px 0;
+    margin: 15px 0 5px 0;
   }
   .card {
     width: 1.9em;
