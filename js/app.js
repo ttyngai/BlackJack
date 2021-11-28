@@ -113,7 +113,7 @@ function autoPilot() {
   buttonStatus.s.remove();
   enableResetButton();
   isAutoPilot = true;
-  cardDealDelay = 200;
+  cardDealDelay = 300;
   startMission();
   runAutoPilot();
 }
@@ -331,17 +331,6 @@ function stay() {
   }, cardDealDelay);
 }
 
-// Call back dealers delay function
-function dealDealerRemaining() {
-  if (!gameEnded && dealtCards.d.reduce((a, b) => a + b) < 17) {
-    setTimeout(function () {
-      runDealCard(false, 'dealersArray', dealtCards.d);
-      render();
-      dealDealerRemaining();
-    }, cardDealDelay);
-  } else return;
-}
-
 // Render function
 function render() {
   let playersSum = dealtCards.p.reduce((a, b) => a + b);
@@ -445,6 +434,34 @@ function checkForDealerBlackJack() {
   return false;
 }
 
+// Call back dealers delay function
+function dealDealerRemaining() {
+  if (!gameEnded && dealtCards.d.reduce((a, b) => a + b) < 17) {
+    setTimeout(function () {
+      runDealCard(false, 'dealersArray', dealtCards.d);
+      render();
+      dealDealerRemaining();
+    }, cardDealDelay);
+  } else return;
+}
+
+// Show hidden card
+function showHiddenCard() {
+  setTimeout(function () {
+    document.getElementById(hiddenCardId).classList.add('hiddenCardFlipOne');
+  }, computerFlowDelay);
+
+  setTimeout(function () {
+    document.getElementById(hiddenCardId).className = `card ${
+      suits[randomSuits()]
+    }${ranks[hiddenCardDisplay - 1]}`;
+    document.getElementById(hiddenCardId).classList.add(`hiddenCardRotated`);
+    setTimeout(function () {
+      document.getElementById(hiddenCardId).classList.add('hiddenCardFlipTwo');
+    }, computerFlowDelay);
+  }, cardDealDelay);
+}
+
 // Random card from 1-13
 function randomCard() {
   return Math.floor(Math.random() * 12 + 1);
@@ -476,28 +493,11 @@ function convertFaceToTen(newCard) {
   return newCard;
 }
 
-// Show hidden card
-function showHiddenCard() {
-  setTimeout(function () {
-    document.getElementById(hiddenCardId).classList.add('hiddenCardFlipOne');
-  }, computerFlowDelay);
-
-  setTimeout(function () {
-    document.getElementById(hiddenCardId).className = `card ${
-      suits[randomSuits()]
-    }${ranks[hiddenCardDisplay - 1]}`;
-    document.getElementById(hiddenCardId).classList.add(`hiddenCardRotated`);
-    setTimeout(function () {
-      document.getElementById(hiddenCardId).classList.add('hiddenCardFlipTwo');
-    }, computerFlowDelay);
-  }, cardDealDelay);
-}
-
+// BLINGS
 // Score Box Bling
 function scoreBoxBlingIsPlayer(isTrue) {
   if (isTrue) {
     scoreBox.p.classList.remove('scoreBoxBling');
-
     setTimeout(function () {
       scoreBox.p.classList.add('scoreBoxBling');
     }, computerFlowDelay);
