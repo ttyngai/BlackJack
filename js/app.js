@@ -101,25 +101,35 @@ function autoPilot() {
   startMission();
   runAutoPilot();
 }
+function changeResetToReload() {
+  document
+    .getElementById('reset')
+    .addEventListener('click', changeResetToReload);
+}
 
 function runAutoPilot() {
   setTimeout(function () {
     deal();
     setTimeout(function () {
       autoHit();
-    }, cardDealDelay * 4);
+    }, cardDealDelay * 2);
   }, cardDealDelay * 4);
 }
 
 function autoHit() {
   if (!gameEnded && dealtCards.p.reduce((a, b) => a + b) < 17) {
-    hit();
     setTimeout(function () {
-      autoHit();
-    }, cardDealDelay * 6);
-  } else if (
+      hit();
+      setTimeout(function () {
+        autoHit();
+      }, cardDealDelay * 4);
+    }, cardDealDelay * 4);
+  }
+  // Dealer has 4 - 6, player has 12-16, should stay
+  else if (
     !gameEnded &&
-    (dealtCards.d[1] === 5 || dealtCards.d[1] === 6) &&
+    dealtCards.d[1] >= 4 &&
+    dealtCards.d[1] <= 6 &&
     dealtCards.p.reduce((a, b) => a + b) >= 12 &&
     dealtCards.p.reduce((a, b) => a + b) <= 16
   ) {
@@ -127,7 +137,23 @@ function autoHit() {
     setTimeout(function () {
       runAutoPilot();
     }, cardDealDelay);
-  } else if (!gameEnded && dealtCards.p.reduce((a, b) => a + b) >= 17) {
+  }
+  // Dealer has 2 or 3, player has 13-16, should stay
+  else if (
+    !gameEnded &&
+    dealtCards.d[1] >= 2 &&
+    dealtCards.d[1] <= 3 &&
+    dealtCards.p.reduce((a, b) => a + b) >= 13 &&
+    dealtCards.p.reduce((a, b) => a + b) <= 16
+  ) {
+    stay();
+    setTimeout(function () {
+      runAutoPilot();
+    }, cardDealDelay);
+  }
+
+  // Player has over 17, should stay
+  else if (!gameEnded && dealtCards.p.reduce((a, b) => a + b) >= 17) {
     stay();
     setTimeout(function () {
       runAutoPilot();
