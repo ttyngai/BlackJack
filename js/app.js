@@ -98,7 +98,7 @@ document.getElementById('stay').addEventListener('click', stay);
 
 function autoPilot() {
   // min is 50
-  cardDealDelay = 50;
+  cardDealDelay = 300;
   startMission();
   runAutoPilot();
 }
@@ -107,7 +107,7 @@ function runAutoPilot() {
     deal();
     setTimeout(function () {
       autoHit();
-    }, cardDealDelay * 6);
+    }, cardDealDelay * 4);
   }, cardDealDelay * 4);
 }
 
@@ -342,6 +342,7 @@ function render() {
     disableHitStayButton();
     enableAgainButton();
     dealtCards.d.push(convertAceToEleven(hiddenCardProcessedValue));
+    checkAndReduceAce(dealtCards.d);
     setTimeout(function () {
       showHiddenCard();
     }, cardDealDelay);
@@ -388,7 +389,6 @@ function render() {
 // Deal card logic
 function runDealCard(hide, array, dealtCardsArray, dealer) {
   let newCard = randomCard();
-  // let newCard = 1;
   cardId++;
   if (!hide && dealer) {
     firstCard = newCard;
