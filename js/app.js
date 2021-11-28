@@ -98,7 +98,7 @@ document.getElementById('stay').addEventListener('click', stay);
 
 function autoPilot() {
   // min is 50
-  cardDealDelay = 300;
+  cardDealDelay = 250;
   startMission();
   runAutoPilot();
 }
@@ -107,11 +107,15 @@ function runAutoPilot() {
     deal();
     setTimeout(function () {
       autoHit();
-    }, cardDealDelay * 4);
+      // cardDealDelay needs to be above 4.5 to be reliable in counting 17 @50ms
+    }, cardDealDelay * 6);
+    // cardDealDelay needs to be above 4 to not trip out at 50ms
   }, cardDealDelay * 4);
 }
 
 function autoHit() {
+  // Need to address
+  // when you get 10 and Ace, it will think it's 11 and hit
   let playersSum = dealtCards.p.reduce((a, b) => a + b);
 
   // Dealer has 4 - 6, player has 12-16, should stay
@@ -389,6 +393,8 @@ function render() {
 // Deal card logic
 function runDealCard(hide, array, dealtCardsArray, dealer) {
   let newCard = randomCard();
+  // let newCard = 1;
+
   cardId++;
   if (!hide && dealer) {
     firstCard = newCard;
