@@ -174,17 +174,6 @@ img {
   margin: 0 0 3px 0;
 }
 
-.splitHandContainer {
-  margin: -40px 0 0 0;
-  z-index: 1;
-}
-.splitHandSumBox {
-  background-color: var(--tableBackground);
-}
-.splitHandArray {
-  background-color: var(--tableBackground);
-}
-
 .sumBox {
   border: solid 2px var(--casinoRed);
   color: white;
@@ -194,7 +183,6 @@ img {
   font-size: 35px;
   padding: 5px;
   margin: 0 5px 0 0;
-  z-index: 0;
 }
 
 .handArray {
@@ -206,7 +194,6 @@ img {
   width: 240px;
   font-size: 50px;
   padding: 0px 0px 0 10px;
-  z-index: 0;
 }
 
 .controlButtons {
@@ -262,6 +249,7 @@ img {
   /* Not a card, but a card-shaped outline to represent a
      droppable place, like an empty pile. */
   transform: rotate(-20deg);
+  z-index: 1;
 }
 .cardDealAnimation {
   transform: rotate(0deg) scale(0.5);
@@ -743,10 +731,6 @@ img {
     padding: 0 15px;
   }
 
-  .splitHandContainer {
-    margin: -70px 0 0 0;
-  }
-
   .scoreBox {
     padding: 5px 20px;
     margin: 60px 50px;
@@ -787,4 +771,8 @@ img {
     transform: scale(-0.5, -0.5);
     transition: transform 0.5s ease-in-out;
   }
+}
+
+.borderBlingOn {
+  border-color: var(--casinoYellow);
 }

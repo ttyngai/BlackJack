@@ -480,25 +480,6 @@ function showHiddenCard() {
   }, cardDealDelay);
 }
 
-// Random card from 1-13
-function randomCard() {
-  return Math.floor(Math.random() * 12 + 1);
-}
-function randomDialogue() {
-  return Math.floor(Math.random() * 5);
-}
-function randomSuits() {
-  return Math.floor(Math.random() * 4);
-}
-
-// Checks if busted total contains Ace that could be converted from 11 to 1
-function checkAndReduceAce(array) {
-  if (array.reduce((a, b) => a + b) >= 22 && array.includes(11)) {
-    array[array.indexOf(11)] = 1;
-  }
-  return array;
-}
-
 // BLINGS
 // Score Box Bling
 function scoreBoxBlingIsPlayer(isTrue) {
@@ -610,77 +591,44 @@ function disableHitButton() {
 }
 
 // split function//////////////////////////////////////
-let splitId = 1;
-let dealtCardIdTEST = 1000;
-function splitHand(array, transferCardIdNumber) {
-  dealtCardIdTEST++;
-  splitId++;
-
-  // get transfer class id
-  cardClassToTransfer = document.getElementById(
-    `dealtCard${transferCardIdNumber}`
-  ).classList[1];
-  // removes card from previous row
-  document.getElementById(`dealtCard${transferCardIdNumber}`).remove();
-
-  // take card's numeric value
-  splitCard = array.pop();
-  dealtCards[`p${splitId}`] = [0, splitCard];
-  // add new row
-  document.getElementById(
-    'multiHandsContainer'
-  ).innerHTML += `<div id="splitHand${splitId}" class="splitHandContainer handContainer">
-      <div class="splitHandSumBox sumBox" id="playersSumBox${splitId}">0</div>
-      <div class="splitHandArray handArray" id="playersArray${splitId}"></div>
-      </div>`;
-  // put in splitted card
-  document.getElementById(
-    `playersArray${splitId}`
-  ).innerHTML += `<div id="dealtCard${dealtCardIdTEST}" class="card ${cardClassToTransfer}"></div>`;
-  setTimeout(function () {
-    document
-      .getElementById(`dealtCard${dealtCardIdTEST}`)
-      .classList.add('cardDealAnimation');
-  }, computerFlowDelay);
-
-  // deal second card
-  setTimeout(function () {
-    runDealCard(false, `playersArray${splitId}`, dealtCards[`p${splitId}`]);
-    sumBox[`p${splitId}`] = document.getElementById(`playersSumBox${splitId}`);
-    sumBox[`p${splitId}`].innerHTML = dealtCards[`p${splitId}`].reduce(
-      (a, b) => a + b
-    );
-  }, cardDealDelay);
-
-  return array;
-}
 
 function handleEndHand() {}
 
+// /////////CONSTANTS/////////////
 const handArray = {
   d: [],
   p1: [],
 };
-
-// /////////CONSTANTS/////////////
+const totalScore = {
+  d: 0,
+  p: 0,
+};
 const cardValue = {};
 const cardClass = {};
 let cardIdNum = 0;
 let secretCardId, dealersNotSecretCard, dealersSecretCard;
 let endGame = false;
+let endPlayer = false;
+let endHand, busted;
 ////////////CONSTANT ENDS/////////////
-
+masterFlow();
 function masterFlow() {
-  dealerSequence();
+  dealerInitSequence();
+  setTimeout(function () {
+    playerInitSequence();
+    // cardDealDelay needs to be more than Old hand cardDealDelay, at least 1.105
+  }, cardDealDelay * 1.5);
 }
 
 // MAIN SEQUENCE START
-function dealerSequence() {
+function dealerInitSequence() {
   endGame = false;
 
   /////DEALER 2 cards and check blackjack
   // deal dealers twice with second as secret card, with timeouts
-  dealCard(handArray.d, 'dealersArray', true);
+  dealCard(handArray.d, 'dealersArray', true, false);
+  // update sumbox's first
+  updateDealerSumBox();
   // Delay second card for cardDealDelay
   setTimeout(function () {
     dealCard(handArray.d, 'dealersArray', true, true);
@@ -693,49 +641,185 @@ function dealerSequence() {
 }
 //////DEALER 2cardBJ ENDED//////////////
 //////player sequence//////
-let focus = 0;
-let indexOfHands = 0;
+let focusedHand = 0;
+let newHandId = 0;
+let arrayOfHandIds = [];
 // scope declared;
-////////recurring rows/////////
-// playHand(Scope)
-function playerSequence() {
+////////recurring rows////////
+
+function playerInitSequence() {
   // index of 1st hand
-  indexOfHands++;
+  endPlayer = false;
+  newHandId++;
+  document
+    .getElementById(`playersArray${newHandId}`)
+    .classList.add('borderBlingOn');
+  document
+    .getElementById(`playersSumBox${newHandId}`)
+    .classList.add('borderBlingOn');
+  arrayOfHandIds.push(newHandId);
+  // focus on new hand
+  focusedHand = newHandId;
   // dealing 2 cards to index 1 of hands
-  dealCard(handArray[`p${indexOfHands}`], `playersArray${indexOfHands}`);
+  dealCard(handArray[`p${newHandId}`], `playersArray${newHandId}`);
   // Delay second card for cardDealDelay
   setTimeout(function () {
-    dealCard(handArray[`p${indexOfHands}`], `playersArray${indexOfHands}`);
+    dealCard(handArray[`p${newHandId}`], `playersArray${newHandId}`);
+    updatePlayerSumBox(newHandId, handArray);
   }, cardDealDelay);
 }
 
-function playHand(index) {}
+function split(arrayToSplit, transferCardIdNumber) {
+  // index of generated hand
+  newHandId++;
+  arrayOfHandIds.push(newHandId);
+  // Remove bling
+  document
+    .getElementById(`playersArray${focusedHand}`)
+    .classList.remove('borderBlingOn');
+  document
+    .getElementById(`playersSumBox${focusedHand}`)
+    .classList.remove('borderBlingOn');
+  // Previous hand of Focus stored
+  let originalHand = focusedHand;
+  console.log('original hand', originalHand);
+  // focus on new hand
+  focusedHand = newHandId;
+  // get transfer class id
+  cardClassToTransfer = document.getElementById(`card${transferCardIdNumber}`)
+    .classList[1];
 
-// player arrayX populates, scope is arrayX
-// split {generates new hand N, scope is now arrayN}
-// hit stay
+  // removes card from previous row
+  document.getElementById(`card${transferCardIdNumber}`).remove();
 
-// at end of scope, scope is removed and new scope popped from scope tracker
+  // take card's numeric value
+  splitCard = arrayToSplit.pop();
+  handArray[`p${focusedHand}`] = [splitCard];
 
-////////recurring rows end//////////
+  // Generate new hand
+  document.getElementById(
+    'multiHandsContainer'
+  ).innerHTML += `<div id="hand${focusedHand}" class="handContainer">
+      <div class="sumBox" id="playersSumBox${focusedHand}">0</div>
+      <div class="handArray" id="playersArray${focusedHand}"></div>
+      </div>`;
 
-//////player sequence ENDS//////
+  // Add bling to new hand container
+  document
+    .getElementById(`playersArray${focusedHand}`)
+    .classList.add('borderBlingOn');
+  document
+    .getElementById(`playersSumBox${focusedHand}`)
+    .classList.add('borderBlingOn');
+  // put in splitted card
+  document.getElementById(
+    `playersArray${focusedHand}`
+  ).innerHTML += `<div id="card${transferCardIdNumber}" class="card ${cardClassToTransfer}"></div>`;
+  setTimeout(function () {
+    document
+      .getElementById(`card${transferCardIdNumber}`)
+      .classList.add('cardDealAnimation');
+  }, computerFlowDelay);
+
+  // deal old hand second card
+  setTimeout(function () {
+    // run deal card
+    dealCard(handArray[`p${originalHand}`], `playersArray${originalHand}`);
+
+    updatePlayerSumBox(originalHand, handArray);
+  }, computerFlowDelay);
+
+  // deal new hand second card
+  setTimeout(function () {
+    dealCard(handArray[`p${newHandId}`], `playersArray${newHandId}`);
+    updatePlayerSumBox(newHandId, handArray);
+  }, cardDealDelay);
+}
+
+function hit(num) {
+  dealCard(
+    handArray[`p${focusedHand}`],
+    `playersArray${focusedHand}`,
+    null,
+    null,
+    num
+  );
+  updatePlayerSumBox(focusedHand, handArray);
+
+  // evaluates() -> if <=21, do nothing.
+  // if busts, end this id in arrayOfHandIds and pick the next id
+
+  evaluate(handArray[`p${focusedHand}`]);
+  handleEvaluated(handArray[`p${focusedHand}`]);
+}
+function stay() {
+  //means pop the arrayOfHandIds[arrayOfHandIds.length].pop()
+  //focusedHand = arrayOfHandIds[arrayOfHandIds.length]
+}
+
 //MAIN SWQUENCE ENDS
+
+function runDealer() {}
+
+function evaluate(array, isDealer) {
+  endHand = false;
+  checkAndReduceAce(array);
+  updatePlayerSumBox(focusedHand, handArray);
+  let sum = parseInt(sumBox[`p${focusedHand}`].innerHTML);
+  if (sum > 21) {
+    endHand = true;
+    busted = true;
+  }
+}
+
+function handleEvaluated(array, isDealer) {
+  // player busted
+  if (endHand && busted && !isDealer) {
+    shiftFocus();
+  }
+  // round ended if arrayOfHandsIds.length=0
+  if (arrayOfHandIds.length === 0) {
+    endPlayer = true;
+  }
+}
+
+function shiftFocus() {
+  document
+    .getElementById(`playersArray${focusedHand}`)
+    .classList.remove('borderBlingOn');
+  document
+    .getElementById(`playersSumBox${focusedHand}`)
+    .classList.remove('borderBlingOn');
+  arrayOfHandIds.splice(arrayOfHandIds.indexOf(focusedHand), 1);
+
+  focusedHand = arrayOfHandIds[arrayOfHandIds.length - 1];
+  document
+    .getElementById(`playersArray${focusedHand}`)
+    .classList.add('borderBlingOn');
+  document
+    .getElementById(`playersSumBox${focusedHand}`)
+    .classList.add('borderBlingOn');
+}
 
 // START OF DEAL CARD
 // Generate new card with Id attached to lookup
-function dealCard(handArray, targetArrayId, isDealer, isSecret) {
+function dealCard(handArray, targetArrayId, isDealer, isSecret, num) {
   cardIdNum++;
   // Generate number 1-13
   let newCard = randomCard();
+  if (num) {
+    newCard = num;
+  }
 
   // Process number 1 to 11, 11-13 to 10
-  let processedCard = convertAceToEleven(convertFaceToTen(newCard + 1));
+  let processedCard = convertAceToEleven(convertFaceToTen(newCard));
   // Push processedCard numeric number to handArray
   handArray.push(processedCard);
   // assign ID
   cardValue[`card${cardIdNum}`] = processedCard;
-  cardClass[`card${cardIdNum}`] = `${suits[randomSuits()]}${ranks[newCard]}`;
+  cardClass[`card${cardIdNum}`] = `${suits[randomSuits()]}${
+    ranks[newCard - 1]
+  }`;
   // If these are first two cards, face value is saved (For blackjack identifications)
   if (isDealer && isSecret) {
     dealersSecretCard = newCard;
@@ -764,6 +848,23 @@ function dealCard(handArray, targetArrayId, isDealer, isSecret) {
   }, computerFlowDelay);
 }
 
+// Updates sumBoxPlayer
+function updatePlayerSumBox(focusedHand, targetArray) {
+  // assigns sumBox target document element
+  sumBox[`p${focusedHand}`] = document.getElementById(
+    `playersSumBox${focusedHand}`
+  );
+  // calculates new value for sumbox
+  sumBox[`p${focusedHand}`].innerHTML = targetArray[`p${focusedHand}`].reduce(
+    (a, b) => a + b
+  );
+}
+function updateDealerSumBox() {
+  document.getElementById(`dealersSumBox`).innerHTML = convertAceToEleven(
+    convertFaceToTen(dealersNotSecretCard)
+  );
+}
+
 // Check for dealers Black Jack
 function checkDealerForBlackJack() {
   if (dealersSecretCard === 1 && dealersNotSecretCard >= 11) {
@@ -785,4 +886,21 @@ function convertFaceToTen(newCard) {
   return newCard;
 }
 
-// END Of DEAL CARD
+// Checks if busted total contains Ace that could be converted from 11 to 1
+function checkAndReduceAce(array) {
+  if (array.reduce((a, b) => a + b) >= 22 && array.includes(11)) {
+    array[array.indexOf(11)] = 1;
+  }
+  return array;
+}
+
+// Random card from 1-13
+function randomCard() {
+  return Math.floor(Math.random() * 12 + 1);
+}
+function randomDialogue() {
+  return Math.floor(Math.random() * 5);
+}
+function randomSuits() {
+  return Math.floor(Math.random() * 4);
+}
