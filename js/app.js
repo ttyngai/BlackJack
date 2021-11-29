@@ -599,6 +599,10 @@ const handArray = {
   d: [],
   p1: [],
 };
+const handArrayCardId = {
+  d: [],
+  p1: [],
+};
 const totalScore = {
   d: 0,
   p: 0,
@@ -609,6 +613,8 @@ let cardIdNum = 0;
 let secretCardId, dealersNotSecretCard, dealersSecretCard;
 let endGame = false;
 let endPlayer = false;
+let endDealer = false;
+let dealerWinNum, playerWinNum;
 let endHand, busted;
 ////////////CONSTANT ENDS/////////////
 masterFlow();
@@ -622,8 +628,9 @@ function masterFlow() {
 
 // MAIN SEQUENCE START
 function dealerInitSequence() {
+  dealerWinNum = 0;
   endGame = false;
-
+  endDealer = false;
   /////DEALER 2 cards and check blackjack
   // deal dealers twice with second as secret card, with timeouts
   dealCard(handArray.d, 'dealersArray', true, false);
@@ -649,6 +656,7 @@ let arrayOfHandIds = [];
 
 function playerInitSequence() {
   // index of 1st hand
+  playerWinNum = 0;
   endPlayer = false;
   newHandId++;
   document
@@ -682,14 +690,16 @@ function split(arrayToSplit, transferCardIdNumber) {
     .classList.remove('borderBlingOn');
   // Previous hand of Focus stored
   let originalHand = focusedHand;
-  console.log('original hand', originalHand);
   // focus on new hand
   focusedHand = newHandId;
   // get transfer class id
   cardClassToTransfer = document.getElementById(`card${transferCardIdNumber}`)
     .classList[1];
-
   // removes card from previous row
+  handArrayCardId[`p${originalHand}`].splice(
+    handArrayCardId[`p${originalHand}`].indexOf(`card${transferCardIdNumber}`),
+    1
+  );
   document.getElementById(`card${transferCardIdNumber}`).remove();
 
   // take card's numeric value
@@ -712,6 +722,9 @@ function split(arrayToSplit, transferCardIdNumber) {
     .getElementById(`playersSumBox${focusedHand}`)
     .classList.add('borderBlingOn');
   // put in splitted card
+
+  handArrayCardId[`p${focusedHand}`] = [`card${transferCardIdNumber}`];
+
   document.getElementById(
     `playersArray${focusedHand}`
   ).innerHTML += `<div id="card${transferCardIdNumber}" class="card ${cardClassToTransfer}"></div>`;
@@ -751,6 +764,9 @@ function hit(num) {
 
   evaluate(handArray[`p${focusedHand}`]);
   handleEvaluated(handArray[`p${focusedHand}`]);
+  if (endPlayer) {
+    runDealer();
+  }
 }
 function stay() {
   //means pop the arrayOfHandIds[arrayOfHandIds.length].pop()
@@ -759,16 +775,61 @@ function stay() {
 
 //MAIN SWQUENCE ENDS
 
-function runDealer() {}
+function runDealer() {
+  flipSecretCard();
+  updateDealerSumBox();
+  evaluate(handArray.d, true);
+  dealRestOfDealer();
+  countWins();
+}
+function dealRestOfDealer() {
+  if (!endDealer) {
+    setTimeout(function () {
+      dealCard(handArray.d, 'dealersArray', true, null, null);
+      // updateDealerSumBox();
+      evaluate(handArray.d, true);
+      setTimeout(function () {
+        dealRestOfDealer();
+      }, cardDealDelay);
+
+      // cardDealDelay *2 to place 3rd card after secret card flipped
+    }, cardDealDelay * 2);
+  }
+}
+
+function countWins() {
+  // if dealer didn't bust
+  let sumBoxTotals = handArray.forEach(function (hand) {
+    return hand.reduce((a, b) => a + b);
+  });
+  console.log('SumArray', sumBoxTotals);
+
+  for (i = 1; i <= Object.keys(handArray).length; i++) {
+    let playerSumBox = handArray[`p${i}`];
+    playerSumBox.reduce((a, b) => a + b);
+    console.log(playerSumBox);
+    if (sumBox.d.innerHTML < playerSumBox && playerSumBox <= 21) {
+      score.p++;
+    }
+  }
+}
 
 function evaluate(array, isDealer) {
   endHand = false;
   checkAndReduceAce(array);
-  updatePlayerSumBox(focusedHand, handArray);
-  let sum = parseInt(sumBox[`p${focusedHand}`].innerHTML);
-  if (sum > 21) {
-    endHand = true;
-    busted = true;
+  if (!isDealer) {
+    updatePlayerSumBox(focusedHand, handArray);
+    let sum = parseInt(sumBox[`p${focusedHand}`].innerHTML);
+    if (sum > 21) {
+      endHand = true;
+      busted = true;
+    }
+  } else {
+    updateDealerSumBox();
+    let dealerSum = parseInt(sumBox.d.innerHTML);
+    if (dealerSum >= 17) {
+      endDealer = true;
+    }
   }
 }
 
@@ -793,12 +854,15 @@ function shiftFocus() {
   arrayOfHandIds.splice(arrayOfHandIds.indexOf(focusedHand), 1);
 
   focusedHand = arrayOfHandIds[arrayOfHandIds.length - 1];
-  document
-    .getElementById(`playersArray${focusedHand}`)
-    .classList.add('borderBlingOn');
-  document
-    .getElementById(`playersSumBox${focusedHand}`)
-    .classList.add('borderBlingOn');
+
+  if (focusedHand > 0) {
+    document
+      .getElementById(`playersArray${focusedHand}`)
+      .classList.add('borderBlingOn');
+    document
+      .getElementById(`playersSumBox${focusedHand}`)
+      .classList.add('borderBlingOn');
+  }
 }
 
 // START OF DEAL CARD
@@ -820,6 +884,13 @@ function dealCard(handArray, targetArrayId, isDealer, isSecret, num) {
   cardClass[`card${cardIdNum}`] = `${suits[randomSuits()]}${
     ranks[newCard - 1]
   }`;
+  // Also assign ID to parallel array
+  if (!isDealer) {
+    let handId = targetArrayId.replace('playersArray', '');
+    handArrayCardId[`p${handId}`].push(`card${cardIdNum}`);
+  } else {
+    handArrayCardId.d.push(`card${cardIdNum}`);
+  }
   // If these are first two cards, face value is saved (For blackjack identifications)
   if (isDealer && isSecret) {
     dealersSecretCard = newCard;
@@ -860,9 +931,27 @@ function updatePlayerSumBox(focusedHand, targetArray) {
   );
 }
 function updateDealerSumBox() {
-  document.getElementById(`dealersSumBox`).innerHTML = convertAceToEleven(
-    convertFaceToTen(dealersNotSecretCard)
-  );
+  if (endPlayer) {
+    sumBox.d.innerHTML = handArray.d.reduce((a, b) => a + b);
+  } else
+    document.getElementById(`dealersSumBox`).innerHTML = convertAceToEleven(
+      convertFaceToTen(dealersNotSecretCard)
+    );
+}
+
+// Flip secret card
+function flipSecretCard() {
+  setTimeout(function () {
+    document.getElementById(`card2`).classList.add('hiddenCardFlipOne');
+  }, computerFlowDelay);
+
+  setTimeout(function () {
+    document.getElementById(`card2`).className = `card ${cardClass.card2}`;
+    document.getElementById(`card2`).classList.add(`hiddenCardRotated`);
+    setTimeout(function () {
+      document.getElementById(`card2`).classList.add('hiddenCardFlipTwo');
+    }, computerFlowDelay);
+  }, cardDealDelay);
 }
 
 // Check for dealers Black Jack
