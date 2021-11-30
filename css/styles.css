@@ -8,6 +8,8 @@
   --buttonText: rgb(250, 243, 225);
   --scoreBackground: #9b880c6b;
   --scoreBoxBlingBackground: #9b880cd0;
+  --brightYellow: #ffdd01;
+
   --scoreText: white;
 }
 
@@ -123,7 +125,7 @@ img {
   min-height: 40px;
 }
 .double {
-  color: rgb(255, 255, 145);
+  color: var(--brightYellow);
   position: absolute;
   font-size: 20px;
   margin: -1px 0 0 1px;
@@ -178,7 +180,7 @@ img {
   flex-direction: row;
   font-size: 50px;
   box-sizing: border-box;
-  margin: 0 0 3px 15px;
+  margin: 0 0 3px 0px;
 }
 
 .sumBox {
@@ -206,12 +208,20 @@ img {
 .controlButtons {
   background-color: var(--buttonsBackground);
   width: 48px;
-
   border-radius: 30px;
   font-size: 10px;
   font-style: bold;
   color: var(--buttonText);
   margin: 5px 0;
+}
+#hint {
+  background-color: var(--brightYellow);
+  color: black;
+  font-style: bold;
+  border-radius: 20px;
+  font-size: 10px;
+  padding: 2px 5px;
+  margin: 0 0 0 95px;
 }
 
 .dialogue {
@@ -221,6 +231,7 @@ img {
   width: 300px;
   font-size: 15px;
   margin: 130px 0 100px 0;
+  padding: 0 0 0 15px;
   text-shadow: black 0 0 10px;
 }
 /* #playerSays {
@@ -714,17 +725,16 @@ img {
 
   .nameCard {
     font-size: 25px;
-    margin: 25px 10px;
+    margin: 25px 15px;
   }
 
   .dialogue {
     width: 500px;
     font-size: 30px;
     margin: 210px 0 0 0;
+    padding: 0 0 0 25px;
   }
-  /* #playerSays {
-    margin: 240px 0 0 0;
-  } */
+
   .sumBox {
     border: solid 4px var(--casinoRed);
     border-radius: 20px;
@@ -746,10 +756,10 @@ img {
 
   .scoreBox {
     padding: 5px 20px;
-    margin: 60px 50px;
+    margin: 60px 60px;
     font-size: 50px;
     border-radius: 10px;
-    min-width: 30px;
+    min-width: 40px;
     min-height: 60px;
   }
   #gameTitle {
@@ -787,6 +797,12 @@ img {
   .double {
     font-size: 40px;
     margin: -6px 0 0 2px;
+  }
+  #hint {
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 18px;
+    margin: 0 0 0 190px;
   }
 }
 
