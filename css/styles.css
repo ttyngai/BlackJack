@@ -116,7 +116,7 @@ img {
   border: solid 3px var(--casinoYellow);
   text-align: center;
   padding: 5px 15px 0 15px;
-  margin: 35px 30px;
+  margin: 35px 40px;
   font-size: 30px;
   border-radius: 5px;
   min-width: 20px;
@@ -161,6 +161,7 @@ img {
   transform: translate(30px, 0px);
   font-size: 15px;
   text-align: right;
+  padding: 0 0 0 13px;
 }
 #sillyTag {
   text-decoration: underline;
@@ -171,7 +172,7 @@ img {
   flex-direction: row;
   font-size: 50px;
   box-sizing: border-box;
-  margin: 0 0 3px 0;
+  margin: 0 0 3px 15px;
 }
 
 .sumBox {
@@ -198,10 +199,10 @@ img {
 
 .controlButtons {
   background-color: var(--buttonsBackground);
-  width: 60px;
-  padding: 5px 5px;
+  width: 48px;
+
   border-radius: 30px;
-  font-size: 12px;
+  font-size: 10px;
   font-style: bold;
   color: var(--buttonText);
   margin: 5px 0;
@@ -695,10 +696,10 @@ img {
     max-width: 500px;
   }
   .controlButtons {
-    width: 120px;
-    padding: 10px 20px;
-    margin: 5px;
-    font-size: 25px;
+    width: 90px;
+    padding: 5px 5px;
+    /* margin: 5px; */
+    font-size: 20px;
   }
 
   .nameCard {
@@ -721,7 +722,9 @@ img {
     width: 80px;
     padding: 10px;
   }
-
+  .handContainer {
+    margin: 0 0 3px 5px;
+  }
   .handArray {
     border: solid 4px var(--casinoRed);
     height: 90px;
