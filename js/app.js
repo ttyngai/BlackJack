@@ -1081,7 +1081,7 @@ function perfectStrategyClicker(autoClick) {
     else if (playerSum <= 21) {
       if (autoClick) {
         stand();
-        buttonBling('hit');
+        buttonBling('stand');
       }
       if (runningAutoPilot) {
         hintDialogue('stand');

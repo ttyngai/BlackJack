@@ -209,10 +209,11 @@ img {
   background-color: var(--buttonsBackground);
   width: 48px;
   border-radius: 30px;
-  font-size: 10px;
+  font-size: 9px;
   font-style: bold;
   color: var(--buttonText);
   margin: 5px 0;
+  padding: 3px 0;
 }
 #hint {
   background-color: var(--brightYellow);
