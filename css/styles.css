@@ -122,6 +122,12 @@ img {
   min-width: 20px;
   min-height: 40px;
 }
+.double {
+  color: rgb(255, 255, 145);
+  position: absolute;
+  font-size: 20px;
+  margin: -1px 0 0 1px;
+}
 .scoreBoxBling {
   animation: scoreAni 0.6s ease-in-out;
 }
@@ -255,6 +261,10 @@ img {
 .cardDealAnimation {
   transform: rotate(0deg) scale(0.5);
   transition: all 0.5s ease-in-out;
+}
+.doubleAnimation {
+  transform: rotate(360deg);
+  transition: all 0.5 ease-in-out;
 }
 .hiddenCardRotated {
   transform: rotate(0) scaleX(0.01);
@@ -773,6 +783,10 @@ img {
   .cardFlipTwo {
     transform: scale(-0.5, -0.5);
     transition: transform 0.5s ease-in-out;
+  }
+  .double {
+    font-size: 40px;
+    margin: -6px 0 0 2px;
   }
 }
 
