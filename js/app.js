@@ -50,27 +50,18 @@ const dialogues = {
   ],
   t: [`(Tie) It's meant to be.`, `(Tie) It's destiny.`],
   bj: ['(Lose) No f*^%ing way..', '(Win) BLACK JACK BABY!'],
-  b: ['(Lose) Ohh ffs...', '(Win) You BUSTED!'],
+  b: ['Ohh ffs...', 'You BUSTED!'],
 };
 
 /*----- app's state (variables) -----*/
-// let firstCard,
-//   hiddenCardProcessedValue,
-//   dealersFirstCard,
-//   hiddenCardDisplay,
-//   playerEndedTurn,
-//   hiddenCardId;
-// let score = {};
 let dealtCards = {
   d: [0],
   p1: [0],
 };
-
 let maxRound = 7;
 let cardDealDelay = 500;
 let computerFlowDelay = 50;
 let isAutoPilot = false;
-// Id intializing
 let dealtCardId = 0;
 
 /*----- cached element references -----*/
@@ -151,132 +142,6 @@ function autoHit() {
   }
 }
 
-// START MISSION from cover page
-function startMission() {
-  document.getElementById('introContainer').remove();
-  document.getElementById('coverPage').classList.add('introFadeOut');
-  setTimeout(function () {
-    document.getElementById('coverPage').remove();
-    scoreBoxBling(true);
-    scoreBoxBling(false);
-  }, 2000);
-}
-
-// BLINGS
-// Score Box Bling
-function scoreBoxBling() {
-  scoreBox.p.classList.remove('scoreBoxBling');
-  setTimeout(function () {
-    scoreBox.p.classList.add('scoreBoxBling');
-  }, computerFlowDelay);
-
-  scoreBox.d.classList.remove('scoreBoxBling');
-  setTimeout(function () {
-    scoreBox.d.classList.add('scoreBoxBling');
-  }, computerFlowDelay);
-}
-
-function scoreBoxBlingIsPlayer(isPlayer) {
-  if (isPlayer) {
-    scoreBox.p.classList.remove('scoreBoxBling');
-    setTimeout(function () {
-      scoreBox.p.classList.add('scoreBoxBling');
-    }, computerFlowDelay);
-  } else {
-    scoreBox.d.classList.remove('scoreBoxBling');
-    setTimeout(function () {
-      scoreBox.d.classList.add('scoreBoxBling');
-    }, computerFlowDelay);
-  }
-}
-
-function buttonBling(buttonId) {
-  if (!isAutoPilot) {
-    document.getElementById(buttonId).classList.remove('buttonBling');
-    setTimeout(function () {
-      document.getElementById(buttonId).classList.add('buttonBling');
-    }, computerFlowDelay);
-  }
-}
-
-function winningDialogueIsPlayer(isTrue) {
-  if (isTrue) {
-    dialogueContainer.p.innerHTML = '';
-    dialogueContainer.p.innerHTML = dialogues.w[randomDialogue()];
-    dialogueContainer.d.innerHTML = '';
-    dialogueContainer.d.innerHTML = dialogues.l[randomDialogue()];
-  } else {
-    dialogueContainer.p.innerHTML = '';
-    dialogueContainer.p.innerHTML = dialogues.l[randomDialogue()];
-    dialogueContainer.d.innerHTML = '';
-    dialogueContainer.d.innerHTML = dialogues.w[randomDialogue()];
-  }
-}
-function tieDialogue() {
-  dialogueContainer.p.innerHTML = dialogues.t[0];
-  dialogueContainer.d.innerHTML = dialogues.t[1];
-}
-function dealerBlackJack() {
-  dialogueContainer.p.innerHTML = '';
-  dialogueContainer.p.innerHTML = dialogues.bj[0];
-  dialogueContainer.d.innerHTML = '';
-  dialogueContainer.d.innerHTML = dialogues.bj[1];
-}
-
-function bustedDialogue() {
-  dialogueContainer.p.innerHTML = '';
-  dialogueContainer.p.innerHTML = dialogues.b[0];
-  dialogueContainer.d.innerHTML = '';
-  dialogueContainer.d.innerHTML = dialogues.b[1];
-}
-
-// Button enable/disable
-// Start/Again/Reset whatever you call it
-function enableStartButton() {
-  buttonStatus.st.disabled = false;
-  buttonStatus.st.style.background = enabledButtonColor;
-}
-function disableStartButton() {
-  buttonStatus.st.disabled = true;
-  buttonStatus.st.style.background = disabledButtonColor;
-}
-//Split
-function enableSplitButton() {
-  buttonStatus.sp.disabled = false;
-  buttonStatus.sp.style.background = enabledButtonColor;
-}
-function disableSplitButton() {
-  buttonStatus.sp.disabled = true;
-  buttonStatus.sp.style.background = disabledButtonColor;
-}
-//Double
-function enableDoubleButton() {
-  buttonStatus.d.disabled = false;
-  buttonStatus.d.style.background = enabledButtonColor;
-}
-function disableDoubleButton() {
-  buttonStatus.d.disabled = true;
-  buttonStatus.d.style.background = disabledButtonColor;
-}
-// Hit
-function enableHitButton() {
-  buttonStatus.h.disabled = false;
-  buttonStatus.h.style.background = enabledButtonColor;
-}
-function disableHitButton() {
-  buttonStatus.h.disabled = true;
-  buttonStatus.h.style.background = disabledButtonColor;
-}
-// Stay
-function enableStayButton() {
-  buttonStatus.s.disabled = false;
-  buttonStatus.s.style.background = enabledButtonColor;
-}
-function disableStayButton() {
-  buttonStatus.s.disabled = true;
-  buttonStatus.s.style.background = disabledButtonColor;
-}
-
 //////////////CACHED ELEMENTS////////////////
 
 let scoreBox = {
@@ -301,19 +166,6 @@ let dialogueContainer = {
   d: document.getElementById('dealerSays'),
   p: document.getElementById('playerSays'),
 };
-
-/*----- event listeners -----*/
-buttonStatus.sm.addEventListener('click', startMission);
-buttonStatus.ap.addEventListener('click', autoPilot);
-buttonStatus.e.addEventListener('click', reloadPage);
-buttonStatus.st.addEventListener('click', runMasterFlow);
-buttonStatus.sp.addEventListener('click', split);
-buttonStatus.d.addEventListener('click', runDouble);
-buttonStatus.h.addEventListener('click', hitClick);
-buttonStatus.s.addEventListener('click', stay);
-
-// /////////CONSTANTS/////////////
-
 let handArray = {
   d: [],
   p1: [],
@@ -330,20 +182,33 @@ scoreBox.d.innerHTML = 0;
 scoreBox.p.innerHTML = 0;
 const cardValue = {};
 const cardClass = {};
+let arrayOfHandIds = [];
+let doubledHandMap = [];
 let cardIdNum = 0;
-let secretCardId, dealersNotSecretCard, dealersSecretCard;
+let secretCardId,
+  dealersNotSecretCard,
+  dealersSecretCard,
+  dealerWinNum,
+  playerWinNum,
+  endHand,
+  busted,
+  playerBling;
 let endGame = false;
 let endPlayer = false;
 let endDealer = false;
-let dealerWinNum, playerWinNum;
-let endHand, busted;
+let dealerHasBlackJack = false;
 let focusedHand = 0;
 let newHandId = 0;
-let arrayOfHandIds = [];
-let dealerHasBlackJack = false;
-let playerBling;
-let doubledHandMap = [];
 ////////////CONSTANT ENDS/////////////
+/*----- event listeners -----*/
+buttonStatus.sm.addEventListener('click', startMission);
+buttonStatus.ap.addEventListener('click', autoPilot);
+buttonStatus.e.addEventListener('click', reloadPage);
+buttonStatus.st.addEventListener('click', runMasterFlow);
+buttonStatus.sp.addEventListener('click', runSplit);
+buttonStatus.d.addEventListener('click', runDouble);
+buttonStatus.h.addEventListener('click', runHit);
+buttonStatus.s.addEventListener('click', stay);
 /*----- functions -----*/
 init();
 // only for restart
@@ -356,40 +221,21 @@ function init() {
   disableDoubleButton();
   disableHitButton();
   disableStayButton();
+  dealersDialogue();
+  playersDialogue();
 }
 
-function buttonManagement() {
-  // splitable
-  if (
-    focusedHand &&
-    handArray[`p${focusedHand}`].length === 2 &&
-    handArray[`p${focusedHand}`][0] === handArray[`p${focusedHand}`][1]
-  ) {
-    enableSplitButton();
-  } else {
-    disableSplitButton();
-  }
-
-  // Double-ABLE
-  if (focusedHand && handArray[`p${focusedHand}`].length === 2) {
-    enableDoubleButton();
-  } else {
-    disableDoubleButton();
-  }
-
-  // Hitable
-  if (!endPlayer) {
-    enableHitButton();
-    enableStayButton();
-  } else {
-    disableHitButton();
-    disableStayButton();
-  }
-
-  if (endPlayer && endDealer) {
-    enableStartButton();
-  }
+// START MISSION from cover page
+function startMission() {
+  document.getElementById('introContainer').remove();
+  document.getElementById('coverPage').classList.add('introFadeOut');
+  setTimeout(function () {
+    document.getElementById('coverPage').remove();
+    scoreBoxBling(true);
+    scoreBoxBling(false);
+  }, 2000);
 }
+
 function runMasterFlow() {
   masterFlow();
 }
@@ -422,9 +268,9 @@ function masterFlow(card1, card2, card3, card4) {
   document.getElementById(
     'multiHandsContainer'
   ).innerHTML += `<div class="handContainer">
-  <div class="sumBox" id="playersSumBox1"></div>
-  <div class="handArray" id="playersArray1"></div>
-</div>`;
+    <div class="sumBox" id="playersSumBox1"></div>
+    <div class="handArray" id="playersArray1"></div>
+    </div>`;
 
   dealerInitSequence(card1, card2);
   setTimeout(function () {
@@ -438,6 +284,7 @@ function dealerInitSequence(card1, card2) {
   dealerWinNum = 0;
   endGame = false;
   endDealer = false;
+  dealersDialogue();
   dealerHasBlackJack = false;
   /////DEALER 2 cards and check blackjack
   // deal dealers twice with second as secret card, with timeouts
@@ -462,6 +309,8 @@ function playerInitSequence(card3, card4) {
   // index of 1st hand
   playerWinNum = 0;
   endPlayer = false;
+  busted = false;
+  playersDialogue();
   newHandId++;
   document
     .getElementById(`playersArray${newHandId}`)
@@ -507,7 +356,8 @@ function split(cardA, cardB) {
   disableSplitButton();
   // index of generated hand
   newHandId++;
-
+  playersDialogue();
+  dealersDialogue();
   arrayOfHandIds.push(newHandId);
   // new doubledHandMap member for the new row
   doubledHandMap.push(1);
@@ -600,6 +450,7 @@ function runDouble() {
   double();
 }
 function double(num) {
+  let isDoubleMode = true;
   disableDoubleButton();
   // double weight of this focusedHand
   doubledHandMap[focusedHand - 1] = 2;
@@ -612,9 +463,9 @@ function double(num) {
       .getElementById(`double${focusedHand}`)
       .classList.add('cardDealAnimation');
 
-    hit(num);
+    hit(num, isDoubleMode);
+    // heres how it ignores the also row
 
-    disableDoubleButton();
     setTimeout(function () {
       shiftFocus();
       setTimeout(function () {
@@ -627,10 +478,12 @@ function double(num) {
   }, computerFlowDelay);
 }
 
-function hitClick() {
+function runHit() {
   hit();
 }
-function hit(num) {
+function hit(num, isDoubleMode) {
+  playersDialogue();
+  dealersDialogue();
   dealCard(
     handArray[`p${focusedHand}`],
     `playersArray${focusedHand}`,
@@ -641,7 +494,7 @@ function hit(num) {
   updatePlayerSumBox(focusedHand, handArray);
   evaluate(handArray[`p${focusedHand}`]);
 
-  handleEvaluated(handArray[`p${focusedHand}`]);
+  handleEvaluated(null, isDoubleMode);
 
   if (endPlayer) {
     runDealer();
@@ -650,6 +503,8 @@ function hit(num) {
 }
 
 function stay() {
+  playersDialogue();
+  dealersDialogue();
   shiftFocus();
   if (endPlayer) {
     runDealer();
@@ -663,8 +518,20 @@ function runDealer() {
   flipSecretCard();
   updateDealerSumBox();
   evaluate(handArray.d, true);
+  // if all busted no need to open
 
-  if (busted) {
+  let playerSumBoxTotal = [];
+  for (i = 1; i <= Object.keys(sumBox).length - 1; i++) {
+    playerSumBoxTotal.push(parseInt(sumBox[`p${i}`].innerHTML));
+  }
+  let count = 0;
+  playerSumBoxTotal.forEach(function (sum) {
+    if (sum > 21) {
+      count++;
+    }
+  });
+
+  if (count === playerSumBoxTotal.length) {
     endDealer = true;
     countWins();
     buttonManagement();
@@ -749,7 +616,9 @@ function evaluate(array, isDealer) {
     let sum = parseInt(sumBox[`p${focusedHand}`].innerHTML);
     if (sum > 21) {
       endHand = true;
+      // bust managed in allBusted in runDealer
       busted = true;
+      bustedDialogue();
     }
   } else {
     updateDealerSumBox();
@@ -760,10 +629,10 @@ function evaluate(array, isDealer) {
   }
 }
 
-function handleEvaluated(array, isDealer) {
+function handleEvaluated(isDealer, isDoubleMode) {
   // player busted
 
-  if (endHand && busted && !isDealer) {
+  if (endHand && busted && !isDealer && !isDoubleMode) {
     shiftFocus();
   }
   // round ended if arrayOfHandsIds.length=0
@@ -776,7 +645,9 @@ function shiftFocus() {
   document
     .getElementById(`playersSumBox${focusedHand}`)
     .classList.remove('borderBlingOn');
+  // removed focusedHand aka changing focus
   arrayOfHandIds.splice(arrayOfHandIds.indexOf(focusedHand), 1);
+
   if (arrayOfHandIds.length >= 1) {
     focusedHand = arrayOfHandIds[arrayOfHandIds.length - 1];
     if (focusedHand > 0) {
@@ -791,10 +662,10 @@ function shiftFocus() {
 
   if (arrayOfHandIds.length == 0) {
     endPlayer = true;
+    focusedHand = 0;
   }
-  if (focusedHand > 0) {
-    buttonManagement();
-  }
+
+  buttonManagement();
 }
 
 // START OF DEAL CARD
@@ -924,4 +795,158 @@ function randomDialogue() {
 }
 function randomSuits() {
   return Math.floor(Math.random() * 4);
+}
+// BLINGS
+// Score Box Bling
+function scoreBoxBling() {
+  scoreBox.p.classList.remove('scoreBoxBling');
+  setTimeout(function () {
+    scoreBox.p.classList.add('scoreBoxBling');
+  }, computerFlowDelay);
+
+  scoreBox.d.classList.remove('scoreBoxBling');
+  setTimeout(function () {
+    scoreBox.d.classList.add('scoreBoxBling');
+  }, computerFlowDelay);
+}
+
+function scoreBoxBlingIsPlayer(isPlayer) {
+  if (isPlayer) {
+    scoreBox.p.classList.remove('scoreBoxBling');
+    setTimeout(function () {
+      scoreBox.p.classList.add('scoreBoxBling');
+    }, computerFlowDelay);
+  } else {
+    scoreBox.d.classList.remove('scoreBoxBling');
+    setTimeout(function () {
+      scoreBox.d.classList.add('scoreBoxBling');
+    }, computerFlowDelay);
+  }
+}
+
+function buttonBling(buttonId) {
+  if (!isAutoPilot) {
+    document.getElementById(buttonId).classList.remove('buttonBling');
+    setTimeout(function () {
+      document.getElementById(buttonId).classList.add('buttonBling');
+    }, computerFlowDelay);
+  }
+}
+
+function dealersDialogue() {
+  dialogueContainer.d.innerHTML = dialogues.c[randomDialogue()];
+}
+function playersDialogue() {
+  dialogueContainer.p.innerHTML = dialogues.h[randomDialogue()];
+}
+
+function winningDialogueIsPlayer(isTrue) {
+  if (isTrue) {
+    dialogueContainer.p.innerHTML = '';
+    dialogueContainer.p.innerHTML = dialogues.w[randomDialogue()];
+    dialogueContainer.d.innerHTML = '';
+    dialogueContainer.d.innerHTML = dialogues.l[randomDialogue()];
+  } else {
+    dialogueContainer.p.innerHTML = '';
+    dialogueContainer.p.innerHTML = dialogues.l[randomDialogue()];
+    dialogueContainer.d.innerHTML = '';
+    dialogueContainer.d.innerHTML = dialogues.w[randomDialogue()];
+  }
+}
+function tieDialogue() {
+  dialogueContainer.p.innerHTML = dialogues.t[0];
+  dialogueContainer.d.innerHTML = dialogues.t[1];
+}
+function dealerBlackJack() {
+  dialogueContainer.p.innerHTML = '';
+  dialogueContainer.p.innerHTML = dialogues.bj[0];
+  dialogueContainer.d.innerHTML = '';
+  dialogueContainer.d.innerHTML = dialogues.bj[1];
+}
+
+function bustedDialogue() {
+  dialogueContainer.p.innerHTML = '';
+  dialogueContainer.p.innerHTML = dialogues.b[0];
+  dialogueContainer.d.innerHTML = '';
+  dialogueContainer.d.innerHTML = dialogues.b[1];
+}
+
+// Button enable/disable
+
+function buttonManagement() {
+  // splitable
+  if (
+    focusedHand &&
+    handArray[`p${focusedHand}`].length === 2 &&
+    handArray[`p${focusedHand}`][0] === handArray[`p${focusedHand}`][1]
+  ) {
+    enableSplitButton();
+  } else {
+    disableSplitButton();
+  }
+
+  // Double-ABLE
+  if (focusedHand && handArray[`p${focusedHand}`].length === 2) {
+    enableDoubleButton();
+  } else {
+    disableDoubleButton();
+  }
+
+  // Hitable
+  if (!endPlayer) {
+    enableHitButton();
+    enableStayButton();
+  } else {
+    disableHitButton();
+    disableStayButton();
+  }
+
+  if (endPlayer && endDealer) {
+    enableStartButton();
+  }
+}
+// Start/Again/Reset whatever you call it
+function enableStartButton() {
+  buttonStatus.st.disabled = false;
+  buttonStatus.st.style.background = enabledButtonColor;
+}
+function disableStartButton() {
+  buttonStatus.st.disabled = true;
+  buttonStatus.st.style.background = disabledButtonColor;
+}
+//Split
+function enableSplitButton() {
+  buttonStatus.sp.disabled = false;
+  buttonStatus.sp.style.background = enabledButtonColor;
+}
+function disableSplitButton() {
+  buttonStatus.sp.disabled = true;
+  buttonStatus.sp.style.background = disabledButtonColor;
+}
+//Double
+function enableDoubleButton() {
+  buttonStatus.d.disabled = false;
+  buttonStatus.d.style.background = enabledButtonColor;
+}
+function disableDoubleButton() {
+  buttonStatus.d.disabled = true;
+  buttonStatus.d.style.background = disabledButtonColor;
+}
+// Hit
+function enableHitButton() {
+  buttonStatus.h.disabled = false;
+  buttonStatus.h.style.background = enabledButtonColor;
+}
+function disableHitButton() {
+  buttonStatus.h.disabled = true;
+  buttonStatus.h.style.background = disabledButtonColor;
+}
+// Stay
+function enableStayButton() {
+  buttonStatus.s.disabled = false;
+  buttonStatus.s.style.background = enabledButtonColor;
+}
+function disableStayButton() {
+  buttonStatus.s.disabled = true;
+  buttonStatus.s.style.background = disabledButtonColor;
 }
