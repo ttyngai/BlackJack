@@ -89,7 +89,7 @@ let secretCardId,
   busted,
   playerBling,
   autoClick;
-
+let runningAutoPilot = false;
 let endPlayer = false;
 let endDealer = false;
 let dealerHasBlackJack = false;
@@ -127,7 +127,7 @@ let dialogueContainer = {
 
 /*----- event listeners -----*/
 buttonStatus.sm.addEventListener('click', startMission);
-buttonStatus.ap.addEventListener('click', autoPilot);
+buttonStatus.ap.addEventListener('click', runAutoPilot);
 buttonStatus.st.addEventListener('click', runMasterFlow);
 buttonStatus.sp.addEventListener('click', runSplit);
 buttonStatus.d.addEventListener('click', runDouble);
@@ -160,9 +160,19 @@ function startMission() {
 
 function runMasterFlow() {
   masterFlow();
-}
-function masterFlow(card1, card2, card3, card4) {
+  enableAutoPilotButton();
+  runningAutoPilot = false;
   buttonStatus.st.innerHTML = 'Again';
+}
+
+function masterFlow(card1, card2, card3, card4) {
+  // // Test numbers
+  // card1 = 1;
+  // card2 = 11;
+  // card3 = 6;
+  // card4 = 4;
+  // // Test end
+
   disableStartButton();
   disableSplitButton();
   disableDoubleButton();
@@ -230,7 +240,9 @@ function dealerInitSequence(card1, card2) {
     if (checkDealerForBlackJack()) {
       endPlayer = true;
       endDealer = true;
+      gameEnded = true;
       dealerHasBlackJack = true;
+      updateDealerSumBox();
       flipSecretCard();
       buttonManagement();
     }
@@ -470,7 +482,9 @@ function runDealer() {
     countWins();
     buttonManagement();
   } else {
-    dealRestOfDealer();
+    setTimeout(function () {
+      dealRestOfDealer();
+    }, computerFlowDelay);
   }
 }
 function dealRestOfDealer() {
@@ -563,7 +577,6 @@ function evaluate(array, isDealer) {
       handEnded = true;
     }
   }
-  handEnded = false;
 }
 
 function handleEvaluated(isDealer, isDoubleMode) {
@@ -868,6 +881,15 @@ function buttonManagement() {
     enableStartButton();
   }
 }
+// AutoPilot button
+function enableAutoPilotButton() {
+  buttonStatus.ap.disabled = false;
+  buttonStatus.ap.style.background = enabledButtonColor;
+}
+function disableAutoPilotButton() {
+  buttonStatus.ap.disabled = true;
+  buttonStatus.ap.style.background = disabledButtonColor;
+}
 // Start/Again/Reset whatever you call it
 function enableStartButton() {
   buttonStatus.st.disabled = false;
@@ -879,8 +901,12 @@ function disableStartButton() {
 }
 //Split
 function enableSplitButton() {
-  buttonStatus.sp.disabled = false;
-  buttonStatus.sp.style.background = enabledButtonColor;
+  if (runningAutoPilot) {
+    buttonStatus.sp.style.background = enabledButtonColor;
+  } else {
+    buttonStatus.sp.disabled = false;
+    buttonStatus.sp.style.background = enabledButtonColor;
+  }
 }
 function disableSplitButton() {
   buttonStatus.sp.disabled = true;
@@ -888,8 +914,12 @@ function disableSplitButton() {
 }
 //Double
 function enableDoubleButton() {
-  buttonStatus.d.disabled = false;
-  buttonStatus.d.style.background = enabledButtonColor;
+  if (runningAutoPilot) {
+    buttonStatus.d.style.background = enabledButtonColor;
+  } else {
+    buttonStatus.d.disabled = false;
+    buttonStatus.d.style.background = enabledButtonColor;
+  }
 }
 function disableDoubleButton() {
   buttonStatus.d.disabled = true;
@@ -897,8 +927,12 @@ function disableDoubleButton() {
 }
 // Hit
 function enableHitButton() {
-  buttonStatus.h.disabled = false;
-  buttonStatus.h.style.background = enabledButtonColor;
+  if (runningAutoPilot) {
+    buttonStatus.h.style.background = enabledButtonColor;
+  } else {
+    buttonStatus.h.disabled = false;
+    buttonStatus.h.style.background = enabledButtonColor;
+  }
 }
 function disableHitButton() {
   buttonStatus.h.disabled = true;
@@ -906,8 +940,12 @@ function disableHitButton() {
 }
 // stand
 function enableStandButton() {
-  buttonStatus.s.disabled = false;
-  buttonStatus.s.style.background = enabledButtonColor;
+  if (runningAutoPilot) {
+    buttonStatus.s.style.background = enabledButtonColor;
+  } else {
+    buttonStatus.s.disabled = false;
+    buttonStatus.s.style.background = enabledButtonColor;
+  }
 }
 function disableStandButton() {
   buttonStatus.s.disabled = true;
@@ -915,10 +953,15 @@ function disableStandButton() {
 }
 // hint
 function enableHintButton() {
-  buttonStatus.hint.disabled = false;
-  buttonStatus.hint.style.background = enabledHintColor;
-  buttonStatus.hint.disabled = false;
-  buttonStatus.hint.style.color = `#000000`;
+  if (runningAutoPilot) {
+    buttonStatus.hint.style.background = disabledButtonColor;
+    buttonStatus.hint.style.color = `grey`;
+  } else {
+    buttonStatus.hint.disabled = false;
+    buttonStatus.hint.style.background = enabledHintColor;
+    buttonStatus.hint.disabled = false;
+    buttonStatus.hint.style.color = `#000000`;
+  }
 }
 function disableHintButton() {
   buttonStatus.hint.disabled = true;
@@ -927,32 +970,35 @@ function disableHintButton() {
   buttonStatus.hint.style.color = '#FFFFFF';
 }
 
-function autoPilot() {
+function runAutoPilot() {
   // min is 50
-  cardDealDelay = 300;
+
+  cardDealDelay = 200;
+  disableAutoPilotButton();
   disableSplitButton();
   disableDoubleButton();
   disableHitButton();
   disableStandButton();
   disableHintButton();
+  runningAutoPilot = true;
+  masterFlow();
   buttonStatus.st.innerHTML = 'Start';
-
-  runAutoPilot();
-
-  ////Temporary not running this yet
-  // runAutoPilot();
+  autoPilot();
 }
 
-function runAutoPilot() {
-  // check if focusedHand < 0
-  // as long as player didn't end autopilot by clicking startbutton runningAutoPilot = false
-  // if game ended, and runningAutoPilot = true
-  // press masterFlow
-  // wait until card dealt
-  // Call back function again
-  // click button every 2 seconds Until if focusedHand < 0
-  // Call back function again
-  //Keep running runAutoPilot as long as runningAutoPilot = true
+function autoPilot() {
+  let autoPilotDelay = cardDealDelay * 10;
+  if (runningAutoPilot && !gameEnded) {
+    perfectStrategyClicker(true);
+    setTimeout(function () {
+      autoPilot();
+    }, autoPilotDelay);
+  } else if (runningAutoPilot && gameEnded) {
+    masterFlow();
+    setTimeout(function () {
+      autoPilot();
+    }, autoPilotDelay);
+  }
 }
 
 function perfectStrategyClicker(autoClick) {
@@ -963,7 +1009,7 @@ function perfectStrategyClicker(autoClick) {
     playerCard2 = handArray[`p${focusedHand}`][1];
     playerSum = parseInt(sumBox[`p${focusedHand}`].innerHTML);
 
-    ////// split//////////////
+    // split
     if (
       (playerCard1 === playerCard2 &&
         ((dealerCard1 >= 2 &&
@@ -984,20 +1030,27 @@ function perfectStrategyClicker(autoClick) {
     ) {
       if (autoClick) {
         split();
+        buttonBling('split');
       }
-      hintDialogue('split');
+      if (runningAutoPilot) {
+        hintDialogue('split');
+      }
     }
 
     // double
     else if (
-      (dealerCard1 >= 3 && dealerCard1 <= 6 && playerSum === 9) ||
-      (dealerCard1 >= 2 && dealerCard1 <= 9 && playerSum === 10) ||
-      (dealerCard1 >= 2 && dealerCard1 <= 10 && playerSum === 11)
+      handArray[`p${focusedHand}`].length === 2 &&
+      ((dealerCard1 >= 3 && dealerCard1 <= 6 && playerSum === 9) ||
+        (dealerCard1 >= 2 && dealerCard1 <= 9 && playerSum === 10) ||
+        (dealerCard1 >= 2 && dealerCard1 <= 10 && playerSum === 11))
     ) {
       if (autoClick) {
         double();
+        buttonBling('double');
       }
-      hintDialogue('double');
+      if (runningAutoPilot) {
+        hintDialogue('double');
+      }
     }
 
     // hit
@@ -1018,19 +1071,27 @@ function perfectStrategyClicker(autoClick) {
     ) {
       if (autoClick) {
         hit();
+        buttonBling('hit');
       }
-      hintDialogue('hit');
+      if (runningAutoPilot) {
+        hintDialogue('hit');
+      }
     }
     // stand
     else if (playerSum <= 21) {
       if (autoClick) {
         stand();
+        buttonBling('hit');
       }
-      hintDialogue('stand');
+      if (runningAutoPilot) {
+        hintDialogue('stand');
+      }
     }
     // all 4 state is complete
   }
   if (focusedHand === 0) {
-    hintDialogue();
+    if (runningAutoPilot) {
+      hintDialogue('split');
+    }
   }
 }
