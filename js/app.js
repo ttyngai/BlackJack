@@ -54,32 +54,6 @@ const dialogues = {
 
 /*----- app's state (variables) -----*/
 
-/*----- cached element references -----*/
-
-//////////////CACHED ELEMENTS////////////////
-
-let scoreBox = {
-  d: document.getElementById('dealersScoreBox'),
-  p: document.getElementById('playersScoreBox'),
-};
-let sumBox = {
-  d: document.getElementById('dealersSumBox'),
-  p1: document.getElementById('playersSumBox'),
-};
-let buttonStatus = {
-  sm: document.getElementById('startMission'),
-  ap: document.getElementById('autoPilot'),
-  e: document.getElementById('exit'),
-  st: document.getElementById('start'),
-  sp: document.getElementById('split'),
-  d: document.getElementById('double'),
-  h: document.getElementById('hit'),
-  s: document.getElementById('stay'),
-};
-let dialogueContainer = {
-  d: document.getElementById('dealerSays'),
-  p: document.getElementById('playerSays'),
-};
 let handArray = {
   d: [],
   p1: [],
@@ -92,8 +66,7 @@ const score = {
   d: 0,
   p: 0,
 };
-scoreBox.d.innerHTML = 0;
-scoreBox.p.innerHTML = 0;
+
 const cardValue = {};
 const cardClass = {};
 let arrayOfHandIds = [];
@@ -117,7 +90,31 @@ let newHandId = 0;
 let gameEnded = false;
 let cardDealDelay = 500;
 let computerFlowDelay = 50;
-////////////CONSTANT ENDS/////////////
+/*----- cached element references -----*/
+
+let scoreBox = {
+  d: document.getElementById('dealersScoreBox'),
+  p: document.getElementById('playersScoreBox'),
+};
+let sumBox = {
+  d: document.getElementById('dealersSumBox'),
+  p1: document.getElementById('playersSumBox'),
+};
+let buttonStatus = {
+  sm: document.getElementById('startMission'),
+  ap: document.getElementById('autoPilot'),
+  e: document.getElementById('exit'),
+  st: document.getElementById('start'),
+  sp: document.getElementById('split'),
+  d: document.getElementById('double'),
+  h: document.getElementById('hit'),
+  s: document.getElementById('stay'),
+};
+let dialogueContainer = {
+  d: document.getElementById('dealerSays'),
+  p: document.getElementById('playerSays'),
+};
+
 /*----- event listeners -----*/
 buttonStatus.sm.addEventListener('click', startMission);
 buttonStatus.ap.addEventListener('click', autoPilot);
@@ -127,6 +124,7 @@ buttonStatus.sp.addEventListener('click', runSplit);
 buttonStatus.d.addEventListener('click', runDouble);
 buttonStatus.h.addEventListener('click', runHit);
 buttonStatus.s.addEventListener('click', stay);
+
 /*----- functions -----*/
 init();
 // only for restart
@@ -141,6 +139,8 @@ function init() {
   disableStayButton();
   dealersDialogue();
   playersDialogue();
+  scoreBox.d.innerHTML = 0;
+  scoreBox.p.innerHTML = 0;
 }
 
 // START MISSION from cover page
@@ -408,6 +408,7 @@ function runHit() {
 function hit(num, isDoubleMode) {
   playersDialogue();
   dealersDialogue();
+  disableHitButton();
   dealCard(
     handArray[`p${focusedHand}`],
     `playersArray${focusedHand}`,
@@ -422,8 +423,9 @@ function hit(num, isDoubleMode) {
 
   if (endPlayer) {
     runDealer();
-    buttonManagement();
+    // buttonManagement();
   }
+  buttonManagement();
 }
 
 function stay() {
@@ -877,7 +879,6 @@ function disableStayButton() {
 
 function autoPilot() {
   // min is 50
-  buttonStatus.e.innerHTML = 'Exit';
   buttonStatus.st.remove();
   buttonStatus.sp.remove();
   buttonStatus.d.remove();
@@ -965,96 +966,59 @@ function repeatCalculateHand() {
   let playerSum = parseInt(sumBox[`p${focusedHand}`].innerHTML);
   ////// split//////////////
   if (
-    !handEnded &&
-    handArray[`p${focusedHand}`][0] === handArray[`p${focusedHand}`][1]
-  ) {
-    ///////player 2/2 3/3, dealer 2-7
-    if (
-      dealerSum <= 7 &&
-      dealerSum > 1 &&
-      handArray[`p${focusedHand}`][0] >= 2 &&
-      handArray[`p${focusedHand}`][0] <= 3
-    ) {
-      setTimeout(function () {
-        something();
-        repeatCalculateHand();
-      }, cardDealDelay);
-    }
-    ///////player 4/4, dealer 5-6
-    if (
-      dealerSum === 5 &&
-      dealerSum === 6 &&
-      handArray[`p${focusedHand}`][0] === 4
-    ) {
-      setTimeout(function () {
-        something();
-        repeatCalculateHand();
-      }, cardDealDelay);
-    }
-    if (
-      dealerSum === 5 &&
-      dealerSum === 6 &&
-      handArray[`p${focusedHand}`][0] === 4
-    ) {
-      setTimeout(function () {
-        something();
-        repeatCalculateHand();
-      }, cardDealDelay);
-    }
-    if (
-      dealerSum >= 2 &&
-      dealerSum <= 6 &&
-      ((handArray[`p${focusedHand}`][0] >= 6 &&
-        handArray[`p${focusedHand}`][0] <= 9) ||
-        handArray[`p${focusedHand}`][0] === 1)
-    ) {
-      setTimeout(function () {
-        something();
-        repeatCalculateHand();
-      }, cardDealDelay);
-    }
-    if (dealerSum === 7 && handArray[`p${focusedHand}`][0] === 7) {
-      setTimeout(function () {
-        something();
-        repeatCalculateHand();
-      }, cardDealDelay);
-    }
-    if (
-      ((dealerSum >= 7 && dealerSum <= 10) || dealerSum === 1) &&
+    (((dealerSum >= 7 && dealerSum <= 10) || dealerSum === 1) &&
       ((handArray[`p${focusedHand}`][0] >= 7 &&
         handArray[`p${focusedHand}`][0] <= 10) ||
         handArray[`p${focusedHand}`][0] === 1) &&
       ((dealerSum != 9 && handArray[`p${focusedHand}`][0] === 7) ||
         (dealerSum != 10 && handArray[`p${focusedHand}`][0] === 7) ||
-        (dealerSum != 1 && handArray[`p${focusedHand}`][0] === 7))
-    ) {
-      setTimeout(function () {
-        something();
-        repeatCalculateHand();
-      }, cardDealDelay);
-    }
+        (dealerSum != 1 && handArray[`p${focusedHand}`][0] === 7))) ||
+    (dealerSum === 7 && handArray[`p${focusedHand}`][0] === 7) ||
+    (dealerSum >= 2 &&
+      dealerSum <= 6 &&
+      ((handArray[`p${focusedHand}`][0] >= 6 &&
+        handArray[`p${focusedHand}`][0] <= 9) ||
+        handArray[`p${focusedHand}`][0] === 1)) ||
+    (dealerSum === 5 &&
+      dealerSum === 6 &&
+      handArray[`p${focusedHand}`][0] === 4) ||
+    (dealerSum === 5 &&
+      dealerSum === 6 &&
+      handArray[`p${focusedHand}`][0] === 4) ||
+    (dealerSum <= 7 &&
+      dealerSum > 1 &&
+      handArray[`p${focusedHand}`][0] >= 2 &&
+      handArray[`p${focusedHand}`][0] <= 3 &&
+      !handEnded &&
+      handArray[`p${focusedHand}`][0] === handArray[`p${focusedHand}`][1])
+  ) {
+    setTimeout(function () {
+      split();
+      repeatCalculateHand();
+    }, cardDealDelay);
   }
 
   // double
-  if (!handEnded) {
+  else if (!handEnded) {
     setTimeout(function () {
-      something();
+      double();
       repeatCalculateHand();
     }, cardDealDelay);
   }
 
   // hit
-  if (!handEnded) {
+  else if (!handEnded) {
     setTimeout(function () {
       something();
       repeatCalculateHand();
     }, cardDealDelay);
   }
   // stay
-  if (!handEnded) {
+  else if (!handEnded) {
     setTimeout(function () {
       something();
       repeatCalculateHand();
     }, cardDealDelay);
   }
+  // all 4 state is complete
 }
