@@ -159,293 +159,8 @@ function startMission() {
     document.getElementById('coverPage').remove();
     scoreBoxBling(true);
     scoreBoxBling(false);
-    buttonBling('start');
   }, 2000);
 }
-
-// init();
-// function init() {
-//   disableHitStayButton();
-//   disableResetButton();
-//   dealtCards = {
-//     d: [0],
-//     p1: [0],
-//   };
-//   // score = {
-//   //   d: [0],
-//   //   p: [0],
-//   // };
-//   calc();
-// }
-// function reset() {
-//   disableHitStayButton();
-//   dealtCards = {
-//     d: [0],
-//     p1: [0],
-//   };
-//   score = {
-//     d: [0],
-//     p: [0],
-//   };
-//   document.getElementById('dealersArray').innerHTML = '';
-//   document.getElementById('playersArray1').innerHTML = '';
-//   dialogueContainer.d.innerHTML = dialogues.c[randomDialogue()];
-//   dialogueContainer.p.innerHTML = dialogues.h[randomDialogue()];
-//   calc();
-//   enableAgainButton();
-//   disableResetButton();
-//   buttonStatus.d.innerHTML = 'Start';
-//   scoreBoxBling(true);
-//   scoreBoxBling(false);
-// }
-
-// // Deal is pressed
-// function deal() {
-//   disableResetButton();
-//   firstCard = 0;
-//   resetScoreBox();
-//   dealersFirstCard = '';
-//   hiddenCardDisplay = '';
-//   playerEndedTurn = false;
-//   gameEnded = false;
-//   dealtCards = {
-//     d: [0],
-//     p1: [0],
-//   };
-//   dialogueContainer.p.innerHTML = '';
-//   dialogueContainer.d.innerHTML = '';
-//   dialogueContainer.d.innerHTML = dialogues.c[randomDialogue()];
-//   dialogueContainer.p.innerHTML = dialogues.h[randomDialogue()];
-//   disableAgainButton();
-//   setTimeout(function () {
-//     buttonStatus.d.innerHTML = 'Again';
-//   }, cardDealDelay * 4);
-//   document.getElementById('playersArray1').innerHTML = '';
-//   document.getElementById('dealersArray').innerHTML = '';
-//   let dealer = true;
-//   setTimeout(function () {
-//     runDealCard(false, 'dealersArray', dealtCards.d, dealer);
-//     dealer = false;
-//     setTimeout(function () {
-//       runDealCard(true, 'dealersArray', dealtCards.d);
-//       if (checkForDealerBlackJack()) {
-//         gameEnded = true;
-//         score.d++;
-//         scoreBoxBling(false);
-//         showHiddenCard();
-//         dealerBlackJack();
-//         calc();
-//         disableHitStayButton();
-//         enableAgainButton();
-//         enableResetButton();
-//       }
-//       if (!gameEnded) {
-//         dealPlayer();
-//         calc();
-//       }
-//     }, cardDealDelay);
-//   }, cardDealDelay);
-// }
-// function dealPlayer() {
-//   setTimeout(function () {
-//     runDealCard(false, 'playersArray1', dealtCards.p1);
-//     setTimeout(function () {
-//       runDealCard(false, 'playersArray1', dealtCards.p1);
-//       setTimeout(function () {
-//         calc();
-//         enableHitButton();
-//         enableStayButton();
-//         enableResetButton();
-//       }, cardDealDelay);
-//     }, cardDealDelay);
-//   }, cardDealDelay);
-// }
-
-// // Player hits
-// function hit() {
-//   disableHitStayButton();
-//   disableResetButton();
-//   dialogueContainer.p.innerHTML = '';
-//   dialogueContainer.p.innerHTML = dialogues.h[randomDialogue()];
-//   dialogueContainer.d.innerHTML = '';
-//   dialogueContainer.d.innerHTML = dialogues.c[randomDialogue()];
-//   setTimeout(function () {
-//     runDealCard(false, 'playersArray1', dealtCards.p1);
-//     calc();
-//     if (!gameEnded) {
-//       enableStayButton();
-//     }
-//     let playersSum = dealtCards.p1.reduce((a, b) => a + b);
-//     if (playersSum >= 21) {
-//       disableHitButton();
-//     } else enableHitButton();
-//     enableResetButton();
-//   }, cardDealDelay);
-// }
-
-// // Player stays and ends turn
-// function stay() {
-//   disableResetButton();
-//   playerEndedTurn = true;
-//   dealtCards.d.push(convertAceToEleven(convertFaceToTen(hiddenCardDisplay)));
-//   showHiddenCard();
-//   checkAndReduceAce(dealtCards.d);
-//   checkAndReduceAce(dealtCards.p1);
-//   disableHitStayButton();
-
-//   calc();
-//   // moved out of timeout to prevent 3rd card in autopuiilot
-//   setTimeout(function () {
-//     dealDealerRemaining();
-//     enableAgainButton();
-//     enableResetButton();
-//   }, cardDealDelay);
-// }
-
-// // Render function
-// function calc() {
-//   let playersSum = dealtCards.p1.reduce((a, b) => a + b);
-//   let dealersSum = dealtCards.d.reduce((a, b) => a + b);
-
-//   //   Hit is pressed
-//   if (playersSum > 21) {
-//     gameEnded = true;
-//     score.d++;
-//     scoreBoxBling(false);
-//     disableHitStayButton();
-//     enableAgainButton();
-//     dealtCards.d.push(convertAceToEleven(hiddenCardProcessedValue));
-//     checkAndReduceAce(dealtCards.d);
-//     setTimeout(function () {
-//       showHiddenCard();
-//     }, cardDealDelay);
-//     bustedDialogue();
-//   }
-//   //   Stay is pressed
-//   if (!gameEnded && playerEndedTurn) {
-//     if (dealersSum > 21) {
-//       gameEnded = true;
-//       score.p++;
-//       scoreBoxBling(true);
-//       winningDialogueIsPlayer(true);
-//     } else if (
-//       dealersSum <= 21 &&
-//       dealersSum > playersSum &&
-//       dealersSum >= 17
-//     ) {
-//       gameEnded = true;
-//       score.d++;
-//       scoreBoxBling(false);
-//       winningDialogueIsPlayer(false);
-//     } else if (
-//       playersSum <= 21 &&
-//       dealersSum >= 17 &&
-//       dealersSum < playersSum
-//     ) {
-//       gameEnded = true;
-//       score.p++;
-//       scoreBoxBling(true);
-//       winningDialogueIsPlayer(true);
-//     }
-//   }
-//   if (playersSum === dealersSum && dealersSum >= 17) {
-//     tieDialogue();
-//   }
-//   render();
-// }
-
-// function render() {
-//   // for (let num in dealtCards) {
-//   //   sumBox[num].innerHTML = dealtCards[num].reduce((a, b) => a + b);
-//   // }
-//   // for (let num in scoreBox) {
-//   //   scoreBox[num].innerHTML = score[num];
-//   // }
-// }
-
-// // Deal card logic
-// function runDealCard(hide, array, dealtCardsArray, dealer) {
-//   let newCard = randomCard();
-
-//   dealtCardId++;
-//   if (!hide && dealer) {
-//     firstCard = newCard;
-//   }
-//   const newCardEl = document.getElementById(array);
-//   const processedCard = convertAceToEleven(convertFaceToTen(newCard));
-//   if (dealer === true) {
-//     dealersFirstCard = newCard;
-//   }
-//   if (hide === true) {
-//     hiddenCardId = dealtCardId;
-//     newCardEl.innerHTML += `<div id="dealtCard${dealtCardId}" class="card back-red"></div>`;
-//     setTimeout(function () {
-//       document
-//         .getElementById(`dealtCard${dealtCardId}`)
-//         .classList.add('cardDealAnimation');
-//     }, computerFlowDelay);
-//     hiddenCardProcessedValue = processedCard;
-//     hiddenCardDisplay = newCard;
-//   } else {
-//     newCardEl.innerHTML += `<div id="dealtCard${dealtCardId}" class="card ${
-//       suits[randomSuits()]
-//     }${ranks[newCard - 1]}"></div>`;
-//     setTimeout(function () {
-//       document
-//         .getElementById(`dealtCard${dealtCardId}`)
-//         .classList.add('cardDealAnimation');
-//     }, computerFlowDelay);
-//     dealtCardsArray.push(processedCard);
-//   }
-//   checkAndReduceAce(dealtCardsArray);
-//   return dealtCardsArray[dealtCardsArray.length - 1];
-// }
-
-// // BlackJack check for dealer
-// function checkForDealerBlackJack() {
-//   if (firstCard === 1 && hiddenCardDisplay >= 11) {
-//     dealtCards.d.push(convertFaceToTen(hiddenCardDisplay));
-//     return true;
-//   } else if (firstCard >= 11 && hiddenCardDisplay === 1) {
-//     dealtCards.d.push(convertAceToEleven(hiddenCardDisplay));
-//     return true;
-//   }
-//   return false;
-// }
-
-// // Call back dealers delay function
-// function dealDealerRemaining() {
-//   if (!gameEnded && dealtCards.d.reduce((a, b) => a + b) < 17) {
-//     setTimeout(function () {
-//       runDealCard(false, 'dealersArray', dealtCards.d);
-//       calc();
-//       dealDealerRemaining();
-//     }, cardDealDelay);
-//   } else return;
-// }
-
-// // Show hidden card
-// function showHiddenCard() {
-//   setTimeout(function () {
-//     document
-//       .getElementById(`dealtCard${hiddenCardId}`)
-//       .classList.add('hiddenCardFlipOne');
-//   }, computerFlowDelay);
-
-//   setTimeout(function () {
-//     document.getElementById(`dealtCard${hiddenCardId}`).className = `card ${
-//       suits[randomSuits()]
-//     }${ranks[hiddenCardDisplay - 1]}`;
-//     document
-//       .getElementById(`dealtCard${hiddenCardId}`)
-//       .classList.add(`hiddenCardRotated`);
-//     setTimeout(function () {
-//       document
-//         .getElementById(`dealtCard${hiddenCardId}`)
-//         .classList.add('hiddenCardFlipTwo');
-//     }, computerFlowDelay);
-//   }, cardDealDelay);
-// }
 
 // BLINGS
 // Score Box Bling
@@ -484,18 +199,6 @@ function buttonBling(buttonId) {
   }
 }
 
-// // Reset scorebox after restart
-// function resetScoreBox() {
-//   dealtCards = {
-//     d: [0],
-//     p1: [0],
-//   };
-//   for (let num in dealtCards) {
-//     sumBox[num].innerHTML = dealtCards[num].reduce((a, b) => a + b);
-//   }
-// }
-
-// Dialoge function
 function winningDialogueIsPlayer(isTrue) {
   if (isTrue) {
     dialogueContainer.p.innerHTML = '';
@@ -603,9 +306,9 @@ let dialogueContainer = {
 buttonStatus.sm.addEventListener('click', startMission);
 buttonStatus.ap.addEventListener('click', autoPilot);
 buttonStatus.e.addEventListener('click', reloadPage);
-buttonStatus.st.addEventListener('click', masterFlow);
+buttonStatus.st.addEventListener('click', runMasterFlow);
 buttonStatus.sp.addEventListener('click', split);
-buttonStatus.d.addEventListener('click', double);
+buttonStatus.d.addEventListener('click', runDouble);
 buttonStatus.h.addEventListener('click', hitClick);
 buttonStatus.s.addEventListener('click', stay);
 
@@ -639,6 +342,7 @@ let newHandId = 0;
 let arrayOfHandIds = [];
 let dealerHasBlackJack = false;
 let playerBling;
+let doubledHandMap = [];
 ////////////CONSTANT ENDS/////////////
 /*----- functions -----*/
 init();
@@ -665,6 +369,14 @@ function buttonManagement() {
   } else {
     disableSplitButton();
   }
+
+  // Double-ABLE
+  if (focusedHand && handArray[`p${focusedHand}`].length === 2) {
+    enableDoubleButton();
+  } else {
+    disableDoubleButton();
+  }
+
   // Hitable
   if (!endPlayer) {
     enableHitButton();
@@ -678,8 +390,10 @@ function buttonManagement() {
     enableStartButton();
   }
 }
-
-function masterFlow() {
+function runMasterFlow() {
+  masterFlow();
+}
+function masterFlow(card1, card2, card3, card4) {
   disableStartButton();
   disableSplitButton();
   disableDoubleButton();
@@ -688,6 +402,7 @@ function masterFlow() {
   newHandId = 0;
   cardIdNum = 0;
   focusedHand = 0;
+  idsOfDoubledHands = [];
   handArray = {
     d: [],
     p1: [],
@@ -711,27 +426,27 @@ function masterFlow() {
   <div class="handArray" id="playersArray1"></div>
 </div>`;
 
-  dealerInitSequence();
+  dealerInitSequence(card1, card2);
   setTimeout(function () {
-    playerInitSequence();
+    playerInitSequence(card3, card4);
     // cardDealDelay needs to be more than Old hand cardDealDelay, at least 1.105
   }, cardDealDelay * 1.5);
 }
 
 // MAIN SEQUENCE START
-function dealerInitSequence() {
+function dealerInitSequence(card1, card2) {
   dealerWinNum = 0;
   endGame = false;
   endDealer = false;
   dealerHasBlackJack = false;
   /////DEALER 2 cards and check blackjack
   // deal dealers twice with second as secret card, with timeouts
-  dealCard(handArray.d, 'dealersArray', true, false);
+  dealCard(handArray.d, 'dealersArray', true, false, card1);
   // update sumbox's first
   updateDealerSumBox();
   // Delay second card for cardDealDelay
   setTimeout(function () {
-    dealCard(handArray.d, 'dealersArray', true, true);
+    dealCard(handArray.d, 'dealersArray', true, true, card2);
   }, cardDealDelay);
   // Check blackjack
   if (checkDealerForBlackJack()) {
@@ -742,13 +457,8 @@ function dealerInitSequence() {
     countWins();
   }
 }
-//////DEALER 2cardBJ ENDED//////////////
-//////player sequence//////
 
-// scope declared;
-////////recurring rows////////
-
-function playerInitSequence() {
+function playerInitSequence(card3, card4) {
   // index of 1st hand
   playerWinNum = 0;
   endPlayer = false;
@@ -762,24 +472,46 @@ function playerInitSequence() {
   arrayOfHandIds.push(newHandId);
   // focus on new hand
   focusedHand = newHandId;
+  // map first array into doubledHandMap as 1, meaning it's not doubled.
+  doubledHandMap = [1];
   // dealing 2 cards to index 1 of hands
-  dealCard(handArray[`p${newHandId}`], `playersArray${newHandId}`);
+  dealCard(
+    handArray[`p${newHandId}`],
+    `playersArray${newHandId}`,
+    null,
+    null,
+    card3
+  );
   updatePlayerSumBox(newHandId, handArray);
   // Delay second card for cardDealDelay
   setTimeout(function () {
-    dealCard(handArray[`p${newHandId}`], `playersArray${newHandId}`);
+    dealCard(
+      handArray[`p${newHandId}`],
+      `playersArray${newHandId}`,
+      null,
+      null,
+      card4
+    );
     updatePlayerSumBox(newHandId, handArray);
+    evaluate(handArray[`p${focusedHand}`]);
   }, cardDealDelay);
   setTimeout(function () {
     buttonManagement();
   }, cardDealDelay * 1.1);
 }
 
-function split() {
+function runSplit() {
+  split();
+}
+function split(cardA, cardB) {
   disableSplitButton();
   // index of generated hand
   newHandId++;
+
   arrayOfHandIds.push(newHandId);
+  // new doubledHandMap member for the new row
+  doubledHandMap.push(1);
+
   // Remove bling
   document
     .getElementById(`playersArray${focusedHand}`)
@@ -838,14 +570,25 @@ function split() {
   // deal old hand second card
   setTimeout(function () {
     // run deal card
-    dealCard(handArray[`p${originalHand}`], `playersArray${originalHand}`);
-
+    dealCard(
+      handArray[`p${originalHand}`],
+      `playersArray${originalHand}`,
+      null,
+      null,
+      cardA
+    );
     updatePlayerSumBox(originalHand, handArray);
   }, computerFlowDelay);
 
   // deal new hand second card
   setTimeout(function () {
-    dealCard(handArray[`p${newHandId}`], `playersArray${newHandId}`);
+    dealCard(
+      handArray[`p${newHandId}`],
+      `playersArray${newHandId}`,
+      null,
+      null,
+      cardB
+    );
     updatePlayerSumBox(newHandId, handArray);
   }, cardDealDelay);
   setTimeout(function () {
@@ -853,7 +596,36 @@ function split() {
     // Want to have buttonManagement invoked at the end
   }, cardDealDelay * 1.1);
 }
-function double() {}
+function runDouble() {
+  double();
+}
+function double(num) {
+  disableDoubleButton();
+  // double weight of this focusedHand
+  doubledHandMap[focusedHand - 1] = 2;
+  idsOfDoubledHands.push(`p${focusedHand}`);
+  document.getElementById(
+    `playersSumBox${focusedHand}`
+  ).parentElement.innerHTML += `<div id="double${focusedHand}" class="double">2x</div>`;
+  setTimeout(function () {
+    document
+      .getElementById(`double${focusedHand}`)
+      .classList.add('cardDealAnimation');
+
+    hit(num);
+
+    disableDoubleButton();
+    setTimeout(function () {
+      shiftFocus();
+      setTimeout(function () {
+        if (endPlayer) {
+          runDealer();
+          buttonManagement();
+        }
+      }, cardDealDelay);
+    }, cardDealDelay);
+  }, computerFlowDelay);
+}
 
 function hitClick() {
   hit();
@@ -868,12 +640,15 @@ function hit(num) {
   );
   updatePlayerSumBox(focusedHand, handArray);
   evaluate(handArray[`p${focusedHand}`]);
+
   handleEvaluated(handArray[`p${focusedHand}`]);
+
   if (endPlayer) {
     runDealer();
     buttonManagement();
   }
 }
+
 function stay() {
   shiftFocus();
   if (endPlayer) {
@@ -890,7 +665,6 @@ function runDealer() {
   evaluate(handArray.d, true);
 
   if (busted) {
-    console.log('finish');
     endDealer = true;
     countWins();
     buttonManagement();
@@ -934,7 +708,7 @@ function countWins() {
       ((dealerSum > 21 && playerSumBoxTotal[i] <= 21) ||
         (dealerSum < playerSumBoxTotal[i] && playerSumBoxTotal[i] <= 21))
     ) {
-      addScoreIsPlayer(true);
+      addScoreIsPlayer(true, doubledHandMap[i]);
     }
   }
   // dealer win conditions
@@ -946,20 +720,22 @@ function countWins() {
       ((playerSumBoxTotal[i] > 21 && dealerSum <= 21) ||
         (dealerSum > playerSumBoxTotal[i] && dealerSum <= 21))
     ) {
-      addScoreIsPlayer(false);
+      addScoreIsPlayer(false, doubledHandMap[i]);
     }
   }
   if (dealerHasBlackJack) {
     addScoreIsPlayer(false);
   }
 }
-function addScoreIsPlayer(isPlayer) {
+function addScoreIsPlayer(isPlayer, multiple) {
   if (isPlayer) {
-    score.p++;
+    score.p += multiple;
+    winningDialogueIsPlayer(true);
     scoreBox.p.innerHTML = score.p;
     scoreBoxBlingIsPlayer(true);
   } else {
-    score.d++;
+    score.d += multiple;
+    winningDialogueIsPlayer(false);
     scoreBox.d.innerHTML = score.d;
     scoreBoxBlingIsPlayer(false);
   }
@@ -986,6 +762,7 @@ function evaluate(array, isDealer) {
 
 function handleEvaluated(array, isDealer) {
   // player busted
+
   if (endHand && busted && !isDealer) {
     shiftFocus();
   }
@@ -1000,18 +777,19 @@ function shiftFocus() {
     .getElementById(`playersSumBox${focusedHand}`)
     .classList.remove('borderBlingOn');
   arrayOfHandIds.splice(arrayOfHandIds.indexOf(focusedHand), 1);
-
-  focusedHand = arrayOfHandIds[arrayOfHandIds.length - 1];
-
-  if (focusedHand > 0) {
-    document
-      .getElementById(`playersArray${focusedHand}`)
-      .classList.add('borderBlingOn');
-    document
-      .getElementById(`playersSumBox${focusedHand}`)
-      .classList.add('borderBlingOn');
+  if (arrayOfHandIds.length >= 1) {
+    focusedHand = arrayOfHandIds[arrayOfHandIds.length - 1];
+    if (focusedHand > 0) {
+      document
+        .getElementById(`playersArray${focusedHand}`)
+        .classList.add('borderBlingOn');
+      document
+        .getElementById(`playersSumBox${focusedHand}`)
+        .classList.add('borderBlingOn');
+    }
   }
-  if (arrayOfHandIds.length === 0) {
+
+  if (arrayOfHandIds.length == 0) {
     endPlayer = true;
   }
   if (focusedHand > 0) {
