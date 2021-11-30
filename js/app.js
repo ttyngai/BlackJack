@@ -159,7 +159,7 @@ function startMission() {
     document.getElementById('coverPage').remove();
     scoreBoxBling(true);
     scoreBoxBling(false);
-    buttonBling('again');
+    buttonBling('start');
   }, 2000);
 }
 
@@ -528,50 +528,51 @@ function bustedDialogue() {
 }
 
 // Button enable/disable
-function enableResetButton() {
-  buttonStatus.r.disabled = false;
-  buttonStatus.r.style.background = enabledButtonColor;
+// Start/Again/Reset whatever you call it
+function enableStartButton() {
+  buttonStatus.st.disabled = false;
+  buttonStatus.st.style.background = enabledButtonColor;
 }
-function disableResetButton() {
-  if (!isAutoPilot) {
-    buttonStatus.r.disabled = true;
-    buttonStatus.r.style.background = disabledButtonColor;
-  }
+function disableStartButton() {
+  buttonStatus.st.disabled = true;
+  buttonStatus.st.style.background = disabledButtonColor;
 }
-function enableAgainButton() {
+//Split
+function enableSplitButton() {
+  buttonStatus.sp.disabled = false;
+  buttonStatus.sp.style.background = enabledButtonColor;
+}
+function disableSplitButton() {
+  buttonStatus.sp.disabled = true;
+  buttonStatus.sp.style.background = disabledButtonColor;
+}
+//Double
+function enableDoubleButton() {
   buttonStatus.d.disabled = false;
   buttonStatus.d.style.background = enabledButtonColor;
-  buttonBling('again');
 }
-function disableAgainButton() {
+function disableDoubleButton() {
   buttonStatus.d.disabled = true;
   buttonStatus.d.style.background = disabledButtonColor;
 }
+// Hit
 function enableHitButton() {
   buttonStatus.h.disabled = false;
   buttonStatus.h.style.background = enabledButtonColor;
-  buttonBling('hit');
-}
-function enableStayButton() {
-  buttonStatus.s.disabled = false;
-  buttonStatus.s.style.background = enabledButtonColor;
-  buttonBling('stay');
-}
-
-function disableHitStayButton() {
-  buttonStatus.h.disabled = true;
-  buttonStatus.h.style.background = disabledButtonColor;
-  buttonStatus.s.disabled = true;
-  buttonStatus.s.style.background = disabledButtonColor;
 }
 function disableHitButton() {
   buttonStatus.h.disabled = true;
   buttonStatus.h.style.background = disabledButtonColor;
 }
-
-// split function//////////////////////////////////////
-
-function handleEndHand() {}
+// Stay
+function enableStayButton() {
+  buttonStatus.s.disabled = false;
+  buttonStatus.s.style.background = enabledButtonColor;
+}
+function disableStayButton() {
+  buttonStatus.s.disabled = true;
+  buttonStatus.s.style.background = disabledButtonColor;
+}
 
 //////////////CACHED ELEMENTS////////////////
 
@@ -587,7 +588,7 @@ let buttonStatus = {
   sm: document.getElementById('startMission'),
   ap: document.getElementById('autoPilot'),
   e: document.getElementById('exit'),
-  a: document.getElementById('again'),
+  st: document.getElementById('start'),
   sp: document.getElementById('split'),
   d: document.getElementById('double'),
   h: document.getElementById('hit'),
@@ -602,17 +603,11 @@ let dialogueContainer = {
 buttonStatus.sm.addEventListener('click', startMission);
 buttonStatus.ap.addEventListener('click', autoPilot);
 buttonStatus.e.addEventListener('click', reloadPage);
-buttonStatus.a.addEventListener('click', masterFlow);
+buttonStatus.st.addEventListener('click', masterFlow);
 buttonStatus.sp.addEventListener('click', split);
 buttonStatus.d.addEventListener('click', double);
 buttonStatus.h.addEventListener('click', hitClick);
 buttonStatus.s.addEventListener('click', stay);
-
-/*----- functions -----*/
-
-function reloadPage() {
-  document.location.reload();
-}
 
 // /////////CONSTANTS/////////////
 
@@ -645,10 +640,51 @@ let arrayOfHandIds = [];
 let dealerHasBlackJack = false;
 let playerBling;
 ////////////CONSTANT ENDS/////////////
-
+/*----- functions -----*/
+init();
 // only for restart
+function reloadPage() {
+  document.location.reload();
+}
+
+function init() {
+  disableSplitButton();
+  disableDoubleButton();
+  disableHitButton();
+  disableStayButton();
+}
+
+function buttonManagement() {
+  // splitable
+  if (
+    focusedHand &&
+    handArray[`p${focusedHand}`].length === 2 &&
+    handArray[`p${focusedHand}`][0] === handArray[`p${focusedHand}`][1]
+  ) {
+    enableSplitButton();
+  } else {
+    disableSplitButton();
+  }
+  // Hitable
+  if (!endPlayer) {
+    enableHitButton();
+    enableStayButton();
+  } else {
+    disableHitButton();
+    disableStayButton();
+  }
+
+  if (endPlayer && endDealer) {
+    enableStartButton();
+  }
+}
 
 function masterFlow() {
+  disableStartButton();
+  disableSplitButton();
+  disableDoubleButton();
+  disableHitButton();
+  disableStayButton();
   newHandId = 0;
   cardIdNum = 0;
   focusedHand = 0;
@@ -664,8 +700,8 @@ function masterFlow() {
     d: document.getElementById('dealersSumBox'),
     p1: document.getElementById('playersSumBox'),
   };
-
   arrayOfHandIds = [];
+
   document.getElementById('dealersArray').innerHTML = '';
   document.getElementById('multiHandsContainer').innerHTML = '';
   document.getElementById(
@@ -728,14 +764,19 @@ function playerInitSequence() {
   focusedHand = newHandId;
   // dealing 2 cards to index 1 of hands
   dealCard(handArray[`p${newHandId}`], `playersArray${newHandId}`);
+  updatePlayerSumBox(newHandId, handArray);
   // Delay second card for cardDealDelay
   setTimeout(function () {
     dealCard(handArray[`p${newHandId}`], `playersArray${newHandId}`);
     updatePlayerSumBox(newHandId, handArray);
   }, cardDealDelay);
+  setTimeout(function () {
+    buttonManagement();
+  }, cardDealDelay * 1.1);
 }
 
 function split() {
+  disableSplitButton();
   // index of generated hand
   newHandId++;
   arrayOfHandIds.push(newHandId);
@@ -807,6 +848,10 @@ function split() {
     dealCard(handArray[`p${newHandId}`], `playersArray${newHandId}`);
     updatePlayerSumBox(newHandId, handArray);
   }, cardDealDelay);
+  setTimeout(function () {
+    buttonManagement();
+    // Want to have buttonManagement invoked at the end
+  }, cardDealDelay * 1.1);
 }
 function double() {}
 
@@ -822,31 +867,19 @@ function hit(num) {
     num
   );
   updatePlayerSumBox(focusedHand, handArray);
-
-  // evaluates() -> if <=21, do nothing.
-  // if busts, end this id in arrayOfHandIds and pick the next id
-
   evaluate(handArray[`p${focusedHand}`]);
   handleEvaluated(handArray[`p${focusedHand}`]);
   if (endPlayer) {
     runDealer();
-    // setTimeout(function () {
-    //   countWins();
-    //   // long wait for dealer to finish dealing
-    // }, cardDealDelay * 4);
+    buttonManagement();
   }
 }
 function stay() {
   shiftFocus();
-  // if shift focus is done, endPlayer=true
   if (endPlayer) {
     runDealer();
-    // setTimeout(function () {
-    //   countWins();
-
-    //   // long wait for dealer to finish dealing
-    // }, cardDealDelay);
   }
+  buttonManagement();
 }
 
 //MAIN SWQUENCE ENDS
@@ -855,7 +888,15 @@ function runDealer() {
   flipSecretCard();
   updateDealerSumBox();
   evaluate(handArray.d, true);
-  dealRestOfDealer();
+
+  if (busted) {
+    console.log('finish');
+    endDealer = true;
+    countWins();
+    buttonManagement();
+  } else {
+    dealRestOfDealer();
+  }
 }
 function dealRestOfDealer() {
   if (!endDealer) {
@@ -873,6 +914,9 @@ function dealRestOfDealer() {
   } else if (endDealer) {
     countWins();
   }
+  setTimeout(function () {
+    buttonManagement();
+  }, cardDealDelay * 2);
 }
 
 function countWins() {
@@ -969,6 +1013,9 @@ function shiftFocus() {
   }
   if (arrayOfHandIds.length === 0) {
     endPlayer = true;
+  }
+  if (focusedHand > 0) {
+    buttonManagement();
   }
 }
 
