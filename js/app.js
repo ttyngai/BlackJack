@@ -49,98 +49,12 @@ const dialogues = {
     `(Lose) It's rigged.`,
   ],
   t: [`(Tie) It's meant to be.`, `(Tie) It's destiny.`],
-  bj: ['(Lose) No f*^%ing way..', '(Win) BLACK JACK BABY!'],
   b: ['Ohh ffs...', 'You BUSTED!'],
 };
 
 /*----- app's state (variables) -----*/
-let dealtCards = {
-  d: [0],
-  p1: [0],
-};
-let maxRound = 7;
-let cardDealDelay = 500;
-let computerFlowDelay = 50;
-let isAutoPilot = false;
-let dealtCardId = 0;
 
 /*----- cached element references -----*/
-let gameEnded;
-
-function autoPilot() {
-  // min is 50
-  buttonStatus.r.removeEventListener('click', reset);
-  buttonStatus.r.addEventListener('click', reloadPage);
-  buttonStatus.r.innerHTML = 'Exit';
-  buttonStatus.d.remove();
-  buttonStatus.h.remove();
-  buttonStatus.s.remove();
-  enableResetButton();
-  isAutoPilot = true;
-  cardDealDelay = 300;
-  startMission();
-  runAutoPilot();
-}
-
-function runAutoPilot() {
-  setTimeout(function () {
-    deal();
-    setTimeout(function () {
-      autoHit();
-      // cardDealDelay needs to be above 4.5 to be reliable in counting 17 @50ms
-    }, cardDealDelay * 6);
-    // cardDealDelay needs to be above 4 to not error out @ 50ms
-  }, cardDealDelay * 4);
-}
-
-function autoHit() {
-  let playersSum = dealtCards.p1.reduce((a, b) => a + b);
-  // Dealer has 4 - 6, player has 12-16, should stay
-  if (
-    !gameEnded &&
-    dealtCards.d[1] >= 4 &&
-    dealtCards.d[1] <= 6 &&
-    playersSum >= 12 &&
-    playersSum <= 16
-  ) {
-    stay();
-    setTimeout(function () {
-      runAutoPilot();
-    }, cardDealDelay);
-  }
-  // Dealer has 2 or 3, player has 13-16, should stay
-  else if (
-    !gameEnded &&
-    dealtCards.d[1] >= 2 &&
-    dealtCards.d[1] <= 3 &&
-    playersSum >= 13 &&
-    playersSum <= 16
-  ) {
-    stay();
-    setTimeout(function () {
-      runAutoPilot();
-    }, cardDealDelay);
-  } else if (!gameEnded && playersSum < 17) {
-    setTimeout(function () {
-      hit();
-      setTimeout(function () {
-        autoHit();
-      }, cardDealDelay);
-    }, cardDealDelay);
-  }
-  // Player has over 17, should stay
-  else if (!gameEnded && playersSum >= 17) {
-    stay();
-    setTimeout(function () {
-      runAutoPilot();
-      // cardDealDelay min *4
-    }, cardDealDelay * 4);
-  } else if (gameEnded) {
-    setTimeout(function () {
-      runAutoPilot();
-    }, cardDealDelay);
-  }
-}
 
 //////////////CACHED ELEMENTS////////////////
 
@@ -193,12 +107,16 @@ let secretCardId,
   endHand,
   busted,
   playerBling;
-let endGame = false;
+
 let endPlayer = false;
 let endDealer = false;
 let dealerHasBlackJack = false;
 let focusedHand = 0;
 let newHandId = 0;
+// forAutoPilot use
+let gameEnded = false;
+let cardDealDelay = 500;
+let computerFlowDelay = 50;
 ////////////CONSTANT ENDS/////////////
 /*----- event listeners -----*/
 buttonStatus.sm.addEventListener('click', startMission);
@@ -231,8 +149,6 @@ function startMission() {
   document.getElementById('coverPage').classList.add('introFadeOut');
   setTimeout(function () {
     document.getElementById('coverPage').remove();
-    scoreBoxBling(true);
-    scoreBoxBling(false);
   }, 2000);
 }
 
@@ -240,6 +156,7 @@ function runMasterFlow() {
   masterFlow();
 }
 function masterFlow(card1, card2, card3, card4) {
+  buttonStatus.st.innerHTML = 'Again';
   disableStartButton();
   disableSplitButton();
   disableDoubleButton();
@@ -274,15 +191,19 @@ function masterFlow(card1, card2, card3, card4) {
 
   dealerInitSequence(card1, card2);
   setTimeout(function () {
-    playerInitSequence(card3, card4);
+    if (!dealerHasBlackJack) {
+      playerInitSequence(card3, card4);
+    } else {
+      countWins();
+    }
     // cardDealDelay needs to be more than Old hand cardDealDelay, at least 1.105
-  }, cardDealDelay * 1.5);
+  }, cardDealDelay * 2);
 }
 
 // MAIN SEQUENCE START
 function dealerInitSequence(card1, card2) {
   dealerWinNum = 0;
-  endGame = false;
+
   endDealer = false;
   dealersDialogue();
   dealerHasBlackJack = false;
@@ -295,14 +216,17 @@ function dealerInitSequence(card1, card2) {
   setTimeout(function () {
     dealCard(handArray.d, 'dealersArray', true, true, card2);
   }, cardDealDelay);
-  // Check blackjack
-  if (checkDealerForBlackJack()) {
-    endGame = true;
-    endPlayer = true;
-    endDealer = true;
-    dealerHasBlackJack = true;
-    countWins();
-  }
+  // Check blackjack need delay
+
+  setTimeout(function () {
+    if (checkDealerForBlackJack()) {
+      endPlayer = true;
+      endDealer = true;
+      dealerHasBlackJack = true;
+      flipSecretCard();
+      buttonManagement();
+    }
+  }, cardDealDelay * 2);
 }
 
 function playerInitSequence(card3, card4) {
@@ -563,8 +487,10 @@ function dealRestOfDealer() {
 function countWins() {
   let playerSumBoxTotal = [];
   let dealerSum = parseInt(sumBox.d.innerHTML);
-  for (i = 1; i <= Object.keys(sumBox).length - 1; i++) {
-    playerSumBoxTotal.push(parseInt(sumBox[`p${i}`].innerHTML));
+  if (!dealerHasBlackJack) {
+    for (i = 1; i <= Object.keys(sumBox).length - 1; i++) {
+      playerSumBoxTotal.push(parseInt(sumBox[`p${i}`].innerHTML));
+    }
   }
   // player win conditions
   for (i = 0; i < playerSumBoxTotal.length; i++) {
@@ -591,7 +517,7 @@ function countWins() {
     }
   }
   if (dealerHasBlackJack) {
-    addScoreIsPlayer(false);
+    addScoreIsPlayer(false, 1);
   }
 }
 function addScoreIsPlayer(isPlayer, multiple) {
@@ -825,12 +751,10 @@ function scoreBoxBlingIsPlayer(isPlayer) {
 }
 
 function buttonBling(buttonId) {
-  if (!isAutoPilot) {
-    document.getElementById(buttonId).classList.remove('buttonBling');
-    setTimeout(function () {
-      document.getElementById(buttonId).classList.add('buttonBling');
-    }, computerFlowDelay);
-  }
+  document.getElementById(buttonId).classList.remove('buttonBling');
+  setTimeout(function () {
+    document.getElementById(buttonId).classList.add('buttonBling');
+  }, computerFlowDelay);
 }
 
 function dealersDialogue() {
@@ -949,4 +873,188 @@ function enableStayButton() {
 function disableStayButton() {
   buttonStatus.s.disabled = true;
   buttonStatus.s.style.background = disabledButtonColor;
+}
+
+function autoPilot() {
+  // min is 50
+  buttonStatus.e.innerHTML = 'Exit';
+  buttonStatus.st.remove();
+  buttonStatus.sp.remove();
+  buttonStatus.d.remove();
+  buttonStatus.h.remove();
+  buttonStatus.s.remove();
+  cardDealDelay = 300;
+  startMission();
+  ////Temporary not running this yet
+  // runAutoPilot();
+}
+
+function runAutoPilot() {
+  masterFlow();
+  setTimeout(function () {
+    autoHit();
+    setTimeout(function () {
+      autoHit();
+      // cardDealDelay needs to be above 4.5 to be reliable in counting 17 @50ms
+    }, cardDealDelay * 6);
+    // cardDealDelay needs to be above 4 to not error out @ 50ms
+  }, cardDealDelay * 6);
+}
+
+function autoHit() {
+  let playersSum = handArray[`p${focusedHand}`].reduce((a, b) => a + b);
+  // Dealer has 4 - 6, player has 12-16, should stay
+  if (
+    !endHand &&
+    handArray.d[0] >= 4 &&
+    handArray.d[0] <= 6 &&
+    playersSum >= 12 &&
+    playersSum <= 16
+  ) {
+    stay();
+    setTimeout(function () {
+      console.log('stopped 1');
+      autoHit();
+    }, cardDealDelay);
+  }
+
+  // Dealer has 2 or 3, player has 13-16, should stay
+  else if (
+    !endHand &&
+    handArray.d[0] >= 2 &&
+    handArray.d[0] <= 3 &&
+    playersSum >= 13 &&
+    playersSum <= 16
+  ) {
+    stay();
+    setTimeout(function () {
+      console.log('stopped 2');
+      autoHit();
+    }, cardDealDelay);
+  } else if (!endHand && playersSum < 17) {
+    setTimeout(function () {
+      console.log('stopped 3');
+      hit();
+      setTimeout(function () {
+        console.log('stopped 3.5');
+        autoHit();
+      }, cardDealDelay);
+    }, cardDealDelay);
+  }
+  // Player has over 17, should stay
+  else if (!endHand && playersSum >= 17) {
+    stay();
+    setTimeout(function () {
+      console.log('stopped 4');
+      runAutoPilot();
+      // cardDealDelay min *4
+    }, cardDealDelay * 4);
+  }
+  // if game ended, will start again
+  else if (endGame) {
+    setTimeout(function () {
+      console.log('stopped 5');
+      runAutoPilot();
+    }, cardDealDelay * 6);
+  }
+}
+
+function repeatCalculateHand() {
+  // as long as !handEnded = true(not ended), will evaluate current Sum and dealer's to see what action to take
+  let dealerSum = handArray.d[0];
+  let playerSum = parseInt(sumBox[`p${focusedHand}`].innerHTML);
+  ////// split//////////////
+  if (
+    !handEnded &&
+    handArray[`p${focusedHand}`][0] === handArray[`p${focusedHand}`][1]
+  ) {
+    ///////player 2/2 3/3, dealer 2-7
+    if (
+      dealerSum <= 7 &&
+      dealerSum > 1 &&
+      handArray[`p${focusedHand}`][0] >= 2 &&
+      handArray[`p${focusedHand}`][0] <= 3
+    ) {
+      setTimeout(function () {
+        something();
+        repeatCalculateHand();
+      }, cardDealDelay);
+    }
+    ///////player 4/4, dealer 5-6
+    if (
+      dealerSum === 5 &&
+      dealerSum === 6 &&
+      handArray[`p${focusedHand}`][0] === 4
+    ) {
+      setTimeout(function () {
+        something();
+        repeatCalculateHand();
+      }, cardDealDelay);
+    }
+    if (
+      dealerSum === 5 &&
+      dealerSum === 6 &&
+      handArray[`p${focusedHand}`][0] === 4
+    ) {
+      setTimeout(function () {
+        something();
+        repeatCalculateHand();
+      }, cardDealDelay);
+    }
+    if (
+      dealerSum >= 2 &&
+      dealerSum <= 6 &&
+      ((handArray[`p${focusedHand}`][0] >= 6 &&
+        handArray[`p${focusedHand}`][0] <= 9) ||
+        handArray[`p${focusedHand}`][0] === 1)
+    ) {
+      setTimeout(function () {
+        something();
+        repeatCalculateHand();
+      }, cardDealDelay);
+    }
+    if (dealerSum === 7 && handArray[`p${focusedHand}`][0] === 7) {
+      setTimeout(function () {
+        something();
+        repeatCalculateHand();
+      }, cardDealDelay);
+    }
+    if (
+      ((dealerSum >= 7 && dealerSum <= 10) || dealerSum === 1) &&
+      ((handArray[`p${focusedHand}`][0] >= 7 &&
+        handArray[`p${focusedHand}`][0] <= 10) ||
+        handArray[`p${focusedHand}`][0] === 1) &&
+      ((dealerSum != 9 && handArray[`p${focusedHand}`][0] === 7) ||
+        (dealerSum != 10 && handArray[`p${focusedHand}`][0] === 7) ||
+        (dealerSum != 1 && handArray[`p${focusedHand}`][0] === 7))
+    ) {
+      setTimeout(function () {
+        something();
+        repeatCalculateHand();
+      }, cardDealDelay);
+    }
+  }
+
+  // double
+  if (!handEnded) {
+    setTimeout(function () {
+      something();
+      repeatCalculateHand();
+    }, cardDealDelay);
+  }
+
+  // hit
+  if (!handEnded) {
+    setTimeout(function () {
+      something();
+      repeatCalculateHand();
+    }, cardDealDelay);
+  }
+  // stay
+  if (!handEnded) {
+    setTimeout(function () {
+      something();
+      repeatCalculateHand();
+    }, cardDealDelay);
+  }
 }
