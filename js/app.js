@@ -1,4 +1,4 @@
-/*----- constants -----*/
+//Constants//////////////////////////////
 const enabledButtonColor = '#0d331f';
 const enabledHintColor = '#ffdd01';
 const disabledButtonColor = '#06170e';
@@ -20,7 +20,7 @@ const ranks = [
   'K',
 ];
 
-// dialogues (Win/loss message)
+// Dialogues (Win/loss message)
 const dialogues = {
   c: [
     'Come at me.',
@@ -61,7 +61,7 @@ const hintDialogues = {
   q: [`Quiet.`, `Shut it.`, `Not now.`, `Pokerface please.`, `Can we start?`],
 };
 
-/*----- app's state (variables) -----*/
+//Variables//////////////////////////////
 let handArray = {
   d: [],
   p1: [],
@@ -100,7 +100,7 @@ let cardDealDelay = 500;
 let computerFlowDelay = 20;
 let resetButtonAvailable = false;
 
-/*----- cached element references -----*/
+//Cached Elements//////////////////////////////
 let scoreBox = {
   d: document.getElementById('dealersScoreBox'),
   p: document.getElementById('playersScoreBox'),
@@ -124,7 +124,7 @@ let dialogueContainer = {
   p: document.getElementById('playerSays'),
 };
 
-/*----- event listeners -----*/
+//Event Listeners//////////////////////////////
 buttonStatus.sm.addEventListener('click', startMission);
 buttonStatus.ap.addEventListener('click', handleAutoPilot);
 buttonStatus.st.addEventListener('click', runInit);
@@ -134,7 +134,7 @@ buttonStatus.h.addEventListener('click', runHit);
 buttonStatus.s.addEventListener('click', stand);
 buttonStatus.hint.addEventListener('click', runHint);
 
-/*----- functions -----*/
+//Functions//////////////////////////////
 disableSplitButton();
 disableDoubleButton();
 disableHitButton();
@@ -142,7 +142,7 @@ disableStandButton();
 scoreBox.d.innerHTML = 0;
 scoreBox.p.innerHTML = 0;
 
-// START MISSION from cover page
+//Start mission//////////////////////////////
 function startMission() {
   document.getElementById('introContainer').remove();
   document.getElementById('coverPage').classList.add('introFadeOut');
@@ -150,6 +150,7 @@ function startMission() {
     document.getElementById('coverPage').remove();
   }, 2000);
 }
+//For restarting game when start is pressed
 function runInit() {
   dealersDialogue();
   playersDialogue();
@@ -158,6 +159,7 @@ function runInit() {
   runningAutoPilot = false;
   buttonStatus.ap.innerHTML = 'Auto';
   buttonStatus.st.innerHTML = 'Again';
+  //Deal delay to make sure buttons come on
   setTimeout(function () {
     disableStartButton();
     disableSplitButton();
@@ -167,6 +169,7 @@ function runInit() {
     enableHintButton();
   }, cardDealDelay);
 }
+//Initializes Game//////////////////////////////
 function init(card1, card2, card3, card4) {
   disableStartButton();
   disableSplitButton();
@@ -192,7 +195,6 @@ function init(card1, card2, card3, card4) {
     p1: document.getElementById('playersSumBox'),
   };
   arrayOfHandIds = [];
-
   document.getElementById('dealersArray').innerHTML = '';
   document.getElementById('multiHandsContainer').innerHTML = '';
   document.getElementById(
@@ -212,7 +214,7 @@ function init(card1, card2, card3, card4) {
   }, cardDealDelay * 2);
 }
 
-// MAIN SEQUENCE START
+//Deal Dealer//////////////////////////////
 function dealerInitSequence(card1, card2) {
   dealerWinNum = 0;
   endDealer = false;
@@ -239,7 +241,7 @@ function dealerInitSequence(card1, card2) {
     }
   }, cardDealDelay);
 }
-
+//Deal Player//////////////////////////////
 function playerInitSequence(card3, card4) {
   // index of 1st hand
   playerWinNum = 0;
@@ -283,7 +285,8 @@ function playerInitSequence(card3, card4) {
     buttonManagement();
   }, cardDealDelay * 1.1);
 }
-//Split/////////////////////////////////////////////////////
+
+//Split//////////////////////////////
 function runSplit() {
   split();
 }
@@ -374,7 +377,7 @@ function split(cardA, cardB) {
     // Want to have buttonManagement invoked at the end
   }, cardDealDelay * 1.2);
 }
-//DOUBLE/////////////////////////////////////////////////////
+//DOUBLE//////////////////////////////
 function runDouble() {
   double();
 }
@@ -405,7 +408,7 @@ function double(num) {
   }, computerFlowDelay);
 }
 
-//HIT/////////////////////////////////////////////////////
+//HIT//////////////////////////////
 function runHit() {
   hit();
 }
@@ -430,7 +433,7 @@ function hit(num, isDoubleMode) {
   }
   buttonManagement();
 }
-//STAND/////////////////////////////////////////////////////
+//STAND//////////////////////////////
 function stand() {
   playersDialogue();
   dealersDialogue();
@@ -443,7 +446,8 @@ function stand() {
   buttonManagement();
 }
 
-//HELPER FUNCTIONS/////////////////////////////////////////////////////
+//HELPER FUNCTIONS//////////////////////////////
+//Run dealer when player ends turn//////////////////////////////
 function runDealer() {
   flipSecretCard();
   updateDealerSumBox();
@@ -453,12 +457,14 @@ function runDealer() {
   for (i = 1; i <= Object.keys(sumBox).length - 1; i++) {
     playerSumBoxTotal.push(parseInt(sumBox[`p${i}`].innerHTML));
   }
+  // counts how many round is busted
   let count = 0;
   playerSumBoxTotal.forEach(function (sum) {
     if (sum > 21) {
       count++;
     }
   });
+  // compare busted rounds vs length to see if dealer needs to open
   if (count === playerSumBoxTotal.length) {
     endDealer = true;
     countWins();
@@ -470,7 +476,7 @@ function runDealer() {
   }
 }
 
-// Generate new card with Id attached to lookup
+//Deal new card//////////////////////////////
 function dealCard(handArray, targetArrayId, isDealer, isSecret, num) {
   cardIdNum++;
   // Generate number 1-13
@@ -538,7 +544,7 @@ function dealRestOfDealer() {
     buttonManagement();
   }, cardDealDelay * 2);
 }
-// Updates sumBoxPlayer
+//Updates sumBoxPlayer//////////////////////////////
 function updatePlayerSumBox(focusedHand, targetArray) {
   // assigns sumBox target document element
   sumBox[`p${focusedHand}`] = document.getElementById(
@@ -606,6 +612,7 @@ function countWins() {
     addScoreIsPlayer(false, 1);
   }
 }
+//Evaluate current state//////////////////////////////
 function evaluate(array, isDealer) {
   checkAndReduceAce(array);
   if (!isDealer) {
@@ -633,6 +640,9 @@ function handleEvaluated(isDealer, isDoubleMode) {
   }
   // round ended if arrayOfHandsIds.length=0
 }
+
+//Shift focus//////////////////////////////
+//Shift to next hand after current hand is done, if splitted
 function shiftFocus() {
   handEnded = true;
   document
@@ -643,7 +653,6 @@ function shiftFocus() {
     .classList.remove('borderBlingOn');
   // removed focusedHand aka changing focus
   arrayOfHandIds.splice(arrayOfHandIds.indexOf(focusedHand), 1);
-
   if (arrayOfHandIds.length >= 1) {
     handEnded = false;
     focusedHand = arrayOfHandIds[arrayOfHandIds.length - 1];
@@ -664,7 +673,7 @@ function shiftFocus() {
   }
   buttonManagement();
 }
-// Flip secret card
+//Flip secret card//////////////////////////////
 function flipSecretCard() {
   setTimeout(function () {
     document.getElementById(`card2`).classList.add('hiddenCardFlipOne');
@@ -676,7 +685,7 @@ function flipSecretCard() {
     setTimeout(function () {
       document.getElementById(`card2`).classList.add('hiddenCardFlipTwo');
     }, computerFlowDelay);
-  }, cardDealDelay);
+  }, computerFlowDelay);
 }
 // Check for dealers Black Jack
 function checkDealerForBlackJack() {
@@ -714,19 +723,8 @@ function randomSuits() {
   return Math.floor(Math.random() * 4);
 }
 
-//BLINGS/////////////////////////////////////////////////////
-// Score Box Bling
-function scoreBoxBling() {
-  scoreBox.p.classList.remove('scoreBoxBling');
-  setTimeout(function () {
-    scoreBox.p.classList.add('scoreBoxBling');
-  }, computerFlowDelay);
-
-  scoreBox.d.classList.remove('scoreBoxBling');
-  setTimeout(function () {
-    scoreBox.d.classList.add('scoreBoxBling');
-  }, computerFlowDelay);
-}
+//BLINGS//////////////////////////////
+//Score box jumps a little bit
 function scoreBoxBlingIsPlayer(isPlayer) {
   if (isPlayer) {
     scoreBox.p.classList.remove('scoreBoxBling');
@@ -740,6 +738,7 @@ function scoreBoxBlingIsPlayer(isPlayer) {
     }, computerFlowDelay);
   }
 }
+// Button jumps a little bit
 function buttonBling(buttonId) {
   document.getElementById(buttonId).classList.remove('buttonBling');
   setTimeout(function () {
@@ -747,7 +746,7 @@ function buttonBling(buttonId) {
   }, computerFlowDelay);
 }
 
-//DIALOGUES/////////////////////////////////////////////////////
+//DIALOGUES//////////////////////////////
 function dealersDialogue() {
   dialogueContainer.d.innerHTML = dialogues.c[randomDialogue()];
 }
@@ -777,6 +776,7 @@ function bustedDialogue() {
   dialogueContainer.d.innerHTML = '';
   dialogueContainer.d.innerHTML = dialogues.b[1];
 }
+//Help button for hints//////////////////////////////
 function runHint() {
   disableHintButton();
   // If Clicker is set to true, need to change below cardDealDelay to match click rate
@@ -804,10 +804,10 @@ function hintDialogue(action) {
   }
 }
 
-//ENABLE DISABLE BUTTON/////////////////////////////////////////////////////
-// Button enable/disable
+//Button toggling//////////////////////////////
+//Manages Buttons
 function buttonManagement() {
-  // splitable
+  // Splitable
   if (
     focusedHand &&
     handArray[`p${focusedHand}`].length === 2 &&
@@ -823,7 +823,7 @@ function buttonManagement() {
   } else {
     disableSplitButton();
   }
-  // Double-ABLE
+  // Doubleable
   if (focusedHand && handArray[`p${focusedHand}`].length === 2) {
     enableDoubleButton();
   } else {
@@ -908,7 +908,7 @@ function disableHitButton() {
   buttonStatus.h.disabled = true;
   buttonStatus.h.style.background = disabledButtonColor;
 }
-// stand
+// Stand
 function enableStandButton() {
   if (runningAutoPilot) {
     buttonStatus.s.style.background = enabledButtonColor;
@@ -921,7 +921,7 @@ function disableStandButton() {
   buttonStatus.s.disabled = true;
   buttonStatus.s.style.background = disabledButtonColor;
 }
-// hint
+// Hint
 function enableHintButton() {
   if (runningAutoPilot) {
     buttonStatus.hint.style.background = disabledButtonColor;
@@ -940,7 +940,7 @@ function disableHintButton() {
   buttonStatus.hint.style.color = '#FFFFFF';
 }
 
-//AUTOPILOT/////////////////////////////////////////////////////
+//AUTOPILOT//////////////////////////////
 // When button is clicked, handleAutoPilot is started
 // Autopilot times
 function handleAutoPilot() {
@@ -965,7 +965,6 @@ function runAutoPilot(delay, ratio) {
   buttonStatus.st.innerHTML = 'Start';
   buttonStatus.ap.innerHTML = 'Reset';
   resetButtonAvailable = true;
-
   autoPilot();
 }
 function autoPilot() {
@@ -982,7 +981,7 @@ function perfectStrategyClicker(autoClick) {
     playerCard1 = handArray[`p${focusedHand}`][0];
     playerCard2 = handArray[`p${focusedHand}`][1];
     playerSum = parseInt(sumBox[`p${focusedHand}`].innerHTML);
-    // split
+    // Split
     if (
       (playerCard1 === playerCard2 &&
         ((dealerCard1 >= 2 &&
@@ -1070,7 +1069,6 @@ function perfectStrategyClicker(autoClick) {
         hintDialogue('stand');
       }
     }
-    // All 4 state is complete
   }
   if (focusedHand === 0) {
     if (!runningAutoPilot) {
@@ -1078,13 +1076,13 @@ function perfectStrategyClicker(autoClick) {
     }
   }
 }
-// Tester
-function autoPilotFast() {
+//Speed tester//////////////////////////////
+function autoFast() {
   runAutoPilot(50, 10);
 }
-function autoPilotUltra() {
+function autoUltra() {
   runAutoPilot(5, 20);
 }
-function autoPilotInsane() {
+function autoInsane() {
   runAutoPilot(1, 100);
 }
