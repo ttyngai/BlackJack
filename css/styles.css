@@ -56,6 +56,7 @@ body {
   padding: 5px 10px;
   margin: 10px 0 20px 0;
   border-radius: 20px;
+  border: solid 1px var(--casinoYellow);
   font-weight: bold;
   background-color: var(--casinoRed);
   color: white;
@@ -682,6 +683,7 @@ img {
     font-size: 16px;
   }
   .introButtons {
+    border: solid 2px var(--casinoYellow);
     padding: 7px 20px;
     margin: 10px 0 20px 0;
     border-radius: 20px;

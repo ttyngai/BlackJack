@@ -32,7 +32,7 @@ const dialogues = {
   h: [
     `How'bout my Aston too?`,
     'I can smell the win.',
-    `Here I come.`,
+    `Here we go.`,
     `I'm winning.`,
     `I'll eat your lunch.`,
   ],
@@ -58,7 +58,7 @@ const hintDialogues = {
   d: [`Doubling is a good idea.`],
   h: [`I'd hit this.`],
   s: [`Let's just stand on this.`],
-  q: [`Quiet.`, `Shut it.`, `Chill out.`, `Pokerface please.`, `Wait.`],
+  q: [`Quiet.`, `Shut it.`, `Not now.`, `Pokerface please.`, `Can we start?`],
 };
 
 /*----- app's state (variables) -----*/
@@ -778,10 +778,11 @@ function bustedDialogue() {
 }
 function runHint() {
   disableHintButton();
-  perfectStrategyClicker(true);
+  // If Clicker is set to true, need to change below cardDealDelay to match click rate
+  perfectStrategyClicker(false);
   setTimeout(function () {
     enableHintButton();
-  }, cardDealDelay * 6);
+  }, cardDealDelay);
 }
 function hintDialogue(action) {
   if (action === 'split') {
@@ -831,6 +832,7 @@ function buttonManagement() {
   }
   if (endPlayer && endDealer) {
     enableStartButton();
+    disableHintButton();
     if (runningAutoPilot) {
       setTimeout(function () {
         autoPilot();
