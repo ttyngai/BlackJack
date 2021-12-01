@@ -126,7 +126,7 @@ let dialogueContainer = {
 
 /*----- event listeners -----*/
 buttonStatus.sm.addEventListener('click', startMission);
-buttonStatus.ap.addEventListener('click', runAutoPilot);
+buttonStatus.ap.addEventListener('click', handleAutoPilot);
 buttonStatus.st.addEventListener('click', runInit);
 buttonStatus.sp.addEventListener('click', runSplit);
 buttonStatus.d.addEventListener('click', runDouble);
@@ -934,18 +934,18 @@ function disableHintButton() {
 }
 
 //AUTOPILOT/////////////////////////////////////////////////////
-// When button is clicked, runAutoPilot is started
+// When button is clicked, handleAutoPilot is started
 // Autopilot times
-function runAutoPilot() {
+function handleAutoPilot() {
   if (resetButtonAvailable) {
     document.location.reload();
   } else {
     let delay = 250;
     let ratio = 10;
-    handleAutoPilot(delay, ratio);
+    runAutoPilot(delay, ratio);
   }
 }
-function handleAutoPilot(delay, ratio) {
+function runAutoPilot(delay, ratio) {
   cardDealDelay = delay;
   initAutoPilotDelay = cardDealDelay * ratio;
 
@@ -1070,4 +1070,8 @@ function perfectStrategyClicker(autoClick) {
       hintDialogue('');
     }
   }
+}
+// Tester
+function autoPilotFast() {
+  runAutoPilot(50, 10);
 }

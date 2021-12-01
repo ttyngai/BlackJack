@@ -733,7 +733,7 @@ img {
     margin: 0 0 3px 5px;
   }
   .handArray {
-    border: solid 4px var(--casinoRed);
+    border: solid 3px var(--casinoRed);
     height: 90px;
     border-radius: 20px;
     min-width: 450px;
