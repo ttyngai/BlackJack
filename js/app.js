@@ -175,14 +175,13 @@ function runMasterFlow() {
 }
 
 function masterFlow(card1, card2, card3, card4) {
-  ///////////// TEST;
+  //  for test card, change following items
 
-  // card1 = 5;
-  // card2 = 11;
+  // card1 = 1;
+  // card2 = 12;
   // card3 = 8;
   // card4 = 8;
 
-  ////////////// TEST;
   disableStartButton();
   disableSplitButton();
   disableDoubleButton();
@@ -251,7 +250,9 @@ function dealerInitSequence(card1, card2) {
       dealerHasBlackJack = true;
       updateDealerSumBox();
       flipSecretCard();
-      buttonManagement();
+      setTimeout(function () {
+        buttonManagement();
+      }, computerFlowDelay);
     }
   }, cardDealDelay);
 }
@@ -831,7 +832,7 @@ function runHint() {
   // true mean will click for you
   disableHintButton();
 
-  perfectStrategyClicker(false);
+  perfectStrategyClicker(true);
 
   setTimeout(function () {
     enableHintButton();
@@ -985,10 +986,26 @@ function disableHintButton() {
   buttonStatus.hint.style.color = '#FFFFFF';
 }
 // Autopilot times
-let clickProgramDelay = 700;
-runAutoPilot();
-function runAutoPilot() {
-  cardDealDelay = 100;
+
+function runAutoPilot(delay) {
+  // cardDeal @ 10 * 4 = 120
+  // cardDeal @ 10 * 5 = 60
+  // cardDeal @ 10 * 8 = 238
+  // cardDeal @ 10 * 10 = 200
+  // cardDeal @ 10 * 12 = 55
+  // cardDeal @ 10 * 15 = 33
+  // cardDeal @ 10 * 20 = 64
+  // cardDeal @ 10 * 20 = 51
+  // cardDeal @ 5 * 4 = 80
+  // cardDeal @ 5 * 5 = 498
+  // cardDeal @ 5 * 8 =
+  // cardDeal @ 5 * 10 =
+  // cardDeal @ 5 * 12 =
+  // cardDeal @ 5 * 15 =
+  // cardDeal @ 5 * 20 =
+  // cardDeal @ 5 * 20 =
+  cardDealDelay = 5;
+  initAutoPilotDelay = cardDealDelay * 8;
   disableAutoPilotButton();
   disableSplitButton();
   disableDoubleButton();
@@ -1004,7 +1021,7 @@ function autoPilot() {
   masterFlow();
   setTimeout(function () {
     perfectStrategyClicker(true);
-  }, clickProgramDelay);
+  }, initAutoPilotDelay);
 }
 
 function perfectStrategyClicker(autoClick) {

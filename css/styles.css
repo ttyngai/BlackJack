@@ -271,30 +271,6 @@ img {
   z-index: 1;
 }
 
-.doubleAnimation {
-  transform: rotate(360deg);
-  transition: all 0.5 ease-in-out;
-}
-.hiddenCardRotated {
-  transform: rotate(0) scaleX(0.01);
-}
-.cardDealAnimation {
-  transform: rotate(0deg) scale(0.5);
-  transition: all 0.5s ease-in-out;
-}
-.hiddenCardFlipOne {
-  transform: scaleX(0.01);
-  transition: all 0.5s ease-in-out;
-}
-.hiddenCardFlipTwo {
-  transform: scale(0.5);
-  transition: all 0.5s ease-in-out;
-}
-.cardFlipTwo {
-  transform: scale(-0.5, -0.5);
-  transition: transform 0.5s ease-in-out;
-}
-
 .card.small {
   font-size: 12px;
 }
@@ -774,20 +750,13 @@ img {
     transform: rotate(-20deg);
   }
   .hiddenCardRotated {
-    transform: rotate(0) scaleX(0.01);
+    transform: rotate(0) scaleX(0.001);
   }
   .cardDealAnimation {
     transform: rotate(0deg) scale(0.5);
     transition: all 0.5s ease-in-out;
   }
-  .hiddenCardFlipOne {
-    transform: scaleX(0.01);
-    transition: all 0.2s ease-in-out;
-  }
-  .hiddenCardFlipTwo {
-    transform: scale(0.5);
-    transition: all 0.2s ease-in-out;
-  }
+
   .double {
     font-size: 40px;
     margin: -6px 0 0 2px;
@@ -802,4 +771,20 @@ img {
 
 .borderBlingOn {
   border-color: var(--casinoYellow);
+}
+
+.hiddenCardRotated {
+  transform: rotate(0) scaleX(0.001);
+}
+.cardDealAnimation {
+  transform: rotate(0deg) scale(0.5);
+  transition: all 0.5s ease-in-out;
+}
+.hiddenCardFlipOne {
+  transform: scaleX(0.001);
+  transition: all 0.5s ease-in-out;
+}
+.hiddenCardFlipTwo {
+  transform: scale(0.5);
+  transition: all 0.5s ease-in-out;
 }
