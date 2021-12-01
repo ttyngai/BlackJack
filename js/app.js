@@ -811,7 +811,13 @@ function buttonManagement() {
   if (
     focusedHand &&
     handArray[`p${focusedHand}`].length === 2 &&
-    handArray[`p${focusedHand}`][0] === handArray[`p${focusedHand}`][1]
+    (handArray[`p${focusedHand}`][0] === handArray[`p${focusedHand}`][1] ||
+      cardValue[
+        document.getElementById(`playersArray${focusedHand}`).children[0].id
+      ] ===
+        cardValue[
+          document.getElementById(`playersArray${focusedHand}`).children[1].id
+        ])
   ) {
     enableSplitButton();
   } else {
