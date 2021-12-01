@@ -831,12 +831,13 @@ function buttonManagement() {
     disableStandButton();
   }
   if (endPlayer && endDealer) {
-    enableStartButton();
-    disableHintButton();
     if (runningAutoPilot) {
       setTimeout(function () {
         autoPilot();
       }, cardDealDelay * 3);
+    } else {
+      enableStartButton();
+      disableHintButton();
     }
   }
   if (runningAutoPilot) {
