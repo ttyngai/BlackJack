@@ -30,7 +30,7 @@ const dialogues = {
   ],
   h: [
     `How'bout my Aston too?`,
-    'Kitchen sink incoming.',
+    'I can smell the win.',
     `Here I come.`,
     `I'm winning.`,
     `I'll eat your lunch.`,
@@ -143,8 +143,7 @@ function init() {
   disableDoubleButton();
   disableHitButton();
   disableStandButton();
-  dealersDialogue();
-  playersDialogue();
+
   scoreBox.d.innerHTML = 0;
   scoreBox.p.innerHTML = 0;
 }
@@ -159,20 +158,31 @@ function startMission() {
 }
 
 function runMasterFlow() {
+  dealersDialogue();
+  playersDialogue();
   masterFlow();
   enableAutoPilotButton();
   runningAutoPilot = false;
   buttonStatus.st.innerHTML = 'Again';
+  setTimeout(function () {
+    disableStartButton();
+    disableSplitButton();
+    disableDoubleButton();
+    disableHitButton();
+    disableStandButton();
+    enableHintButton();
+  }, cardDealDelay);
 }
 
 function masterFlow(card1, card2, card3, card4) {
-  // // Test numbers
-  // card1 = 1;
-  // card2 = 11;
-  // card3 = 6;
-  // card4 = 4;
-  // // Test end
+  // TEST
 
+  card1 = 5;
+  card2 = 5;
+  card3 = 8;
+  card4 = 8;
+
+  // TEST
   disableStartButton();
   disableSplitButton();
   disableDoubleButton();
@@ -359,7 +369,7 @@ function split(cardA, cardB) {
     document
       .getElementById(`${transferCardId}`)
       .classList.add('cardDealAnimation');
-  }, computerFlowDelay);
+  }, computerFlowDelay * 2);
 
   // deal old hand second card
   setTimeout(function () {
@@ -372,7 +382,7 @@ function split(cardA, cardB) {
       cardA
     );
     updatePlayerSumBox(originalHand, handArray);
-  }, computerFlowDelay);
+  }, computerFlowDelay * 2);
 
   // deal new hand second card
   setTimeout(function () {
@@ -388,7 +398,7 @@ function split(cardA, cardB) {
   setTimeout(function () {
     buttonManagement();
     // Want to have buttonManagement invoked at the end
-  }, cardDealDelay * 1.1);
+  }, cardDealDelay * 1.2);
 }
 function runDouble() {
   double();
@@ -821,7 +831,7 @@ function runHint() {
   // true mean will click for you
   disableHintButton();
 
-  perfectStrategyClicker(true);
+  perfectStrategyClicker(false);
 
   setTimeout(function () {
     enableHintButton();
@@ -971,9 +981,7 @@ function disableHintButton() {
 }
 
 function runAutoPilot() {
-  // min is 50
-
-  cardDealDelay = 200;
+  cardDealDelay = 400;
   disableAutoPilotButton();
   disableSplitButton();
   disableDoubleButton();
@@ -987,17 +995,18 @@ function runAutoPilot() {
 }
 
 function autoPilot() {
-  let autoPilotDelay = cardDealDelay * 10;
+  delay = cardDealDelay * 10;
+
   if (runningAutoPilot && !gameEnded) {
     perfectStrategyClicker(true);
     setTimeout(function () {
       autoPilot();
-    }, autoPilotDelay);
+    }, delay);
   } else if (runningAutoPilot && gameEnded) {
     masterFlow();
     setTimeout(function () {
       autoPilot();
-    }, autoPilotDelay);
+    }, delay);
   }
 }
 
@@ -1032,7 +1041,7 @@ function perfectStrategyClicker(autoClick) {
         split();
         buttonBling('split');
       }
-      if (runningAutoPilot) {
+      if (!runningAutoPilot && !gameEnded) {
         hintDialogue('split');
       }
     }
@@ -1048,7 +1057,7 @@ function perfectStrategyClicker(autoClick) {
         double();
         buttonBling('double');
       }
-      if (runningAutoPilot) {
+      if (!runningAutoPilot && !gameEnded) {
         hintDialogue('double');
       }
     }
@@ -1073,7 +1082,7 @@ function perfectStrategyClicker(autoClick) {
         hit();
         buttonBling('hit');
       }
-      if (runningAutoPilot) {
+      if (!runningAutoPilot && !gameEnded) {
         hintDialogue('hit');
       }
     }
@@ -1083,15 +1092,15 @@ function perfectStrategyClicker(autoClick) {
         stand();
         buttonBling('stand');
       }
-      if (runningAutoPilot) {
+      if (!runningAutoPilot && !gameEnded) {
         hintDialogue('stand');
       }
     }
     // all 4 state is complete
   }
   if (focusedHand === 0) {
-    if (runningAutoPilot) {
-      hintDialogue('split');
+    if (!runningAutoPilot) {
+      hintDialogue('');
     }
   }
 }
