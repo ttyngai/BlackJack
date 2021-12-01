@@ -270,10 +270,7 @@ img {
   transform: rotate(-20deg);
   z-index: 1;
 }
-.cardDealAnimation {
-  transform: rotate(0deg) scale(0.5);
-  transition: all 0.5s ease-in-out;
-}
+
 .doubleAnimation {
   transform: rotate(360deg);
   transition: all 0.5 ease-in-out;
@@ -781,19 +778,15 @@ img {
   }
   .cardDealAnimation {
     transform: rotate(0deg) scale(0.5);
-    transition: all 0.5s ease-in-out;
+    transition: all 0.1s ease-in-out;
   }
   .hiddenCardFlipOne {
     transform: scaleX(0.01);
-    transition: all 0.5s ease-in-out;
+    transition: all 0.1s ease-in-out;
   }
   .hiddenCardFlipTwo {
     transform: scale(0.5);
-    transition: all 0.5s ease-in-out;
-  }
-  .cardFlipTwo {
-    transform: scale(-0.5, -0.5);
-    transition: transform 0.5s ease-in-out;
+    transition: all 0.1s ease-in-out;
   }
   .double {
     font-size: 40px;
