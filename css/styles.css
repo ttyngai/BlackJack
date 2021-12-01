@@ -200,7 +200,7 @@ img {
   text-align: left;
   height: 50px;
   border-radius: 15px;
-  width: 240px;
+  min-width: 260px;
   font-size: 50px;
   padding: 0px 0px 0 10px;
 }
@@ -699,7 +699,7 @@ img {
 
   .nameCard {
     font-size: 25px;
-    margin: 25px 15px;
+    margin: 25px 35px;
   }
 
   .dialogue {
@@ -723,14 +723,14 @@ img {
     border: solid 4px var(--casinoRed);
     height: 90px;
     border-radius: 20px;
-    width: 400px;
+    min-width: 450px;
     font-size: 55px;
     padding: 0 15px;
   }
 
   .scoreBox {
     padding: 5px 20px;
-    margin: 60px 60px;
+    margin: 55px 75px;
     font-size: 50px;
     border-radius: 10px;
     min-width: 40px;
@@ -768,11 +768,9 @@ img {
     margin: 0 0 0 190px;
   }
 }
-
 .borderBlingOn {
   border-color: var(--casinoYellow);
 }
-
 .hiddenCardRotated {
   transform: rotate(0) scaleX(0.001);
 }
