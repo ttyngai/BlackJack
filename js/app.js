@@ -168,12 +168,6 @@ function runInit() {
   }, cardDealDelay);
 }
 function init(card1, card2, card3, card4) {
-  // Test
-  card1 = 6;
-  card2 = 6;
-  card3 = 1;
-  card4 = 1;
-
   disableStartButton();
   disableSplitButton();
   disableDoubleButton();
@@ -294,8 +288,6 @@ function runSplit() {
   split();
 }
 function split(cardA, cardB) {
-  cardA = 4;
-  cardB = 1;
   disableSplitButton();
   // index of generated hand
   newHandId++;
@@ -348,35 +340,35 @@ function split(cardA, cardB) {
   document.getElementById(
     `playersArray${focusedHand}`
   ).innerHTML += `<div id="${transferCardId}" class="card ${cardClassToTransfer}"></div>`;
-  // setTimeout(function () {
-  document
-    .getElementById(`${transferCardId}`)
-    .classList.add('cardDealAnimation');
-  // }, computerFlowDelay);
+  setTimeout(function () {
+    document
+      .getElementById(`${transferCardId}`)
+      .classList.add('cardDealAnimation');
+  }, computerFlowDelay * 2);
   // deal old hand second card
-  // setTimeout(function () {
-  // run deal card
-  dealCard(
-    handArray[`p${originalHand}`],
-    `playersArray${originalHand}`,
-    null,
-    null,
-    cardA
-  );
-  updatePlayerSumBox(originalHand, handArray);
-  // }, computerFlowDelay * 1);
+  setTimeout(function () {
+    // run deal card
+    dealCard(
+      handArray[`p${originalHand}`],
+      `playersArray${originalHand}`,
+      null,
+      null,
+      cardA
+    );
+    updatePlayerSumBox(originalHand, handArray);
+  }, computerFlowDelay * 2);
   // deal new hand second card
-  // setTimeout(function () {
-  dealCard(
-    handArray[`p${newHandId}`],
-    `playersArray${newHandId}`,
-    null,
-    null,
-    cardB
-  );
-  updatePlayerSumBox(newHandId, handArray);
-  // }, computerFlowDelay * 2);
-  updatePlayerSumBox(newHandId, handArray);
+  setTimeout(function () {
+    dealCard(
+      handArray[`p${newHandId}`],
+      `playersArray${newHandId}`,
+      null,
+      null,
+      cardB
+    );
+    updatePlayerSumBox(newHandId, handArray);
+    evaluate(handArray[`p${focusedHand}`]);
+  }, cardDealDelay);
   setTimeout(function () {
     buttonManagement();
     // Want to have buttonManagement invoked at the end
@@ -819,13 +811,7 @@ function buttonManagement() {
   if (
     focusedHand &&
     handArray[`p${focusedHand}`].length === 2 &&
-    (handArray[`p${focusedHand}`][0] === handArray[`p${focusedHand}`][1] ||
-      cardValue[
-        document.getElementById(`playersArray${focusedHand}`).children[0].id
-      ] ===
-        cardValue[
-          document.getElementById(`playersArray${focusedHand}`).children[1].id
-        ])
+    handArray[`p${focusedHand}`][0] === handArray[`p${focusedHand}`][1]
   ) {
     enableSplitButton();
   } else {
@@ -1089,4 +1075,10 @@ function perfectStrategyClicker(autoClick) {
 // Tester
 function autoPilotFast() {
   runAutoPilot(50, 10);
+}
+function autoPilotUltra() {
+  runAutoPilot(5, 20);
+}
+function autoPilotInsane() {
+  runAutoPilot(1, 100);
 }
