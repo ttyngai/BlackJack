@@ -16,7 +16,7 @@ With `setTimeout()` functions to simulate some delays, I also needed to make sur
 
 **BONUS: This game is sized for both desktop and mobile phone screens. The breakpoint is set to 800px**
 
-**BONUS #2: There is a HELP button in which Bond will help you choose the action that has highest probability of winning**
+**BONUS #2: There is a HELP button in which Bond will help you choose the action that has highest probability of winning. This is based on "perfect blackjack strategies" without soft ACE rules**
 
 **BONUS #3: Autopilot mode required careful timing in order for animations to work properly.**
 
@@ -34,4 +34,4 @@ With `setTimeout()` functions to simulate some delays, I also needed to make sur
 
 https://ttyngai.github.io/BlackJack/
 
-**Future improvements in the future would be to add bank account functions.**
+**Future improvements in the future would be to add bank account functions. Also can have 3D viewports would be quiet cool. Could also imporve on soft ACE rule**
