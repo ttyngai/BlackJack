@@ -685,7 +685,7 @@ function flipSecretCard() {
     setTimeout(function () {
       document.getElementById(`card2`).classList.add('hiddenCardFlipTwo');
     }, computerFlowDelay);
-  }, computerFlowDelay);
+  }, cardDealDelay);
 }
 // Check for dealers Black Jack
 function checkDealerForBlackJack() {
@@ -974,6 +974,8 @@ function autoPilot() {
   }, initAutoPilotDelay);
   // Enable reset button
 }
+
+//Perfect strategy advisor/clicker(auto)//////////////////////////////
 function perfectStrategyClicker(autoClick) {
   let dealerCard1, playerCard1, playerCard2, playerSum;
   if (focusedHand != 0) {
@@ -1080,6 +1082,7 @@ function perfectStrategyClicker(autoClick) {
 function autoFast() {
   runAutoPilot(50, 10);
 }
+//Ultra ran 1700 rounds before crashing
 function autoUltra() {
   runAutoPilot(5, 20);
 }
