@@ -221,7 +221,7 @@ img {
 }
 #hint {
   background-color: var(--brightYellow);
-  border: solid 1px var(--brightYellow);
+  border: dotted 1px var(--casinoRed);
   color: black;
   font-style: bold;
   border-radius: 20px;
@@ -768,7 +768,7 @@ img {
     margin: -6px 0 0 2px;
   }
   #hint {
-    border: solid 2px var(--brightYellow);
+    border: dotted 2px var(--casinoRed);
     border-radius: 20px;
     padding: 5px 10px;
     font-size: 18px;
