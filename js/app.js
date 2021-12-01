@@ -2,6 +2,7 @@
 const enabledButtonColor = '#0d331f';
 const enabledHintColor = '#ffdd01';
 const disabledButtonColor = '#06170e';
+const autoPilotBlue = '#042483';
 const suits = ['s', 'c', 'd', 'h'];
 const ranks = [
   'A',
@@ -843,7 +844,7 @@ function buttonManagement() {
 // AutoPilot button
 function enableAutoPilotButton() {
   buttonStatus.ap.disabled = false;
-  buttonStatus.ap.style.background = enabledButtonColor;
+  buttonStatus.ap.style.background = autoPilotBlue;
 }
 function disableAutoPilotButton() {
   buttonStatus.ap.disabled = true;
