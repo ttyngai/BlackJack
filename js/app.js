@@ -175,14 +175,14 @@ function runMasterFlow() {
 }
 
 function masterFlow(card1, card2, card3, card4) {
-  // TEST
+  ///////////// TEST;
 
-  card1 = 5;
-  card2 = 5;
+  card1 = 1;
+  card2 = 11;
   card3 = 8;
   card4 = 8;
 
-  // TEST
+  ////////////// TEST;
   disableStartButton();
   disableSplitButton();
   disableDoubleButton();
@@ -243,10 +243,7 @@ function dealerInitSequence(card1, card2) {
   // Delay second card for cardDealDelay
   setTimeout(function () {
     dealCard(handArray.d, 'dealersArray', true, true, card2);
-  }, cardDealDelay);
-  // Check blackjack need delay
 
-  setTimeout(function () {
     if (checkDealerForBlackJack()) {
       endPlayer = true;
       endDealer = true;
@@ -256,7 +253,10 @@ function dealerInitSequence(card1, card2) {
       flipSecretCard();
       buttonManagement();
     }
-  }, cardDealDelay * 2);
+  }, cardDealDelay);
+  // Check blackjack need delay
+
+  setTimeout(function () {}, cardDealDelay);
 }
 
 function playerInitSequence(card3, card4) {
@@ -981,7 +981,7 @@ function disableHintButton() {
 }
 
 function runAutoPilot() {
-  cardDealDelay = 400;
+  cardDealDelay = 200;
   disableAutoPilotButton();
   disableSplitButton();
   disableDoubleButton();
@@ -995,7 +995,7 @@ function runAutoPilot() {
 }
 
 function autoPilot() {
-  delay = cardDealDelay * 10;
+  delay = cardDealDelay * 12;
 
   if (runningAutoPilot && !gameEnded) {
     perfectStrategyClicker(true);
