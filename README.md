@@ -12,13 +12,15 @@ A major challenge was to animate cards dealt and assigning `id` to track which o
 
 An even bigger challenge was to have the second hidden card simultaneously store it's numeric value and showing an SVG with the backside. The backside card element `<div>` generated carries a unique `id` generated. When hands are to be shown, the code applies the animation to flip the downwards facing card halfway `scaleX()`, while finds and swaps the facecard `<div>` carrying the corresponding `id`, applies the correct animation classes again to show the card being flipped back, and showing the correct SVG.
 
+an even more massive challenge was the apply the split function. The need for tracking the card and value became difficult as cards are being generated and moved to different rows and caluculated. As a result rows have their own IDs as well, as generation, animation and scoring requires it.
+
 With `setTimeout()` functions to simulate some delays, I also needed to make sure buttons can't be pressed again during timeout. Hence there is a block of code to manage button enable/disable with corresponding color change.
 
 **BONUS: This game is sized for both desktop and mobile phone screens. The breakpoint is set to 800px**
 
 **BONUS #2: There is a HELP button in which Bond will help you choose the action that has highest probability of winning. This is based on "perfect blackjack strategies" without soft ACE rules**
 
-**BONUS #3: Autopilot mode required careful timing in order for animations to work properly.**
+**BONUS #3: Autopilot mode required careful timing in order for animations to work properly. As a nice touch the buttons chosen by autopilot will bounce**
 
 ### **Gameplay Screenshots:**
 

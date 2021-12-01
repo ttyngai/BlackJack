@@ -9,7 +9,7 @@
   --scoreBackground: #9b880c6b;
   --scoreBoxBlingBackground: #9b880cd0;
   --brightYellow: #ffdd01;
-
+  --autoPilotBlue: #042483;
   --scoreText: white;
 }
 
@@ -100,7 +100,7 @@ img {
 }
 
 #gameTitle {
-  border: solid 3px var(--casinoRed);
+  border: dotted 2px var(--casinoRed);
   color: var(--interfaceGrey);
   text-align: center;
   border-radius: 30px;
@@ -214,6 +214,10 @@ img {
   color: var(--buttonText);
   margin: 5px 0;
   padding: 3px 0;
+  border: dotted 1px var(--casinoYellow);
+}
+.autoPilotButton {
+  background-color: var(--autoPilotBlue);
 }
 #hint {
   background-color: var(--brightYellow);
@@ -693,7 +697,9 @@ img {
   .controlButtons {
     width: 90px;
     padding: 5px 5px;
+    margin: 10px 0px;
     font-size: 20px;
+    border: dotted 2px var(--casinoYellow);
   }
 
   .nameCard {
@@ -736,7 +742,7 @@ img {
     min-height: 60px;
   }
   #gameTitle {
-    border: solid 4px var(--casinoRed);
+    border: dotted 5px var(--casinoRed);
     border-radius: 30px;
     font-size: 35px;
     padding: 10px 30px;
