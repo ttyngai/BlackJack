@@ -99,7 +99,7 @@ let newHandId = 0;
 let gameEnded = true;
 let handEnded = true;
 let cardDealDelay = 500;
-let computerFlowDelay = 50;
+let computerFlowDelay = 20;
 /*----- cached element references -----*/
 
 let scoreBox = {
@@ -177,10 +177,10 @@ function runMasterFlow() {
 function masterFlow(card1, card2, card3, card4) {
   ///////////// TEST;
 
-  card1 = 1;
-  card2 = 11;
-  card3 = 8;
-  card4 = 8;
+  // card1 = 1;
+  // card2 = 11;
+  // card3 = 8;
+  // card4 = 8;
 
   ////////////// TEST;
   disableStartButton();
@@ -254,9 +254,6 @@ function dealerInitSequence(card1, card2) {
       buttonManagement();
     }
   }, cardDealDelay);
-  // Check blackjack need delay
-
-  setTimeout(function () {}, cardDealDelay);
 }
 
 function playerInitSequence(card3, card4) {
@@ -428,7 +425,7 @@ function double(num) {
 
           buttonManagement();
         }
-      }, cardDealDelay);
+      }, computerFlowDelay);
     }, cardDealDelay);
   }, computerFlowDelay);
 }
@@ -453,7 +450,9 @@ function hit(num, isDoubleMode) {
   handleEvaluated(null, isDoubleMode);
 
   if (endPlayer) {
-    runDealer();
+    setTimeout(function () {
+      runDealer();
+    }, computerFlowDelay);
   }
   buttonManagement();
 }
@@ -981,7 +980,7 @@ function disableHintButton() {
 }
 
 function runAutoPilot() {
-  cardDealDelay = 200;
+  cardDealDelay = 400;
   disableAutoPilotButton();
   disableSplitButton();
   disableDoubleButton();
@@ -995,18 +994,18 @@ function runAutoPilot() {
 }
 
 function autoPilot() {
-  delay = cardDealDelay * 12;
+  let autoPilotDelay = cardDealDelay * 8;
 
   if (runningAutoPilot && !gameEnded) {
     perfectStrategyClicker(true);
     setTimeout(function () {
       autoPilot();
-    }, delay);
+    }, autoPilotDelay);
   } else if (runningAutoPilot && gameEnded) {
     masterFlow();
     setTimeout(function () {
       autoPilot();
-    }, delay);
+    }, autoPilotDelay);
   }
 }
 
