@@ -177,7 +177,7 @@ function runMasterFlow() {
 function masterFlow(card1, card2, card3, card4) {
   ///////////// TEST;
 
-  // card1 = 1;
+  // card1 = 5;
   // card2 = 11;
   // card3 = 8;
   // card4 = 8;
@@ -835,7 +835,7 @@ function runHint() {
 
   setTimeout(function () {
     enableHintButton();
-  }, cardDealDelay * 3);
+  }, cardDealDelay * 6);
 }
 
 function hintDialogue(action) {
@@ -889,6 +889,11 @@ function buttonManagement() {
 
   if (endPlayer && endDealer) {
     enableStartButton();
+    if (runningAutoPilot) {
+      setTimeout(function () {
+        autoPilot();
+      }, cardDealDelay * 3);
+    }
   }
 }
 // AutoPilot button
@@ -979,9 +984,11 @@ function disableHintButton() {
   buttonStatus.hint.disabled = true;
   buttonStatus.hint.style.color = '#FFFFFF';
 }
-
+// Autopilot times
+let clickProgramDelay = 700;
+runAutoPilot();
 function runAutoPilot() {
-  cardDealDelay = 300;
+  cardDealDelay = 100;
   disableAutoPilotButton();
   disableSplitButton();
   disableDoubleButton();
@@ -989,25 +996,15 @@ function runAutoPilot() {
   disableStandButton();
   disableHintButton();
   runningAutoPilot = true;
-  masterFlow();
   buttonStatus.st.innerHTML = 'Start';
   autoPilot();
 }
 
 function autoPilot() {
-  let autoPilotDelay = cardDealDelay * 10;
-
-  if (runningAutoPilot && !gameEnded) {
+  masterFlow();
+  setTimeout(function () {
     perfectStrategyClicker(true);
-    setTimeout(function () {
-      autoPilot();
-    }, autoPilotDelay);
-  } else if (runningAutoPilot && gameEnded) {
-    masterFlow();
-    setTimeout(function () {
-      autoPilot();
-    }, autoPilotDelay);
-  }
+  }, clickProgramDelay);
 }
 
 function perfectStrategyClicker(autoClick) {
@@ -1039,6 +1036,9 @@ function perfectStrategyClicker(autoClick) {
     ) {
       if (autoClick) {
         split();
+        setTimeout(function () {
+          perfectStrategyClicker(autoClick);
+        }, cardDealDelay);
         buttonBling('split');
       }
       if (!runningAutoPilot && !gameEnded) {
@@ -1055,6 +1055,9 @@ function perfectStrategyClicker(autoClick) {
     ) {
       if (autoClick) {
         double();
+        setTimeout(function () {
+          perfectStrategyClicker(autoClick);
+        }, cardDealDelay);
         buttonBling('double');
       }
       if (!runningAutoPilot && !gameEnded) {
@@ -1080,6 +1083,9 @@ function perfectStrategyClicker(autoClick) {
     ) {
       if (autoClick) {
         hit();
+        setTimeout(function () {
+          perfectStrategyClicker(autoClick);
+        }, cardDealDelay);
         buttonBling('hit');
       }
       if (!runningAutoPilot && !gameEnded) {
@@ -1090,6 +1096,9 @@ function perfectStrategyClicker(autoClick) {
     else if (playerSum <= 21) {
       if (autoClick) {
         stand();
+        setTimeout(function () {
+          perfectStrategyClicker(autoClick);
+        }, cardDealDelay);
         buttonBling('stand');
       }
       if (!runningAutoPilot && !gameEnded) {
