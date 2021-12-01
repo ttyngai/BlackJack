@@ -155,7 +155,9 @@ function runInit() {
   playersDialogue();
   init();
   enableAutoPilotButton();
+
   runningAutoPilot = false;
+  buttonStatus.ap.innerHTML = 'Auto';
   buttonStatus.st.innerHTML = 'Again';
   setTimeout(function () {
     disableStartButton();
@@ -824,12 +826,14 @@ function buttonManagement() {
     handArray[`p${focusedHand}`][0] === handArray[`p${focusedHand}`][1]
   ) {
     enableSplitButton();
+    // autoPilotSplitable()
   } else {
     disableSplitButton();
   }
   // Double-ABLE
   if (focusedHand && handArray[`p${focusedHand}`].length === 2) {
     enableDoubleButton();
+    // autoPilotDoubleable()
   } else {
     disableDoubleButton();
   }
@@ -837,17 +841,25 @@ function buttonManagement() {
   if (!endPlayer) {
     enableHitButton();
     enableStandButton();
+
+    // autoPilotHitable()
+    // autoPilotStandable()
   } else {
     disableHitButton();
     disableStandButton();
   }
   if (endPlayer && endDealer) {
     enableStartButton();
+
+    // autoPilotStartable()
     if (runningAutoPilot) {
       setTimeout(function () {
         autoPilot();
       }, cardDealDelay * 3);
     }
+  }
+  if (runningAutoPilot) {
+    perfectStrategyClicker(autoClick);
   }
 }
 // AutoPilot button
@@ -940,10 +952,14 @@ function disableHintButton() {
 }
 
 //AUTOPILOT/////////////////////////////////////////////////////
+// When button is clicked, runAutoPilot is started
 // Autopilot times
-let delay = 50;
-let ratio = 8;
-function runAutoPilot(delay, ratio) {
+function runAutoPilot() {
+  let delay = 250;
+  let ratio = 10;
+  handleAutoPilot(delay, ratio);
+}
+function handleAutoPilot(delay, ratio) {
   // cardDeal @ 5 * 4 = 80
   // cardDeal @ 5 * 5 = 498//////////////
   // cardDeal @ 5 * 8 =300
@@ -963,12 +979,10 @@ function runAutoPilot(delay, ratio) {
   // cardDeal @ 15 * 5 =278
   // cardDeal @ 15 * 8 = 100
   // cardDeal @ 15 * 10 = 30
-  // cardDeal @ 15 * 12 =350
+  // cardDeal @ 15 * 12 =350/////////////////////
   // cardDeal @ 15 * 15 = 200
-  // this one too laggy of animation
-  // cardDeal @ 15 * 20 = 208
-
-  //  50 * 4 = 150
+  // 15 * 20 = 208
+  // 50 * 4 = 150
   // 50 * 8 =  1300 /////////////////
   // 50 * 10 = 1500
 
@@ -982,6 +996,7 @@ function runAutoPilot(delay, ratio) {
   disableHintButton();
   runningAutoPilot = true;
   buttonStatus.st.innerHTML = 'Start';
+  buttonStatus.ap.innerHTML = 'Reset';
   autoPilot();
 }
 function autoPilot() {
