@@ -189,7 +189,7 @@ img {
   color: white;
   text-align: center;
   border-radius: 15px;
-  width: 40px;
+  width: 45px;
   font-size: 35px;
   padding: 5px;
   margin: 0 5px 0 0;
@@ -215,7 +215,7 @@ img {
   color: var(--buttonText);
   margin: 5px 0;
   padding: 3px 0;
-  border: dotted 1px var(--casinoYellow);
+  border: solid 1px var(--casinoYellow);
 }
 .autoPilotButton {
   background-color: var(--autoPilotBlue);
@@ -228,7 +228,7 @@ img {
   border-radius: 20px;
   font-size: 10px;
   padding: 2px 5px;
-  margin: 0 0 0 95px;
+  margin: 0 0 0 105px;
 }
 
 .dialogue {
@@ -668,6 +668,26 @@ img {
   box-shadow: -2px 2px 3px 0 rgba(41, 41, 41, 0.75);
 }
 
+.borderBlingOn {
+  border-color: var(--casinoYellow);
+  border: dotted 2px var(--brightYellow);
+}
+.hiddenCardRotated {
+  transform: rotate(0) scaleX(0.001);
+}
+.cardDealAnimation {
+  transform: rotate(0deg) scale(0.5);
+  transition: all 0.5s ease-in-out;
+}
+.hiddenCardFlipOne {
+  transform: scaleX(0.001);
+  transition: all 0.5s ease-in-out;
+}
+.hiddenCardFlipTwo {
+  transform: scale(0.5);
+  transition: all 0.5s ease-in-out;
+}
+
 @media (min-width: 800px) {
   body {
     padding: 0;
@@ -702,7 +722,7 @@ img {
     padding: 5px 5px;
     margin: 10px 0px;
     font-size: 20px;
-    border: dotted 2px var(--casinoYellow);
+    border: solid 1px var(--casinoYellow);
   }
 
   .nameCard {
@@ -776,22 +796,8 @@ img {
     font-size: 18px;
     margin: 0 0 0 190px;
   }
-}
-.borderBlingOn {
-  border-color: var(--casinoYellow);
-}
-.hiddenCardRotated {
-  transform: rotate(0) scaleX(0.001);
-}
-.cardDealAnimation {
-  transform: rotate(0deg) scale(0.5);
-  transition: all 0.5s ease-in-out;
-}
-.hiddenCardFlipOne {
-  transform: scaleX(0.001);
-  transition: all 0.5s ease-in-out;
-}
-.hiddenCardFlipTwo {
-  transform: scale(0.5);
-  transition: all 0.5s ease-in-out;
+  .borderBlingOn {
+    border-color: var(--casinoYellow);
+    border: dotted 3px var(--brightYellow);
+  }
 }
