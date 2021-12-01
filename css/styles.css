@@ -672,21 +672,6 @@ img {
   border-color: var(--casinoYellow);
   border: dotted 2px var(--brightYellow);
 }
-.hiddenCardRotated {
-  transform: rotate(0) scaleX(0.001);
-}
-.cardDealAnimation {
-  transform: rotate(0deg) scale(0.5);
-  transition: all 0.5s ease-in-out;
-}
-.hiddenCardFlipOne {
-  transform: scaleX(0.001);
-  transition: all 0.5s ease-in-out;
-}
-.hiddenCardFlipTwo {
-  transform: scale(0.5);
-  transition: all 0.5s ease-in-out;
-}
 
 @media (min-width: 800px) {
   body {
@@ -800,4 +785,19 @@ img {
     border-color: var(--casinoYellow);
     border: dotted 3px var(--brightYellow);
   }
+}
+.hiddenCardRotated {
+  transform: rotate(0) scaleX(0.001);
+}
+.cardDealAnimation {
+  transform: rotate(0deg) scale(0.5);
+  transition: all 0.5s ease-in-out;
+}
+.hiddenCardFlipOne {
+  transform: scaleX(0.001);
+  transition: all 0.5s ease-in-out;
+}
+.hiddenCardFlipTwo {
+  transform: scale(0.5);
+  transition: all 0.5s ease-in-out;
 }
