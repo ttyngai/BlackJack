@@ -73,7 +73,6 @@ const score = {
   d: 0,
   p: 0,
 };
-
 const cardValue = {};
 const cardClass = {};
 let arrayOfHandIds = [];
@@ -98,6 +97,7 @@ let gameEnded = true;
 let handEnded = true;
 let cardDealDelay = 500;
 let computerFlowDelay = 20;
+let resetButtonAvailable = false;
 
 /*----- cached element references -----*/
 let scoreBox = {
@@ -134,7 +134,6 @@ buttonStatus.s.addEventListener('click', stand);
 buttonStatus.hint.addEventListener('click', runHint);
 
 /*----- functions -----*/
-
 disableSplitButton();
 disableDoubleButton();
 disableHitButton();
@@ -155,7 +154,6 @@ function runInit() {
   playersDialogue();
   init();
   enableAutoPilotButton();
-
   runningAutoPilot = false;
   buttonStatus.ap.innerHTML = 'Auto';
   buttonStatus.st.innerHTML = 'Again';
@@ -169,13 +167,6 @@ function runInit() {
   }, cardDealDelay);
 }
 function init(card1, card2, card3, card4) {
-  //  for test card, change following items
-
-  // card1 = 1;
-  // card2 = 12;
-  // card3 = 8;
-  // card4 = 8;
-
   disableStartButton();
   disableSplitButton();
   disableDoubleButton();
@@ -209,7 +200,6 @@ function init(card1, card2, card3, card4) {
     <div class="sumBox" id="playersSumBox1"></div>
     <div class="handArray" id="playersArray1"></div>
     </div>`;
-
   dealerInitSequence(card1, card2);
   setTimeout(function () {
     if (!dealerHasBlackJack) {
@@ -305,7 +295,6 @@ function split(cardA, cardB) {
   arrayOfHandIds.push(newHandId);
   // new doubledHandMap member for the new row
   doubledHandMap.push(1);
-
   // Remove bling
   document
     .getElementById(`playersArray${focusedHand}`)
@@ -487,7 +476,6 @@ function dealCard(handArray, targetArrayId, isDealer, isSecret, num) {
   if (num) {
     newCard = num;
   }
-
   // Process number 1 to 11, 11-13 to 10
   let processedCard = convertAceToEleven(convertFaceToTen(newCard));
   // Push processedCard numeric number to handArray
@@ -539,7 +527,6 @@ function dealRestOfDealer() {
         dealRestOfDealer();
         setTimeout(function () {}, cardDealDelay);
       }, cardDealDelay);
-
       // cardDealDelay *2 to place 3rd card after secret card flipped
     }, cardDealDelay * 2);
   } else if (endDealer) {
@@ -639,7 +626,6 @@ function evaluate(array, isDealer) {
 }
 function handleEvaluated(isDealer, isDoubleMode) {
   // player busted
-
   if (handEnded && busted && !isDealer && !isDoubleMode) {
     shiftFocus();
   }
@@ -690,7 +676,6 @@ function flipSecretCard() {
     }, computerFlowDelay);
   }, cardDealDelay);
 }
-
 // Check for dealers Black Jack
 function checkDealerForBlackJack() {
   if (dealersSecretCard === 1 && dealersNotSecretCard >= 11) {
@@ -826,14 +811,12 @@ function buttonManagement() {
     handArray[`p${focusedHand}`][0] === handArray[`p${focusedHand}`][1]
   ) {
     enableSplitButton();
-    // autoPilotSplitable()
   } else {
     disableSplitButton();
   }
   // Double-ABLE
   if (focusedHand && handArray[`p${focusedHand}`].length === 2) {
     enableDoubleButton();
-    // autoPilotDoubleable()
   } else {
     disableDoubleButton();
   }
@@ -841,17 +824,12 @@ function buttonManagement() {
   if (!endPlayer) {
     enableHitButton();
     enableStandButton();
-
-    // autoPilotHitable()
-    // autoPilotStandable()
   } else {
     disableHitButton();
     disableStandButton();
   }
   if (endPlayer && endDealer) {
     enableStartButton();
-
-    // autoPilotStartable()
     if (runningAutoPilot) {
       setTimeout(function () {
         autoPilot();
@@ -955,40 +933,18 @@ function disableHintButton() {
 // When button is clicked, runAutoPilot is started
 // Autopilot times
 function runAutoPilot() {
-  let delay = 250;
-  let ratio = 10;
-  handleAutoPilot(delay, ratio);
+  if (resetButtonAvailable) {
+    document.location.reload();
+  } else {
+    let delay = 250;
+    let ratio = 10;
+    handleAutoPilot(delay, ratio);
+  }
 }
 function handleAutoPilot(delay, ratio) {
-  // cardDeal @ 5 * 4 = 80
-  // cardDeal @ 5 * 5 = 498//////////////
-  // cardDeal @ 5 * 8 =300
-  // cardDeal @ 5 * 10 =400///////////////////
-  // cardDeal @ 5 * 12 =40
-  // cardDeal @ 5 * 15 =20
-  // cardDeal @ 5 * 20 = 494//////////////////
-  // cardDeal @ 10 * 4 = 120
-  // cardDeal @ 10 * 5 = 60
-  // cardDeal @ 10 * 8 = 238
-  // cardDeal @ 10 * 10 = 200////////////////
-  // cardDeal @ 10 * 12 = 55
-  // cardDeal @ 10 * 15 = 33
-  // cardDeal @ 10 * 20 = 64
-  // cardDeal @ 10 * 20 = 51??????
-  // cardDeal @ 15 * 4 = 100
-  // cardDeal @ 15 * 5 =278
-  // cardDeal @ 15 * 8 = 100
-  // cardDeal @ 15 * 10 = 30
-  // cardDeal @ 15 * 12 =350/////////////////////
-  // cardDeal @ 15 * 15 = 200
-  // 15 * 20 = 208
-  // 50 * 4 = 150
-  // 50 * 8 =  1300 /////////////////
-  // 50 * 10 = 1500
-
   cardDealDelay = delay;
   initAutoPilotDelay = cardDealDelay * ratio;
-  disableAutoPilotButton();
+
   disableSplitButton();
   disableDoubleButton();
   disableHitButton();
@@ -997,6 +953,8 @@ function handleAutoPilot(delay, ratio) {
   runningAutoPilot = true;
   buttonStatus.st.innerHTML = 'Start';
   buttonStatus.ap.innerHTML = 'Reset';
+  resetButtonAvailable = true;
+
   autoPilot();
 }
 function autoPilot() {
@@ -1004,6 +962,7 @@ function autoPilot() {
   setTimeout(function () {
     perfectStrategyClicker(true);
   }, initAutoPilotDelay);
+  // Enable reset button
 }
 function perfectStrategyClicker(autoClick) {
   let dealerCard1, playerCard1, playerCard2, playerSum;
@@ -1042,7 +1001,7 @@ function perfectStrategyClicker(autoClick) {
         hintDialogue('split');
       }
     }
-    // double
+    // Double
     else if (
       handArray[`p${focusedHand}`].length === 2 &&
       ((dealerCard1 >= 3 && dealerCard1 <= 6 && playerSum === 9) ||
@@ -1060,7 +1019,7 @@ function perfectStrategyClicker(autoClick) {
         hintDialogue('double');
       }
     }
-    // hit
+    // Hit
     else if (
       playerSum <= 16 &&
       ((dealerCard1 >= 2 &&
@@ -1087,7 +1046,7 @@ function perfectStrategyClicker(autoClick) {
         hintDialogue('hit');
       }
     }
-    // stand
+    // Stand
     else if (playerSum <= 21) {
       if (autoClick) {
         stand();
@@ -1100,7 +1059,7 @@ function perfectStrategyClicker(autoClick) {
         hintDialogue('stand');
       }
     }
-    // all 4 state is complete
+    // All 4 state is complete
   }
   if (focusedHand === 0) {
     if (!runningAutoPilot) {
