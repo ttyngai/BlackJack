@@ -422,7 +422,6 @@ function double(num) {
       setTimeout(function () {
         if (endPlayer) {
           runDealer();
-
           buttonManagement();
         }
       }, computerFlowDelay);
@@ -452,7 +451,7 @@ function hit(num, isDoubleMode) {
   if (endPlayer) {
     setTimeout(function () {
       runDealer();
-    }, computerFlowDelay);
+    }, cardDealDelay);
   }
   buttonManagement();
 }
@@ -462,7 +461,9 @@ function stand() {
   dealersDialogue();
   shiftFocus();
   if (endPlayer) {
-    runDealer();
+    setTimeout(function () {
+      runDealer();
+    }, cardDealDelay);
   }
   buttonManagement();
 }
@@ -980,7 +981,7 @@ function disableHintButton() {
 }
 
 function runAutoPilot() {
-  cardDealDelay = 400;
+  cardDealDelay = 300;
   disableAutoPilotButton();
   disableSplitButton();
   disableDoubleButton();
@@ -994,7 +995,7 @@ function runAutoPilot() {
 }
 
 function autoPilot() {
-  let autoPilotDelay = cardDealDelay * 8;
+  let autoPilotDelay = cardDealDelay * 10;
 
   if (runningAutoPilot && !gameEnded) {
     perfectStrategyClicker(true);
