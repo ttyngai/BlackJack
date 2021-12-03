@@ -98,6 +98,8 @@ let gameEnded = true;
 let handEnded = true;
 let cardDealDelay = 500;
 let computerFlowDelay = 20;
+let cardDealDelay1 = 500;
+let computerFlowDelay1 = 20;
 let resetButtonAvailable = false;
 
 //Cached Elements//////////////////////////////
@@ -167,7 +169,7 @@ function runInit() {
     disableHitButton();
     disableStandButton();
     enableHintButton();
-  }, cardDealDelay);
+  }, cardDealDelay1);
 }
 //Initializes Game//////////////////////////////
 function init(card1, card2, card3, card4) {
@@ -204,14 +206,14 @@ function init(card1, card2, card3, card4) {
     <div class="handArray" id="playersArray1"></div>
     </div>`;
   dealerInitSequence(card1, card2);
-  setTimeout(function () {
-    if (!dealerHasBlackJack) {
-      playerInitSequence(card3, card4);
-    } else {
-      countWins();
-    }
-    // cardDealDelay needs to be more than Old hand cardDealDelay, at least 1.105
-  }, cardDealDelay * 2);
+  // setTimeout(function () {
+  if (!dealerHasBlackJack) {
+    playerInitSequence(card3, card4);
+  } else {
+    countWins();
+  }
+  // cardDealDelay needs to be more than Old hand cardDealDelay, at least 1.105
+  // }, cardDealDelay * 2);
 }
 
 //Deal Dealer//////////////////////////////
@@ -226,20 +228,20 @@ function dealerInitSequence(card1, card2) {
   // update sumbox's first
   updateDealerSumBox();
   // Delay second card for cardDealDelay
-  setTimeout(function () {
-    dealCard(handArray.d, 'dealersArray', true, true, card2);
-    if (checkDealerForBlackJack()) {
-      endPlayer = true;
-      endDealer = true;
-      gameEnded = true;
-      dealerHasBlackJack = true;
-      updateDealerSumBox();
-      flipSecretCard();
-      setTimeout(function () {
-        buttonManagement();
-      }, computerFlowDelay);
-    }
-  }, cardDealDelay);
+  // setTimeout(function () {
+  dealCard(handArray.d, 'dealersArray', true, true, card2);
+  if (checkDealerForBlackJack()) {
+    endPlayer = true;
+    endDealer = true;
+    gameEnded = true;
+    dealerHasBlackJack = true;
+    updateDealerSumBox();
+    flipSecretCard();
+    // setTimeout(function () {
+    buttonManagement();
+    // }, computerFlowDelay);
+  }
+  // }, cardDealDelay);
 }
 //Deal Player//////////////////////////////
 function playerInitSequence(card3, card4) {
@@ -270,20 +272,20 @@ function playerInitSequence(card3, card4) {
   );
   updatePlayerSumBox(newHandId, handArray);
   // Delay second card for cardDealDelay
-  setTimeout(function () {
-    dealCard(
-      handArray[`p${newHandId}`],
-      `playersArray${newHandId}`,
-      null,
-      null,
-      card4
-    );
-    updatePlayerSumBox(newHandId, handArray);
-    evaluate(handArray[`p${focusedHand}`]);
-  }, cardDealDelay);
-  setTimeout(function () {
-    buttonManagement();
-  }, cardDealDelay * 1.1);
+  // setTimeout(function () {
+  dealCard(
+    handArray[`p${newHandId}`],
+    `playersArray${newHandId}`,
+    null,
+    null,
+    card4
+  );
+  updatePlayerSumBox(newHandId, handArray);
+  evaluate(handArray[`p${focusedHand}`]);
+  // }, cardDealDelay);
+  // setTimeout(function () {
+  buttonManagement();
+  // }, cardDealDelay * 1.1);
 }
 
 //Split//////////////////////////////
@@ -343,39 +345,40 @@ function split(cardA, cardB) {
   document.getElementById(
     `playersArray${focusedHand}`
   ).innerHTML += `<div id="${transferCardId}" class="card ${cardClassToTransfer}"></div>`;
-  setTimeout(function () {
-    document
-      .getElementById(`${transferCardId}`)
-      .classList.add('cardDealAnimation');
-  }, computerFlowDelay * 2);
+  // THIS SETTIMEOUT CAUSES ERROR IN CONSOLE
+  // setTimeout(function () {
+  document
+    .getElementById(`${transferCardId}`)
+    .classList.add('cardDealAnimation');
+  // }, computerFlowDelay);
   // deal old hand second card
-  setTimeout(function () {
-    // run deal card
-    dealCard(
-      handArray[`p${originalHand}`],
-      `playersArray${originalHand}`,
-      null,
-      null,
-      cardA
-    );
-    updatePlayerSumBox(originalHand, handArray);
-  }, computerFlowDelay * 2);
+  // setTimeout(function () {
+  // run deal card
+  dealCard(
+    handArray[`p${originalHand}`],
+    `playersArray${originalHand}`,
+    null,
+    null,
+    cardA
+  );
+  updatePlayerSumBox(originalHand, handArray);
+  // }, computerFlowDelay * 2);
   // deal new hand second card
-  setTimeout(function () {
-    dealCard(
-      handArray[`p${newHandId}`],
-      `playersArray${newHandId}`,
-      null,
-      null,
-      cardB
-    );
-    updatePlayerSumBox(newHandId, handArray);
-    evaluate(handArray[`p${focusedHand}`]);
-  }, cardDealDelay);
-  setTimeout(function () {
-    buttonManagement();
-    // Want to have buttonManagement invoked at the end
-  }, cardDealDelay * 1.2);
+  // setTimeout(function () {
+  dealCard(
+    handArray[`p${newHandId}`],
+    `playersArray${newHandId}`,
+    null,
+    null,
+    cardB
+  );
+  updatePlayerSumBox(newHandId, handArray);
+  evaluate(handArray[`p${focusedHand}`]);
+  // }, cardDealDelay);
+  // setTimeout(function () {
+  buttonManagement();
+  // Want to have buttonManagement invoked at the end
+  // }, cardDealDelay * 1.2);
 }
 //DOUBLE//////////////////////////////
 function runDouble() {
@@ -390,22 +393,22 @@ function double(num) {
   document.getElementById(
     `playersSumBox${focusedHand}`
   ).parentElement.innerHTML += `<div id="double${focusedHand}" class="double">2x</div>`;
-  setTimeout(function () {
-    document
-      .getElementById(`double${focusedHand}`)
-      .classList.add('cardDealAnimation');
-    hit(num, isDoubleMode);
-    // heres how it ignores the also row
-    setTimeout(function () {
-      shiftFocus();
-      setTimeout(function () {
-        if (endPlayer) {
-          runDealer();
-          buttonManagement();
-        }
-      }, computerFlowDelay);
-    }, cardDealDelay);
-  }, computerFlowDelay);
+  // setTimeout(function () {
+  document
+    .getElementById(`double${focusedHand}`)
+    .classList.add('cardDealAnimation');
+  hit(num, isDoubleMode);
+  // heres how it ignores the also row
+  // setTimeout(function () {
+  shiftFocus();
+  // setTimeout(function () {
+  if (endPlayer) {
+    runDealer();
+    buttonManagement();
+  }
+  // }, computerFlowDelay);
+  // }, cardDealDelay);
+  // }, computerFlowDelay);
 }
 
 //HIT//////////////////////////////
@@ -427,9 +430,9 @@ function hit(num, isDoubleMode) {
   evaluate(handArray[`p${focusedHand}`]);
   handleEvaluated(null, isDoubleMode);
   if (endPlayer) {
-    setTimeout(function () {
-      runDealer();
-    }, cardDealDelay);
+    // setTimeout(function () {
+    runDealer();
+    // }, cardDealDelay);
   }
   buttonManagement();
 }
@@ -439,9 +442,9 @@ function stand() {
   dealersDialogue();
   shiftFocus();
   if (endPlayer) {
-    setTimeout(function () {
-      runDealer();
-    }, cardDealDelay);
+    // setTimeout(function () {
+    runDealer();
+    // }, cardDealDelay);
   }
   buttonManagement();
 }
@@ -470,9 +473,9 @@ function runDealer() {
     countWins();
     buttonManagement();
   } else {
-    setTimeout(function () {
-      dealRestOfDealer();
-    }, computerFlowDelay);
+    // setTimeout(function () {
+    dealRestOfDealer();
+    // }, computerFlowDelay);
   }
 }
 
@@ -523,26 +526,26 @@ function dealCard(handArray, targetArrayId, isDealer, isSecret, num) {
     document
       .getElementById(`card${cardIdNum}`)
       .classList.add('cardDealAnimation');
-  }, computerFlowDelay);
+  }, computerFlowDelay1);
 }
 function dealRestOfDealer() {
   if (!endDealer) {
-    setTimeout(function () {
-      dealCard(handArray.d, 'dealersArray', true, null, null);
-      updateDealerSumBox();
-      evaluate(handArray.d, true);
-      setTimeout(function () {
-        dealRestOfDealer();
-        setTimeout(function () {}, cardDealDelay);
-      }, cardDealDelay);
-      // cardDealDelay *2 to place 3rd card after secret card flipped
-    }, cardDealDelay * 2);
+    // setTimeout(function () {
+    dealCard(handArray.d, 'dealersArray', true, null, null);
+    updateDealerSumBox();
+    evaluate(handArray.d, true);
+    // setTimeout(function () {
+    dealRestOfDealer();
+    // setTimeout(function () {}, cardDealDelay);
+    // }, cardDealDelay);
+    // cardDealDelay *2 to place 3rd card after secret card flipped
+    // }, cardDealDelay * 2);
   } else if (endDealer) {
     countWins();
   }
-  setTimeout(function () {
-    buttonManagement();
-  }, cardDealDelay * 2);
+  // setTimeout(function () {
+  buttonManagement();
+  // }, cardDealDelay * 2);
 }
 //Updates sumBoxPlayer//////////////////////////////
 function updatePlayerSumBox(focusedHand, targetArray) {
@@ -677,15 +680,15 @@ function shiftFocus() {
 function flipSecretCard() {
   setTimeout(function () {
     document.getElementById(`card2`).classList.add('hiddenCardFlipOne');
-  }, computerFlowDelay);
+  }, computerFlowDelay1);
 
   setTimeout(function () {
     document.getElementById(`card2`).className = `card ${cardClass.card2}`;
     document.getElementById(`card2`).classList.add(`hiddenCardRotated`);
     setTimeout(function () {
       document.getElementById(`card2`).classList.add('hiddenCardFlipTwo');
-    }, computerFlowDelay);
-  }, cardDealDelay);
+    }, computerFlowDelay1);
+  }, cardDealDelay1);
 }
 // Check for dealers Black Jack
 function checkDealerForBlackJack() {
@@ -730,12 +733,12 @@ function scoreBoxBlingIsPlayer(isPlayer) {
     scoreBox.p.classList.remove('scoreBoxBling');
     setTimeout(function () {
       scoreBox.p.classList.add('scoreBoxBling');
-    }, computerFlowDelay);
+    }, computerFlowDelay1);
   } else {
     scoreBox.d.classList.remove('scoreBoxBling');
     setTimeout(function () {
       scoreBox.d.classList.add('scoreBoxBling');
-    }, computerFlowDelay);
+    }, computerFlowDelay1);
   }
 }
 // Button jumps a little bit
@@ -743,7 +746,7 @@ function buttonBling(buttonId) {
   document.getElementById(buttonId).classList.remove('buttonBling');
   setTimeout(function () {
     document.getElementById(buttonId).classList.add('buttonBling');
-  }, computerFlowDelay);
+  }, computerFlowDelay1);
 }
 
 //DIALOGUES//////////////////////////////
@@ -783,7 +786,7 @@ function runHint() {
   perfectStrategyClicker(false);
   setTimeout(function () {
     enableHintButton();
-  }, cardDealDelay);
+  }, cardDealDelay1);
 }
 function hintDialogue(action) {
   if (action === 'split') {
@@ -841,7 +844,7 @@ function buttonManagement() {
     if (runningAutoPilot) {
       setTimeout(function () {
         autoPilot();
-      }, cardDealDelay * 3);
+      }, cardDealDelay1 * 3);
     } else {
       enableStartButton();
       disableHintButton();
@@ -955,6 +958,8 @@ function handleAutoPilot() {
 function runAutoPilot(delay, ratio) {
   cardDealDelay = delay;
   initAutoPilotDelay = cardDealDelay * ratio;
+  cardDealDelay1 = delay;
+  initAutoPilotDelay1 = cardDealDelay * ratio;
 
   disableSplitButton();
   disableDoubleButton();
@@ -1003,10 +1008,10 @@ function perfectStrategyClicker(autoClick) {
           (playerCard1 === 11 && playerCard2 === 1)))
     ) {
       if (autoClick) {
-        split();
         setTimeout(function () {
+          split();
           perfectStrategyClicker(autoClick);
-        }, cardDealDelay);
+        }, cardDealDelay1);
         buttonBling('split');
       }
       if (!runningAutoPilot && !gameEnded) {
@@ -1021,10 +1026,10 @@ function perfectStrategyClicker(autoClick) {
         (dealerCard1 >= 2 && dealerCard1 <= 10 && playerSum === 11))
     ) {
       if (autoClick) {
-        double();
         setTimeout(function () {
+          double();
           perfectStrategyClicker(autoClick);
-        }, cardDealDelay);
+        }, cardDealDelay1);
         buttonBling('double');
       }
       if (!runningAutoPilot && !gameEnded) {
@@ -1048,10 +1053,10 @@ function perfectStrategyClicker(autoClick) {
           playerSum <= 16))
     ) {
       if (autoClick) {
-        hit();
         setTimeout(function () {
+          hit();
           perfectStrategyClicker(autoClick);
-        }, cardDealDelay);
+        }, cardDealDelay1);
         buttonBling('hit');
       }
       if (!runningAutoPilot && !gameEnded) {
@@ -1061,10 +1066,10 @@ function perfectStrategyClicker(autoClick) {
     // Stand
     else if (playerSum <= 21) {
       if (autoClick) {
-        stand();
         setTimeout(function () {
+          stand();
           perfectStrategyClicker(autoClick);
-        }, cardDealDelay);
+        }, cardDealDelay1);
         buttonBling('stand');
       }
       if (!runningAutoPilot && !gameEnded) {
@@ -1089,3 +1094,6 @@ function autoUltra() {
 function autoInsane() {
   runAutoPilot(1, 100);
 }
+
+startMission();
+runAutoPilot(0, 1);
