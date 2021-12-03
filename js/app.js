@@ -464,7 +464,7 @@ function runDealer() {
       count++;
     }
   });
-  // compare busted rounds vs length to see if dealer needs to open
+  // compare tied rounds vs length to see everything tied including mutliple splitted hands
   if (count === playerSumBoxTotal.length) {
     endDealer = true;
     countWins();
@@ -473,6 +473,20 @@ function runDealer() {
     setTimeout(function () {
       dealRestOfDealer();
     }, computerFlowDelay);
+  }
+
+  // counts how many round is tied
+  let ties = 0;
+  playerSumBoxTotal.forEach(function (sum) {
+    if (sum === parseInt(sumBox.d.innerHTML)) {
+      ties++;
+    }
+  });
+  if (ties === playerSumBoxTotal.length) {
+    endDealer = true;
+    countWins();
+    buttonManagement();
+    tieDialogue();
   }
 }
 
@@ -533,7 +547,6 @@ function dealRestOfDealer() {
       evaluate(handArray.d, true);
       setTimeout(function () {
         dealRestOfDealer();
-        setTimeout(function () {}, cardDealDelay);
       }, cardDealDelay);
       // cardDealDelay *2 to place 3rd card after secret card flipped
     }, cardDealDelay * 2);
