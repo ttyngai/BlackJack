@@ -2,6 +2,8 @@
 
 Game of BlackJack with James Bond Theme. The story is situated at the movie Casino Royale, the win/loss responses would be subtitles just like you are watching a movie.
 
+![Game of BlackJack](https://i.imgur.com/QsyVWtP.png 'ScreenShot of Gameplay')
+
 The game is coded for dealer's "BlackJack" condition only for ace with facecards(not 10, as per convention). As a result code needs to differentiate between a 10 card, and facecard with value also as 10. If this condition is triggered it is an automatic win for the dealer. This is not true for the players(again as per convention), hence the game is sided slightly towards the dealer, as real casinos are designed. Dealer also will hit any hands under 17.
 
 The game has split and double function as well. When player receives first two cards with the same rank, it will split into two rows. The card is tracked with its generated ID, and transfered into the new row.
@@ -23,8 +25,6 @@ With `setTimeout()` functions to simulate some delays, I also needed to make sur
 **BONUS #3: Autopilot mode required careful timing in order for animations to work properly. As a nice touch the buttons chosen by autopilot will bounce**
 
 ### **Gameplay Screenshots:**
-
-![Game of BlackJack](https://i.imgur.com/QsyVWtP.png 'ScreenShot of Gameplay')
 
 **Tehcnologies used:**
 
