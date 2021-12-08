@@ -395,7 +395,7 @@ function double(num) {
       .getElementById(`double${focusedHand}`)
       .classList.add('cardDealAnimation');
     hit(num, isDoubleMode);
-    // heres how it ignores the also row
+    // heres how it ignores the finished row
     setTimeout(function () {
       shiftFocus();
       setTimeout(function () {
