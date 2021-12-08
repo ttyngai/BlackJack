@@ -30,7 +30,7 @@ With `setTimeout()` functions to simulate some delays, I also needed to make sur
 
 - CSS
 - HTML
-- Javascript.
+- Javascript
 
 **Please click this link to start the game:**
 
