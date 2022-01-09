@@ -241,9 +241,13 @@ img {
   padding: 0 0 0 15px;
   text-shadow: black 0 0 10px;
 }
-/* #playerSays {
-  margin: 150px 0 100px 0;
-} */
+.footer {
+  position: fixed;
+  padding: 1rem;
+  top: 96%;
+  z-index: -1;
+  color: var(--greyFont);
+}
 
 /* Card CSS */
 .card {
