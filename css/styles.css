@@ -242,11 +242,13 @@ img {
   text-shadow: black 0 0 10px;
 }
 .footer {
-  position: fixed;
-  padding: 1rem;
-  top: 96%;
+  position: absolute;
+  color: grey;
+  top: -1%;
+  left: 1%;
   z-index: -1;
-  color: var(--greyFont);
+  margin: auto;
+  font-size: 14px;
 }
 
 /* Card CSS */
