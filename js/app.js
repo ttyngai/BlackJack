@@ -488,32 +488,6 @@ function runDealer() {
     buttonManagement();
     tieDialogue();
   }
-  // counts how many round is tied
-  let ties = 0;
-  playerSumBoxTotal.forEach(function (sum) {
-    if (sum === parseInt(sumBox.d.innerHTML)) {
-      ties++;
-    }
-  });
-  if (ties === playerSumBoxTotal.length) {
-    endDealer = true;
-    countWins();
-    buttonManagement();
-    tieDialogue();
-  }
-  // counts how many round is tied
-  let ties = 0;
-  playerSumBoxTotal.forEach(function (sum) {
-    if (sum === parseInt(sumBox.d.innerHTML)) {
-      ties++;
-    }
-  });
-  if (ties === playerSumBoxTotal.length) {
-    endDealer = true;
-    countWins();
-    buttonManagement();
-    tieDialogue();
-  }
 }
 
 //Deal new card//////////////////////////////
